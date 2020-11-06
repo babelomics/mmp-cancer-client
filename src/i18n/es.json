@@ -1,0 +1,85 @@
+{
+  "app": {
+    "name": "MMP - Cancer",
+    "access": "Acceder"
+  },
+  "example": {
+    "menu": "Ejemplo",
+    "title": "Ejemplo",
+    "country": "País",
+    "year": "Año",
+    "ageLess14": "% < 14 años",
+    "age1564": "% 15 a 64 años",
+    "ageOver65": "% > 65 años"
+  },
+  "exampleList": {
+    "menu": "Lista Ejemplos",
+    "title": "Lista Ejemplos"
+  },
+  "forgotPassword": {
+    "title": "Solicitar recordatorio de contraseña",
+    "subtitle": "Introduzca identificador o email",
+    "identifier": "Identificador",
+    "email": "Correo electrónico"
+  },
+  "setPassword": {
+    "title": "Establecer contraseña",
+    "subtitle": "Bienvenido, UsuAcc1. Porfavor, establezca su contraseña",
+    "password": "Contraseña",
+    "passwordConfirmation": "Repita la contraseña"
+  },
+  "registryRequest": {
+    "title": "Solicitud de acceso al sistema",
+    "accessType": "Tipo de acceso",
+    "identifier": "Identificación",
+    "organization": "Organización",
+    "name": "Nombre",
+    "lastName": "Apellidos",
+    "email": "Correo electrónico",
+    "reason": "Motivo de solicitud de acceso"
+  },
+  "userProfile": {
+    "title": "Perfil de usuario",
+    "identifier": "Identificador",
+    "organization": "Organización",
+    "creationDate": "Fecha de creación",
+    "name": "Nombre",
+    "lastName": "Apellidos",
+    "lastAccessDate": "Fecha del último acceso",
+    "email": "Correo electrónico",
+    "modifyPassword": "Modificar contraseña",
+    "projectPermissions": "Permiso de creación de proyectos",
+    "userUnsubscribe": "Baja de usuario",
+    "userType": {
+      "title": "Tipo de usuario",
+      "user": "Usuario",
+      "admin": "Administrador"
+    }
+  },
+  "launch": {
+    "administrationInfoTitle": "Información de la administración",
+    "administrationInfoText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "installationInfoTitle": "Información de la instalación",
+    "installationInfoText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+  },
+  "commons": {
+    "save": "Guardar",
+    "goBack": "Atrás",
+    "accept": "Aceptar",
+    "submit": "Enviar",
+    "confirmDelete": "¿Estás seguro de querer eliminar este elemento?",
+    "disagree": "Cancelar",
+    "agree": "Aceptar",
+    "error": {
+      "general": "Se ha producido un error inesperado",
+      "required": "Este campo es obligatorio",
+      "invalidEmail": "Dirección de correo electrónico invalida.",
+      "invalidIdentifier": "Formato de identificador no valido.",
+      "password": {
+        "required": "Contraseña requerida",
+        "dontMatch": "No coinciden los valores"
+      }
+    },
+    "success": "La operación se ha completado correctamente"
+  }
+}

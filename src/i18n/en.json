@@ -1,0 +1,204 @@
+{
+  "app": {
+    "name": "MMP - Cancer",
+    "access": "Access",
+    "profile": "My profile",
+    "logout": "Logout"
+  },
+  "login": {
+    "title": "Sign in",
+    "forgotPassword": "Forgot password?",
+    "signup": "Don't have an account? Sign up",
+    "messages": {
+      "emptyUsername": "Invalid username",
+      "emptyPassword": "Invalid password",
+      "loginError": "Invalid User or Password"
+    }
+  },
+  "forgotPassword": {
+    "title": "Request password reminder",
+    "subtitle": "Enter identifier or email",
+    "messages": {
+      "success": "If identifier or email is correct, you'll receive an email with information about recover your account"
+    }
+  },
+  "setPassword": {
+    "title": "Set password",
+    "subtitle": "Welcome, {{username}}. Please, set your password",
+    "password": "Password",
+    "passwordConfirmation": "Repeat password",
+    "messages": {
+      "success": "Password has been set successfully"
+    }
+  },
+  "registryRequest": {
+    "title": "Request for access to the system",
+    "reason": "Reason for access request",
+    "review": {
+      "title": "Access request review",
+      "approve": "Approve Request",
+      "deny": "Deny Request",
+      "approved": "Request has been approved",
+      "denied": "Request has been denied",
+      "denyReasonLabel": "Deny reason"
+    },
+    "messages": {
+      "success": "Registration request has been sent successfully"
+    }
+  },
+  "userProfile": {
+    "title": "User profile",
+    "identifier": "Identifier",
+    "organization": "Organization",
+    "creationDate": "Creation date",
+    "name": "Name",
+    "lastName": "Last name",
+    "lastAccessDate": "Last access date",
+    "email": "Email",
+    "modifyPassword": "Modify password",
+    "projectPermissions": "Project creation permissions",
+    "userUnsubscribe": "User unsubscribe",
+    "userType": {
+      "title": "User type",
+      "user": "User",
+      "admin": "Administrator"
+    },
+    "password": "Password",
+    "repeatPassword": "Repeat password",
+    "unsubscribe": {
+      "title": "Unsubscribe user",
+      "description": "Type DELETE to unsubscribe selected user",
+      "confirmWord": "DELETE",
+      "error": "Entered text doesn't match the required keyword",
+      "success": "User has been unsubscribed successfully"
+    }
+  },
+  "launch": {
+    "administrationInfoTitle": "Administration information",
+    "administrationInfoText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "installationInfoTitle": "Installation information",
+    "installationInfoText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+  },
+  "usersManagement": {
+    "title": "Users Management"
+  },
+  "registrationManagement": {
+    "title": "Registration Request Management",
+    "messages": {
+      "approveSuccess": "Request has been approved successfully",
+      "denySuccess": "Request has been denied successfully"
+    }
+  },
+  "createNewUser": {
+    "title": "New User",
+    "messages": {
+      "success": "User created successfully!"
+    }
+  },
+  "notFoundPage": {
+    "title": "Page not found!"
+  },
+  "commons": {
+    "table": {
+      "emptyDataSourceMessage": "No records to display",
+      "addTooltip": "Add",
+      "deleteTooltip": "Delete",
+      "editTooltip": "Edit",
+      "filters": {
+        "filterPlaceHolder": "",
+        "filterTooltip": "Filter"
+      },
+      "edit": {
+        "deleteText": "Are you sure delete this row?",
+        "cancelTooltip": "Cancel",
+        "saveTooltip": "Save"
+      },
+      "grouping": {
+        "placeholder": "Drag headers ...",
+        "groupedBy": "Grouped By:"
+      },
+      "header": {
+        "actions": "Actions"
+      },
+      "pagination": {
+        "labelDisplayedRows": "{from}-{to} of {count}",
+        "labelRowsSelect": "rows",
+        "labelRowsPerPage": "Rows per page:",
+        "firstAriaLabel": "First Page",
+        "firstTooltip": "First Page",
+        "previousAriaLabel": "Previous Page",
+        "previousTooltip": "Previous Page",
+        "nextAriaLabel": "Next Page",
+        "nextTooltip": "Next Page",
+        "lastAriaLabel": "Last Page",
+        "lastTooltip": "Last Page"
+      },
+      "toolbar": {
+        "addRemoveColumns": "Add or remove columns",
+        "nRowsSelected": "{0} row(s) selected",
+        "showColumnsTitle": "Show Columns",
+        "showColumnsAriaLabel": "Show Columns",
+        "exportTitle": "Export",
+        "exportAriaLabel": "Export",
+        "exportCSVName": "Export as CSV",
+        "exportPDFName": "Export as PDF",
+        "searchTooltip": "Search",
+        "searchPlaceholder": "Search"
+      }
+    },
+    "loading": {
+      "title": "Loading...",
+      "signIn": "Signing in..."
+    },
+    "confirmDelete": "Are you sure you want to delete this item?",
+    "disagree": "Disagree",
+    "agree": "Agree",
+    "error": {
+      "general": "An unexpected error occurred",
+      "generalContact": "An unexpected error occurred, please contact the Administrator",
+      "required": "This field is mandatory",
+      "invalidEmail": "Invalid email address.",
+      "invalidIdentifier": "Invalid identifier format.",
+      "password": {
+        "required": "Password is required",
+        "dontMatch": "Password do not match"
+      }
+    },
+    "buttons": {
+      "signIn": "Sign in",
+      "accept": "Accept",
+      "cancel": "Cancel",
+      "save": "Save",
+      "goBack": "Back",
+      "goBackVariant": "Go Back",
+      "submit": "Submit",
+      "process": "Process"
+    },
+    "fields": {
+      "firstName": "Name",
+      "lastName": "Last Name",
+      "identifier": "Identifier",
+      "email": "Email",
+      "userType": {
+        "title": "User type",
+        "user": "User",
+        "admin": "Administrator"
+      },
+      "projectCreationPermission": "Project creation permissions",
+      "organization": "Organization",
+      "typeOfAccess": {
+        "title": "Type of access",
+        "local": "Local",
+        "ldap": "LDAP",
+        "elixir": "ElixirAAI"
+      },
+      "password": "Password",
+      "repeatPassword": "Repeat password",
+      "confirmation": "Confirmation",
+      "dateCreated": "Creation date",
+      "dateLastAccess": "Last access date",
+      "dateRequest": "Request date",
+      "attended": "Is attended"
+    }
+  }
+}
