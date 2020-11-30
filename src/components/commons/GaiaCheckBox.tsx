@@ -9,9 +9,10 @@ interface IProps {
   text?: string;
   formik?: any;
   onChange?: (value: boolean | null) => void;
+  disabled?: boolean;
 }
 
-const GaiaCheckBox = ({ text, labelPlacement, color = 'primary', checked, name, formik, onChange }: IProps) => {
+const GaiaCheckBox = ({ text, labelPlacement, color = 'primary', checked, name, formik, onChange, disabled=false }: IProps) => {
   const [checkedState, setCheckedState] = useState<boolean>(checked || false);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const GaiaCheckBox = ({ text, labelPlacement, color = 'primary', checked, name, 
   };
 
   return (
-    <FormControlLabel labelPlacement={labelPlacement} control={<Checkbox name={name} color={color} checked={formik ? formik.values[name] : checkedState} onChange={handleChange} />} label={text} />
+    <FormControlLabel labelPlacement={labelPlacement} control={<Checkbox name={name} color={color} checked={formik && formik.values[name] ? formik.values[name] : checkedState} onChange={handleChange} disabled={disabled} />} label={text}/>
   );
 };
 export default GaiaCheckBox;

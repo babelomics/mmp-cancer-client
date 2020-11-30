@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { generateValidationSchema, modifyPasswordSchema, unsubscribeSchema } from './validationSchema';
 import { useFormik } from 'formik';
 
-import IUserProfile, { IData, IPasswordModify, IUnsubscribeForm } from './interfaces';
+import IUserProfile, { IContactAdminUpdate, IData, IPasswordModify, IUnsubscribeForm } from './interfaces';
 // import GaiaUserProfile from '../commons/GaiaUserProfile';
 import GaiaContainer from '../commons/GaiaContainer';
 import { Grid, Typography } from '@material-ui/core';
@@ -16,13 +16,16 @@ import GaiaCheckBox from '../commons/GaiaCheckBox';
 import GaiaButton from '../commons/GaiaButton';
 import GaiaLoading from '../commons/GaiaLoading';
 import { getUserTypeByValue } from '../../utils/roles';
+import PopupUsersSelection from '../usersManagement/PopupUsersSelection';
 
 interface IProps {
   login: any;
   userProfile: IUserProfile;
-  updateUser: (identifier: string, data: any) => void;
+  updateUser: (identifier: string, data: any, t: any) => void;
   changePassword: (identifier: string, password: string) => void;
   unsubscribeUser: (identifier: string, t: any) => void;
+  setUserSelectionPopupOpen: (open: boolean) => void;
+  updateContactAdmin: (params: IContactAdminUpdate, t: any, user: any, isUnsubscribing: boolean) => void;
 }
 
 export const UserProfile = (props: IProps) => {
@@ -30,6 +33,8 @@ export const UserProfile = (props: IProps) => {
 
   const [openPasswordModal, setOpenPasswordModal] = useState(false);
   const [openUnsubscribeModal, setOpenUnsubscribeModal] = useState(false);
+  const [selectedContactAdmin, setSelectedAdminContact] = useState<IContactAdminUpdate | null>(null);
+  const [isUnsubscribing, setIsUnsubscribing] = useState<boolean>(false);
 
   const { data } = props.userProfile;
 
@@ -39,7 +44,11 @@ export const UserProfile = (props: IProps) => {
     validationSchema: generateValidationSchema(t),
     onSubmit: (values) => {
       const finalValues = { ...data, ...values, userType: getUserTypeByValue(values.userType) };
-      props.updateUser(values.identifier, finalValues);
+
+      if (isUnsubscribing) {
+        setIsUnsubscribing(false);
+      }
+      props.updateUser(values.identifier, finalValues, t);
     }
   });
 
@@ -58,7 +67,9 @@ export const UserProfile = (props: IProps) => {
     enableReinitialize: true,
     validationSchema: unsubscribeSchema(t),
     onSubmit: () => {
-      props.unsubscribeUser(data.identifier, t);
+      if (selectedContactAdmin) {
+        props.updateContactAdmin(selectedContactAdmin, t, data, true);
+      }
     }
   });
 
@@ -83,6 +94,25 @@ export const UserProfile = (props: IProps) => {
         <Typography variant="body1">{t('userProfile.unsubscribe.description')}</Typography>
         <GaiaTextField required name="confirmation" label={t('commons.fields.confirmation')} formik={unsubscribeFormik} fullWidth />
       </GaiaModalFormik>
+
+      {/* User Selection Popup */}
+      <PopupUsersSelection
+        open={props.userProfile.showUserSelectionPopup}
+        buttonType={9}
+        openPopupParent={props.setUserSelectionPopupOpen}
+        setValueField={(selectedUser) => {
+          const updatedContactData = { contactIdentifier: selectedUser.identifier, contactName: selectedUser.firstName, contactLastName: selectedUser.lastName, contactEmail: selectedUser.email };
+
+          if (isUnsubscribing) {
+            setSelectedAdminContact(updatedContactData);
+            setOpenUnsubscribeModal(true);
+          } else {
+            const finalValues = { ...data, ...formik.values, userType: getUserTypeByValue(formik.values.userType) };
+            props.updateContactAdmin(updatedContactData, t, finalValues, false);
+          }
+        }}
+        exclude={[props.userProfile.data.identifier]}
+      />
 
       {props.userProfile.loading ? (
         <GaiaLoading />
@@ -134,11 +164,18 @@ export const UserProfile = (props: IProps) => {
             {!props.login.user.isAdmin ||
               (data.userType === 0 && (
                 <Grid item xs={4}>
-                  <GaiaCheckBox name="projectPermissions" text={t('userProfile.projectPermissions')} labelPlacement="start" />
+                  <GaiaCheckBox name="canCreateProject" formik={formik} text={t('commons.fields.projectCreationPermission')} labelPlacement="start" />
                 </Grid>
               ))}
             <Grid item xs={4}>
-              <GaiaButton text={t('userProfile.userUnsubscribe')} onClick={(e) => setOpenUnsubscribeModal(true)} />
+              <GaiaButton
+                text={t('userProfile.userUnsubscribe')}
+                onClick={(e) => {
+                  // setOpenUnsubscribeModal(true);
+                  setIsUnsubscribing(true);
+                  props.unsubscribeUser(data.identifier, t);
+                }}
+              />
             </Grid>
           </Grid>
         </React.Fragment>

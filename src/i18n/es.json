@@ -3,6 +3,9 @@
     "name": "MMP - Cancer",
     "access": "Acceder"
   },
+  "appConfiguration": {
+    "title": "Configuración"
+  },
   "example": {
     "menu": "Ejemplo",
     "title": "Ejemplo",

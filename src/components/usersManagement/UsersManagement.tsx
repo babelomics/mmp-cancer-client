@@ -7,9 +7,10 @@ import GaiaTable, { ITableFilter } from '../commons/GaiaTable';
 import IUsersManagement, { ITableData } from './interfaces';
 import GaiaContainer from '../commons/GaiaContainer';
 import routes from '../router/routes';
+import { doDateFormat } from '../../utils/utils';
 
 interface IProps {
-  fetchUsers: (query: Query<any>, filters: ITableFilter) => Promise<any>;
+  fetchUsers: (query: Query<any>, filters: ITableFilter, previousData: any) => Promise<any>;
   usersManagement: IUsersManagement;
 }
 
@@ -43,7 +44,10 @@ export const UsersManagement = (props: IProps) => {
           {
             title: t('commons.fields.dateCreated'),
             field: 'dateCreated',
-            type: 'date'
+            type: 'date',
+            render: (rowData: ITableData) => {
+              return doDateFormat(rowData.dateCreated);
+            }
           },
           {
             title: t('commons.fields.userType.title'),
@@ -52,7 +56,10 @@ export const UsersManagement = (props: IProps) => {
           {
             title: t('commons.fields.dateLastAccess'),
             field: 'dateLastAccess',
-            type: 'date'
+            type: 'date',
+            render: (rowData: ITableData) => {
+              return doDateFormat(rowData.dateLastAccess);
+            }
           }
         ]}
         remoteData={props.fetchUsers}

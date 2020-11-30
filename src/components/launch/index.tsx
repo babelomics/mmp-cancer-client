@@ -5,17 +5,25 @@ import { RouteComponentProps } from 'react-router-dom';
 import { IRootState } from '../../store';
 import Launch from './Launch';
 import ILoginState from '../login/interfaces';
-import { operations } from '../login/duck';
+import ILaunchState from './interfaces';
+import { operations } from './duck';
 import routes from '../router/routes';
+import { saveToStorageLaunch } from '../../utils/storage';
 
 interface IProps extends RouteComponentProps {
+  launch:ILaunchState;
   login: ILoginState;
+  fetchConfigRequest: () => void;
 }
 
 class Wrapper extends React.Component<IProps, {}> {
   componentDidMount() {
     if (this.props.login.isAuthenticated) {
       this.redirectToHome();
+    }
+    else {
+      this.props.fetchConfigRequest();
+      saveToStorageLaunch(this.props.launch.data.configured);
     }
   }
 
@@ -29,7 +37,8 @@ class Wrapper extends React.Component<IProps, {}> {
 }
 
 const mapStateToProps = (state: IRootState) => ({
-  login: state.login
+  login: state.login,
+  launch: state.launch
 });
 
 const mapDispatchToProps = { ...operations };

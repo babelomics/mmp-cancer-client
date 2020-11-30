@@ -9,8 +9,8 @@ import { operations as userProfileOperations } from '../../userProfile/duck';
 
 const setData = userProfileOperations.setData;
 
-const fetchUsers = (query: Query<any>, filters: ITableFilter) => (dispatch: Dispatch) => {
-  return generalTableRemoteFetchOperation(api.fetchUsers, query, filters, actions.initFetch, actions.errFetch, actions.endFetch)(dispatch);
+const fetchUsers = (query: Query<any>, filters: ITableFilter, previousData: any, exclude?: any) => (dispatch: Dispatch) => {
+  return generalTableRemoteFetchOperation(api.fetchUsers, query, filters, previousData, actions.initFetch, actions.errFetch, actions.endFetch, exclude)(dispatch);
 };
 
 export default { fetchUsers, setData };

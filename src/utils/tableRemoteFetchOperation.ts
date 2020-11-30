@@ -39,9 +39,11 @@ export const generalTableRemoteFetchOperation = (
   api: any,
   query: Query<any>,
   filters: ITableFilter,
+  previousData: any,
   init: (...args: any[]) => AnyAction,
   err: (...args: any[]) => AnyAction,
-  end: (...args: any[]) => AnyAction
+  end: (...args: any[]) => AnyAction,
+  exclude?: any
 ) => (dispatch: Dispatch): Promise<QueryResult<any>> => {
   dispatch(init());
   return new Promise((resolve, reject) => {
@@ -55,19 +57,30 @@ export const generalTableRemoteFetchOperation = (
       Object.keys(filters).forEach((k) => {
         const filter: any = filters[k];
         if (typeof filter !== 'string') {
-          let date: any;
-          if (filter.fromDate !== null && filter.fromDate !== undefined) {
-            date = filter.fromDate;
-            params[k + 'Start'] = typeof date === 'string' || typeof date === 'boolean' || typeof date === 'number' ? date : date instanceof Date ? doDateFormat(date) : date;
+          if (typeof filter === 'boolean') {
+            params[k] = filter;
           }
-          if (filter.toDate !== null && filter.toDate !== undefined) {
-            date = filter.toDate;
-            params[k + 'End'] = typeof date === 'string' || typeof date === 'boolean' || typeof date === 'number' ? date : date instanceof Date ? doDateFormat(date) : date;
+          else {
+
+            let date: any;
+            if (filter.fromDate !== null && filter.fromDate !== undefined) {
+              date = filter.fromDate;
+              params[k + 'Start'] = typeof date === 'string' || typeof date === 'boolean' || typeof date === 'number' ? date : date instanceof Date ? doDateFormat(date) : date;
+            }
+            if (filter.toDate !== null && filter.toDate !== undefined) {
+              date = filter.toDate;
+              params[k + 'End'] = typeof date === 'string' || typeof date === 'boolean' || typeof date === 'number' ? date : date instanceof Date ? doDateFormat(date) : date;
+            }
           }
         } else {
           let other: any = filter;
-          if (other !== null && other !== undefined) {
-            params[k] = typeof other === 'string' || typeof other === 'boolean' || typeof other === 'number' ? other : other instanceof Date ? doDateFormat(other) : other;
+          if (k === 'costMax' || k === 'costMin') {
+            params[k] = parseFloat(filter.replace(',', '.'));
+          }
+          else {
+            if (other !== null && other !== undefined) {
+              params[k] = typeof other === 'string' || typeof other === 'boolean' || typeof other === 'number' ? other : other instanceof Date ? doDateFormat(other) : other;
+            }
           }
         }
       });
@@ -77,13 +90,37 @@ export const generalTableRemoteFetchOperation = (
       params.sort = `${query.orderBy.field as string},${query.orderDirection}`;
     }
 
+    if (query.search) {
+      params.search = query.search;
+    }
+
     api(params)
       .then((res: AxiosResponse<IPageable>) => {
-        dispatch(end());
+        let datashown = previousData;
+        let pageshown = res.data.totalPages - 1;
+        let totalshown = previousData.length;
+        if (res.data.totalPages > res.data.pageable.pageNumber) {
+          if (params.page === 0) {
+            datashown = res.data.content;
+          }
+          else {
+            datashown = datashown.concat(res.data.content);
+          }
+          pageshown = res.data.pageable.pageNumber;
+          totalshown = res.data.totalElements;
+        }
+        if(exclude) {
+          let filtered=[...datashown];
+          exclude.forEach((element:any) => {
+            filtered = filtered.filter((el:any) =>{ return el.identifier !== element; });
+          });
+          datashown=[...filtered];
+        }
+        dispatch(end(datashown));
         resolve({
-          data: res.data.content,
-          page: res.data.pageable.pageNumber,
-          totalCount: res.data.totalElements
+          data: datashown,
+          page: pageshown,
+          totalCount: totalshown
         });
       })
       .catch((error: any) => {

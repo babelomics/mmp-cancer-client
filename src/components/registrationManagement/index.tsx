@@ -10,7 +10,7 @@ import RegistrationManagement from './RegisrationManagement';
 
 interface IProps extends RouteComponentProps {
   loading: boolean;
-  fetchRegistrationRequests: (query: Query<any>, filters: ITableFilter) => Promise<any>;
+  fetchRegistrationRequests: (query: Query<any>, filters: ITableFilter, previousData: any) => Promise<any>;
 }
 
 class Wrapper extends React.Component<IProps, {}> {

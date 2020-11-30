@@ -5,7 +5,10 @@ let regexpEmail = new RegExp(/^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"
 
 export const generateValidationSchema = (t: TFunction) =>
   Yup.object().shape({
-    email: Yup.string().nullable().required(t('commons.error.required')).matches(regexpEmail, t('commons.error.invalidEmail'))
+    email: Yup.string().nullable().required(t('commons.error.required')).matches(regexpEmail, t('commons.error.invalidEmail')),
+    firstName: Yup.string().nullable().required(t('commons.error.required')),
+    lastName: Yup.string().nullable().required(t('commons.error.required')),
+    userType: Yup.string().nullable().required(t('commons.error.required')),
   });
 
 export const modifyPasswordSchema = (t: TFunction) =>

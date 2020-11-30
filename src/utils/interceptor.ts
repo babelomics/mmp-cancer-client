@@ -25,7 +25,8 @@ axios.interceptors.request.use(async function (config) {
 
 axios.interceptors.response.use(
   (response) => {
-    const responseToken = response.config.headers['Authorization'];
+    const responseToken = response.headers['authorization'];
+
     if (responseToken) {
       store.dispatch<AnyAction>(loginActions.setToken(responseToken));
     }
@@ -35,8 +36,9 @@ axios.interceptors.response.use(
   (error) => {
     const response = error.response ? error.response.data : undefined;
     const message = typeof error.response.data === 'string' ? error.response.data : `${error.response.data.status} ${error.response.data.error}`;
+    const token = getToken();
 
-    if (response && parseInt(response.status) === 401) {
+    if (response && parseInt(response.status) === 401 && token) {
       store.dispatch<AnyAction>(
         globalPopupsActions.showMessagePopup('Session expired', 'error', () => {
           localStorage.clear();
@@ -45,6 +47,6 @@ axios.interceptors.response.use(
       );
     }
 
-    return Promise.reject(message);
+    return Promise.reject({ status: error.response.status, message: message });
   }
 );

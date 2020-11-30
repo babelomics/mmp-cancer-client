@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, makeStyles, Typography } from '@material-ui/core';
-import { useFormik } from 'formik';
+import { FormikErrors, useFormik } from 'formik';
 
 import { generateValidationSchema } from './validationSchema';
 import GaiaTextField from '../commons/GaiaTextField';
@@ -15,11 +15,12 @@ import GaiaLoading from '../commons/GaiaLoading';
 import { getUserTypeByValue } from '../../utils/roles';
 import { getAccessTypeByValue } from '../../utils/accessType';
 import GaiaIcon from '../commons/GaiaIcon';
+import { initialState } from './duck';
 
 interface IProps {
   loading: boolean;
   data: IFormData;
-  createRequest: (data: any, t?: any) => void;
+  createRequest: (data: any, setFormikErrors: (errors: FormikErrors<IFormData>) => void, t?: any) => void;
   processRequest: (data: any, t?: any) => void;
 }
 
@@ -36,15 +37,14 @@ export const RegistryRequest = (props: IProps) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const history = useHistory();
-
   const isReviewing = () => {
     // TODO: Check if user is admin
     const path = history.location.pathname.split('/');
-    return `/${path[1]}/${path[2]}` === routes.PATH_ADMIN_REVIEW_REQUEST;
+    return `/${path[1]}` === routes.PATH_ADMIN_REVIEW_REQUEST;
   };
 
   const formik = useFormik({
-    initialValues: { ...props.data },
+    initialValues: isReviewing() ? { ...props.data } : { ...initialState.data },
     enableReinitialize: true,
     validationSchema: generateValidationSchema(t),
     onSubmit: (values) => {
@@ -52,7 +52,7 @@ export const RegistryRequest = (props: IProps) => {
       if (isReviewing()) {
         props.processRequest(finalValues, t);
       } else {
-        props.createRequest(finalValues, t);
+        props.createRequest(finalValues, formik.setErrors, t);
       }
     }
   });

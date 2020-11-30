@@ -5,6 +5,32 @@
     "profile": "My profile",
     "logout": "Logout"
   },
+  
+  "UnderMaintenance": {
+    "title": "Under Maintenance",
+    "subTitle": "Application Configuration"
+  },
+  "appConfiguration": {
+    "title": "Configuration",
+    "subTitle": "Application Configuration"
+  },
+  "panDrugsConfig": {
+    "title": "Pandrugs Configuration",
+    "messages": {
+      "success": "Pandrugs service configuration: Correct",
+      "notExist": "Pandrugs service configuration:\nThe user does not exist the service.\nDo you want to register it?\n\n",
+      "invalidUrl": "Pandrugs service configuration: Invalid URL",
+      "unknowwn": "Pandrugs service configuration: Unknowwn error"
+    }
+  },
+  "genomicDictionaryConfig": {
+    "title": "Genomic Dictionary Configuration",
+    "messages": {
+      "success": "Genomic dictionary configuration: Correct",
+      "invalid": "Genomic dictionary configuration: Invalid",
+      "unknowwn": "Genomic dictionary configuration: Unknowwn error"
+    }
+  },
   "login": {
     "title": "Sign in",
     "forgotPassword": "Forgot password?",
@@ -43,7 +69,9 @@
       "denyReasonLabel": "Deny reason"
     },
     "messages": {
-      "success": "Registration request has been sent successfully"
+      "success": "Registration request has been sent successfully",
+      "errorIdentifier": "Identifier is already taken!",
+      "errorEmail": "Email is already in use!"
     }
   },
   "userProfile": {
@@ -70,7 +98,9 @@
       "description": "Type DELETE to unsubscribe selected user",
       "confirmWord": "DELETE",
       "error": "Entered text doesn't match the required keyword",
-      "success": "User has been unsubscribed successfully"
+      "success": "User has been unsubscribed successfully",
+      "errorAdmin": "Error: It is necessary to have at least one administrator in the system. You must to create a new Admin user in order to delete this user.",
+      "warningContactAdmin": "You will process to delete the contact admin from this application. Do you want to assign a new contact Admin?"
     }
   },
   "launch": {
@@ -81,6 +111,20 @@
   },
   "usersManagement": {
     "title": "Users Management"
+  },
+  "drugsManagement": {
+    "title": "Drugs Management",
+    "refresDrugs": "Manual Drugs Update"
+  },
+  "drugProfile": {
+    "title": "Drug",
+    "creationDate": "Creation date",
+    "deletionDate": "Deletion Date",
+    "currentVersion": "Modification",
+    "lastVersion": "Last Modification",
+    "alternativeNames": "Alternative Names",
+    "previous": "Previous modification",
+    "next": "Next modification"
   },
   "registrationManagement": {
     "title": "Registration Request Management",
@@ -157,12 +201,15 @@
       "general": "An unexpected error occurred",
       "generalContact": "An unexpected error occurred, please contact the Administrator",
       "required": "This field is mandatory",
+      "invalidCost": "Invalid cost, must be a number with 2 decimals separated by comma.",
       "invalidEmail": "Invalid email address.",
       "invalidIdentifier": "Invalid identifier format.",
       "password": {
         "required": "Password is required",
         "dontMatch": "Password do not match"
-      }
+      },
+      "url": "Invalid URL. Try to modify it, please.",
+      "user": "Wrong credentials. Try to modify them, please"
     },
     "buttons": {
       "signIn": "Sign in",
@@ -172,13 +219,26 @@
       "goBack": "Back",
       "goBackVariant": "Go Back",
       "submit": "Submit",
-      "process": "Process"
+      "modify": "Modify",
+      "validation": "Validation",
+      "process": "Process",
+      "ok": "ok",
+      "yes": "yes",
+      "no": "no",
+      "filter": "FILTER",
+      "reset": "RESET",
+      "manualDrugUpdate": "Manual Drug Update",
+      "available": "Available",
+      "noAvailable": "No Available"
     },
     "fields": {
       "firstName": "Name",
       "lastName": "Last Name",
       "identifier": "Identifier",
       "email": "Email",
+      "firstName_lastName": "Name and Last Name",
+      "user": "User",
+      "url": "Url",
       "userType": {
         "title": "User type",
         "user": "User",
@@ -198,7 +258,26 @@
       "dateCreated": "Creation date",
       "dateLastAccess": "Last access date",
       "dateRequest": "Request date",
-      "attended": "Is attended"
+      "attended": "Is attended",
+      "standardName": "Standard Name",
+      "commonName": "Common Name",
+      "available": "Available",
+      "avaType": {
+        "yes": "Yes",
+        "no": "No"
+      },
+      "avaFilter": {
+        "yes": "Available",
+        "no": "No Available"
+      },
+      "cost": "Cost",
+      "lastModificationDate": "Last Modification Date",
+      "drugDeleted": "Drug Deleted",
+      "delFilter": {
+        "title": "Drug Deleted?",
+        "yes": "Yes",
+        "no": "No"
+      }
     }
   }
 }

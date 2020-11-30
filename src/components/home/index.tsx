@@ -8,6 +8,7 @@ import { ITokenData } from '../login/interfaces';
 
 interface IProps extends RouteComponentProps {
   user: ITokenData | null;
+  configured: boolean;
 }
 
 class Wrapper extends React.Component<IProps, {}> {
@@ -17,7 +18,8 @@ class Wrapper extends React.Component<IProps, {}> {
 }
 
 const mapStateToProps = (state: IRootState) => ({
-  user: state.login.user
+  user: state.login.user,
+  configured: state.launch.data.configured
 });
 
 const mapDispatchToProps = { ...operations };

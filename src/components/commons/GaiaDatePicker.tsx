@@ -10,9 +10,10 @@ interface IProps {
   fullWidth?: boolean;
   disabled?: boolean;
   onChange?: (date: MaterialUiPickersDate, value?: string | null | undefined) => void;
+  InputLabelProps?: any;
 }
 
-const GaiaDatePicker = ({ label, name, formik, fullWidth, disabled, onChange }: IProps) => {
+const GaiaDatePicker = ({ label, name, formik, fullWidth, disabled, onChange, InputLabelProps = {} }: IProps) => {
   const [dateState, setDate] = useState<Moment | Date | string | null | undefined>(new Date());
 
   const handleChange = (date: MaterialUiPickersDate, value?: string | null | undefined) => {
@@ -40,11 +41,12 @@ const GaiaDatePicker = ({ label, name, formik, fullWidth, disabled, onChange }: 
       format="DD/MM/YYYY"
       margin="normal"
       label={label}
-      value={formik ? moment(formik.values[name] || new Date(), 'DD/MM/YYYY') : dateState}
+      value={formik ? (formik.values[name] !== null ?(moment(formik.values[name], 'DD/MM/YYYY')) : null) : dateState}
       onChange={handleChange}
       fullWidth={fullWidth}
       disabled={disabled}
-      style={{ margin: 0 }}
+      style={{ margin: 0 }}      
+      InputLabelProps={InputLabelProps}
     />
   );
 };

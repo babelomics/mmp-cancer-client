@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormik } from 'formik';
+import { FormikErrors, useFormik } from 'formik';
 
 import { IFormData } from './interfaces';
 import GaiaContainer from '../commons/GaiaContainer';
@@ -17,7 +17,7 @@ interface IProps {
   loading: boolean;
   error: any;
   success: boolean | null;
-  createUser: (data: any, t: any) => void;
+  createUser: (data: any, setFormikErrors: (errors: FormikErrors<IFormData>) => void, t: any) => void;
   resetPopups: () => void;
 }
 
@@ -42,7 +42,7 @@ export const CreateNewUser = (props: IProps) => {
     enableReinitialize: true,
     validationSchema: generateValidationSchema(t),
     onSubmit: (values) => {
-      props.createUser({ ...values, userType: getUserTypeByValue(values.userType), accessType: getAccessTypeByValue(values.accessType) }, t);
+      props.createUser({ ...values, userType: getUserTypeByValue(values.userType), accessType: getAccessTypeByValue(values.accessType) }, formik.setErrors, t);
     }
   });
 

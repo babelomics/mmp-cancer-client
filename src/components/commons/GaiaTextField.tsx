@@ -4,6 +4,7 @@ import { TextField } from '@material-ui/core';
 interface IProps {
   name: string;
   label: String;
+  variant?: any | undefined;
   formik?: any;
   required?: boolean;
   disabled?: boolean;
@@ -14,9 +15,10 @@ interface IProps {
   multiline?: boolean;
   rows?: number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  InputLabelProps?: any;
 }
 
-const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, multiline, className, fullWidth = true, debounce = 200, onChange }: IProps) => {
+const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, multiline, className, fullWidth = true, debounce = 50, onChange, InputLabelProps = {}, variant }: IProps) => {
   const [valueState, setValue] = useState(formik ? formik.values[name] : '');
   const [timer, setTimer] = useState<any>(debounce);
 
@@ -42,11 +44,17 @@ const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, mu
     setTimer(setTimeout(() => triggerChange(e), debounce));
   };
 
+  let blueStyle = {};
+  if (variant === 'filled') {
+    blueStyle = { backgroundColor: '#dbecfb' };
+  }
+
   return (
     <TextField
       disabled={disabled}
       className={className}
       required={required}
+      variant={variant}
       inputProps={{ required: false }}
       type={type}
       name={name}
@@ -58,6 +66,8 @@ const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, mu
       error={formik ? formik.submitCount > 0 && !!formik.errors[name] : undefined}
       helperText={formik ? formik.submitCount > 0 && formik.errors[name] : undefined}
       fullWidth={fullWidth}
+      InputLabelProps={InputLabelProps}
+      style={blueStyle}
     />
   );
 };

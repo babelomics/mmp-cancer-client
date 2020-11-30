@@ -5,22 +5,24 @@ import { RouteComponentProps } from 'react-router-dom';
 import { IRootState } from '../../store';
 import { operations } from './duck';
 import UserProfile from './UserProfile';
-import IUserProfile from './interfaces';
+import IUserProfile, { IContactAdminUpdate, IData } from './interfaces';
 import routes from '../router/routes';
 
 interface IProps extends RouteComponentProps {
   login: any;
   userProfile: IUserProfile;
   fetchUserData: (identifier: string) => void;
-  updateUser: (identifier: string, data: any) => void;
+  updateUser: (identifier: string, data: any, t: any) => void;
   changePassword: (identifier: string, password: string) => void;
   unsubscribeUser: (identifier: string, t: any) => void;
+  setUserSelectionPopupOpen: (open: boolean) => void;
+  updateContactAdmin: (params: IContactAdminUpdate, t: any, user: any, isUnsubscribing: boolean) => void;
 }
 
 class Wrapper extends React.Component<IProps, {}> {
   componentDidMount() {
     const pathParts = this.props.history.location.pathname.split('/');
-    const userIdentifier = pathParts[3];
+    const userIdentifier = pathParts[2];
 
     // If an username exists in url
     if (userIdentifier) {

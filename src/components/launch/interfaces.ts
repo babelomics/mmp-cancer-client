@@ -1,9 +1,11 @@
+import { IFormData } from "../forgotPassword/interfaces";
+
 export default interface IState {
   loading: boolean;
-  error: string | null;
-  success: boolean;
+  data:IData
 }
 
-export interface ISetPassword {
-  password: string;
+export interface IData {
+  configured: boolean;
+  text: string;
 }

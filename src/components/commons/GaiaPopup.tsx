@@ -13,6 +13,7 @@ interface IProps {
   open?: boolean;
   type?: 'info' | 'error' | 'success' | 'warning';
   onClose?: () => void;
+  onAccept?: () => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +45,7 @@ const DialogTitle = (props: any) => {
   );
 };
 
-export const GaiaPopup = ({ message, title, open = false, type = 'info', onClose }: IProps) => {
+export const GaiaPopup = ({ message, title, open = false, type = 'info', onClose, onAccept }: IProps) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [openState, setOpen] = useState(open);
@@ -57,6 +58,13 @@ export const GaiaPopup = ({ message, title, open = false, type = 'info', onClose
     setOpen(false);
     if (onClose) {
       onClose();
+    }
+  };
+
+  const handleAccept = () => {
+    setOpen(false);
+    if (onAccept) {
+      onAccept();
     }
   };
 
@@ -96,7 +104,7 @@ export const GaiaPopup = ({ message, title, open = false, type = 'info', onClose
     }
 
     if (type === 'warning') {
-      return <GaiaIcon icon="report_problem" size={60} color="inherit" />;
+      return <GaiaIcon icon="report_problem" size={60} color="inherit" style={{ color: '#FEC000' }} />;
     }
   };
 
@@ -107,7 +115,7 @@ export const GaiaPopup = ({ message, title, open = false, type = 'info', onClose
       </DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={3}>
-          <Grid item xs={message.length < 20 ? 4 : 3} container justify="flex-end">
+          <Grid item xs={message.length < 20 ? 4 : 3} container justify="flex-end" alignItems="center">
             {renderIcon()}
           </Grid>
           <Grid item xs={8} container alignItems="center">
@@ -116,7 +124,7 @@ export const GaiaPopup = ({ message, title, open = false, type = 'info', onClose
         </Grid>
       </DialogContent>
       <DialogActions>
-        <GaiaButton text={t('commons.buttons.accept')} onClick={handleClose} />
+        <GaiaButton text={t('commons.buttons.accept')} onClick={handleAccept} />
       </DialogActions>
     </Dialog>
   );

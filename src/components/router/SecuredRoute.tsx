@@ -5,16 +5,21 @@ import routes from './routes';
 interface IProps {
   path: string;
   login: any;
+  launch: any;
   component: any;
   redirect?: string;
   adminOnly?: boolean;
+  configurationOnly?: boolean;
 }
 
-const SecuredRoute = ({ path, login, component: Component, redirect, adminOnly, ...otherProps }: IProps) => {
+const SecuredRoute = ({ path, login, component: Component, redirect, adminOnly, configurationOnly, launch, ...otherProps }: IProps) => {
   const isAllowed = () => {
     // TODO: Implement roles logic
+    if (configurationOnly) {
+      return login.isAuthenticated && login.user.isAdmin && !launch.data.configured;
+    }
     if (adminOnly) {
-      return login.isAuthenticated && login.user.isAdmin;
+      return login.isAuthenticated && login.user.isAdmin && launch.data.configured;
     }
 
     return login.isAuthenticated;

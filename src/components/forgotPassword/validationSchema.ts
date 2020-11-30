@@ -10,7 +10,7 @@ export const generateValidationSchema = (t: TFunction) =>
         .nullable()
         .when(['email'], {
           is: (email) => !email,
-          then: Yup.string().required('Identifier is a required field')
+          then: Yup.string().required('Yeeees')
         }),
       email: Yup.string()
         .nullable()

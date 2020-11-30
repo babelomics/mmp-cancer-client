@@ -10,7 +10,7 @@ import UsersManagement from './UsersManagement';
 import IUsersManagement from './interfaces';
 
 interface IProps extends RouteComponentProps {
-  fetchUsers: (query: Query<any>, filters: ITableFilter) => Promise<any>;
+  fetchUsers: (query: Query<any>, filters: ITableFilter, previousData: any) => Promise<any>;
   usersManagement: IUsersManagement;
 }
 

@@ -5,12 +5,14 @@ import { RouteComponentProps } from 'react-router-dom';
 import { IRootState } from '../../store';
 import { operations } from './duck';
 import CreateNewUser from './CreateNewUser';
+import { IFormData } from './interfaces';
+import { FormikErrors } from 'formik/dist/types';
 
 interface IProps extends RouteComponentProps {
   loading: boolean;
   error: any;
   success: boolean | null;
-  createUser: (data: any, t: any) => void;
+  createUser: (data: any, setFormikErrors: (errors: FormikErrors<IFormData>) => void, t: any) => void;
   resetPopups: () => void;
 }
 

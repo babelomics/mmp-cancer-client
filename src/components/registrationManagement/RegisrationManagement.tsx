@@ -7,10 +7,11 @@ import routes from '../router/routes';
 import { ITableData } from './interfaces';
 import { Query } from 'material-table';
 import GaiaContainer from '../commons/GaiaContainer';
+import { doDateFormat } from '../../utils/utils';
 
 interface IProps {
   loading: boolean;
-  fetchRegistrationRequests: (query: Query<any>, filters: ITableFilter) => Promise<any>;
+  fetchRegistrationRequests: (query: Query<any>, filters: ITableFilter, previousData: any) => Promise<any>;
 }
 
 export const RegistrationManagement = (props: IProps) => {
@@ -39,7 +40,10 @@ export const RegistrationManagement = (props: IProps) => {
           {
             title: t('commons.fields.dateRequest'),
             field: 'applicationDate',
-            type: 'date'
+            type: 'date',
+            render: (rowData: ITableData) => {
+              return doDateFormat(rowData.applicationDate);
+            }
           },
           {
             title: t('commons.fields.attended'),

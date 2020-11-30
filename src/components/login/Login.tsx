@@ -96,6 +96,9 @@ export const Login = (props: IProps) => {
           <Grid className={classes.formItem} item xs={12}>
             <GaiaButton text={t('commons.buttons.signIn')} type="submit" disabled={formik.values.type !== 0} uppercase fullWidth />
           </Grid>
+          <Grid style={{ marginTop: 15 }} item xs={12}>
+            <GaiaButton text={t('commons.buttons.goBack')} type="button" uppercase fullWidth onClick={() => history.goBack()} />
+          </Grid>
           <Grid className={classes.formItem} item xs={6}>
             <GaiaLink text={t('login.forgotPassword')} onClick={() => history.push(routes.PATH_FORGOT_PASSWORD)} />
           </Grid>

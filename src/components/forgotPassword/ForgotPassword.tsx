@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid } from '@material-ui/core';
 import { useFormik } from 'formik';
-
 import GaiaTextField from '../commons/GaiaTextField';
 import { IFormData } from './interfaces';
 import GaiaContainer from '../commons/GaiaContainer';
@@ -16,7 +15,6 @@ interface IProps {
 
 export const ForgotPassword = (props: IProps) => {
   const { t } = useTranslation();
-
   const formik = useFormik<IFormData>({
     initialValues: {
       identifier: '',
@@ -26,17 +24,16 @@ export const ForgotPassword = (props: IProps) => {
     validationSchema: generateValidationSchema(t),
     onSubmit: (values) => {
       let data = null;
-
       if (values.identifier) {
         data = values.identifier;
       }
       if (values.email) {
         data = values.email;
       }
-
       if (data) {
         props.requestPassword(data, t);
       }
+      formik.resetForm();
     }
   });
 

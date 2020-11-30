@@ -18,8 +18,9 @@ export const initialState: IState = {
     dateCreated: new Date(),
     dateLastAccess: new Date(),
     userType: 0,
-    projectPermissions: false
-  }
+    canCreateProject: false
+  },
+  showUserSelectionPopup: false
 };
 
 const reducer = (state: IState = initialState, action: AnyAction) => {
@@ -36,6 +37,11 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
         ...state,
         loading: false,
         error: payload
+      };
+    case types.AC_END_OPERATION:
+      return {
+        ...state,
+        loading: false
       };
     case types.AC_END_FETCH_DATA:
       return {
@@ -61,6 +67,11 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
           dateCreated: doDateFormat(payload.dateCreated),
           dateLastAccess: doDateFormat(payload.dateLastAccess)
         }
+      };
+    case types.AC_SET_USER_SELECTION_POPUP_OPEN:
+      return {
+        ...state,
+        showUserSelectionPopup: payload
       };
     default:
       return state;

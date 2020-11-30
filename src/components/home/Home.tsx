@@ -12,6 +12,7 @@ import { ITokenData } from '../login/interfaces';
 interface IProps {
   user: ITokenData | null;
   width: any;
+  configured: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -61,6 +62,9 @@ export const Home = (props: IProps) => {
 
   const isHidden = (item: any) => {
     if (props.user) {
+      if (!props.configured && props.user.isAdmin) {
+        return (!item.notConfigured && props.user.isAdmin);
+      }
       return item.hidden && !props.user.isAdmin;
     }
     return true;

@@ -1,10 +1,10 @@
 import types from './types';
 import { AnyAction } from 'redux';
-import { loadFromStorage } from '../../../utils/storage';
+import { loadFromStorageUser } from '../../../utils/storage';
 import IState, { ITokenData } from '../interfaces';
 import { decodeJwt } from '../../../utils/utils';
 
-const localUserData = loadFromStorage();
+const localUserData = loadFromStorageUser();
 
 const loadDecodedData = (token: string | null): ITokenData | null => {
   if (token) {
@@ -54,7 +54,7 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
     case types.SET_TOKEN:
       return {
         ...state,
-        localUser: { ...state.localUser, token: payload }
+        localUser: { ...state.localUser, token: `Bearer ${payload}` }
       };
     case types.LOGOUT:
       return {

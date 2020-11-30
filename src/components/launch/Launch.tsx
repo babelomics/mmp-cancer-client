@@ -2,9 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { makeStyles } from '@material-ui/core/styles';
 import { createStyles, Grid, Paper, Typography } from '@material-ui/core';
+import ILaunchState from './interfaces';
 import GaiaContainer from '../commons/GaiaContainer';
+import parse from 'html-react-parser';
 
-interface IProps {}
+interface IProps {
+  launch: ILaunchState;
+}
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -47,7 +51,7 @@ export const Launch = (props: IProps) => {
               {t('launch.administrationInfoTitle')}
             </Typography>
             <Typography variant="body2" gutterBottom>
-              {t('launch.administrationInfoText')}
+              {parse(props.launch.data.text)}
             </Typography>
           </Paper>
         </Grid>

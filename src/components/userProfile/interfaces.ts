@@ -5,6 +5,7 @@ export default interface IState {
   error: any;
   success: boolean;
   data: IData;
+  showUserSelectionPopup: boolean;
 }
 
 export interface IData {
@@ -17,7 +18,7 @@ export interface IData {
   dateCreated: string | Date;
   dateLastAccess: string | Date;
   userType: number;
-  projectPermissions: boolean;
+  canCreateProject: boolean;
 }
 
 export interface IPasswordModify {
@@ -27,4 +28,11 @@ export interface IPasswordModify {
 
 export interface IUnsubscribeForm {
   confirmation: string;
+}
+
+export interface IContactAdminUpdate {
+  contactEmail: string | null;
+  contactIdentifier: string | null;
+  contactLastName: string | null;
+  contactName: string | null;
 }
