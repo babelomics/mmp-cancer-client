@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { Query } from 'material-table';
@@ -9,20 +9,25 @@ import GaiaContainer from '../commons/GaiaContainer';
 import routes from '../router/routes';
 import { doDateFormat } from '../../utils/utils';
 
-interface IProps {
-  fetchUsers: (query: Query<any>, filters: ITableFilter, previousData: any) => Promise<any>;
-  usersManagement: IUsersManagement;
-}
+import UserFilter from '../../cbra/models/UserFilter';
+import UserFilterEditor from './user-filter-editor/UserFilterEditor';
 
-export const UsersManagement = (props: IProps) => {
-  const { t } = useTranslation();
-  const history = useHistory();
 
-  return (
-    <GaiaContainer icon="group_add" title={t('usersManagement.title')}>
+import UserTable from './user-table/UserTable';
+
+
+const defaultUserFilter = {} as UserFilter;
+
+
+/*
+class UsersTable2 extends React.PureComponent<UMJProps> {
+
+  render() {
+    const { loading, t, history, fetchUsers } = this.props;
+    return (
       <GaiaTable
         showTitle={false}
-        loading={props.usersManagement.loading}
+        loading={loading}
         columns={[
           {
             title: t('commons.fields.identifier'),
@@ -62,13 +67,35 @@ export const UsersManagement = (props: IProps) => {
             }
           }
         ]}
-        remoteData={props.fetchUsers}
+        remoteData={fetchUsers}
         filtersMenu={true}
         onAddClick={() => history.push(routes.PATH_ADMIN_CREATE_USER)}
         onRowClick={(e, rowData) => {
           history.push(`${routes.PATH_USER_PROFILE}/${rowData.identifier}`);
         }}
       />
+
+    );
+  }
+}
+*/
+
+
+interface IProps {
+  fetchUsers: (query: Query<any>, filters: ITableFilter, previousData: any) => Promise<any>;
+  usersManagement: IUsersManagement;
+}
+
+
+export const UsersManagement = (props: IProps) => {
+  const { t } = useTranslation();
+  const history = useHistory();
+  const [filter, setFilter] = useState(defaultUserFilter);
+  return (
+    <GaiaContainer icon="group_add" title={t('usersManagement.title')}>
+      <UserFilterEditor filter={filter} setFilter={setFilter} />
+      <UserTable filter={filter} />
+      {/* <UsersTable {...props} t={t} history={history} loading={false} /> */}
     </GaiaContainer>
   );
 };
