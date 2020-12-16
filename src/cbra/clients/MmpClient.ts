@@ -3,15 +3,7 @@
 import User from "../models/User";
 import UserFilter from "../models/UserFilter";
 
-
-const clientConfig = { 
-    get: (paramName: string) => {
-        switch(paramName) {
-            case "mmp-host": return "http://192.168.150.151:8080/api/";
-            default: return "";
-        }
-    }
-};
+import { API_ENDPOINT } from '../../utils/constants';
 
 
 class MmpClient { 
@@ -21,15 +13,22 @@ class MmpClient {
         queryParams.size = pageSize;
         queryParams.page = page;
         if (!!filter.searchText) {
-            queryParams.search = filter.searchText;            
+            queryParams.search = filter.searchText;
         }
-        return MmpClient.get<User[]>(sessionToken, "users/list", queryParams, abortSignal).then((response: any) => {
+        if (!!filter.createdAfter) {
+            queryParams.dateCreatedStart = filter.createdAfter.toISOString().substring(0, 10);
+        }
+        if (!!filter.createdBefore) {
+            queryParams.dateCreatedEnd = filter.createdBefore.toISOString().substring(0, 10);
+        }
+        return MmpClient.get<User[]>(sessionToken, "/users/list", queryParams, abortSignal).then((response: any) => {
             return response.content as User[];
         });
     }
 
     private static async exchange<T>(sessionToken: string, serviceUrl: string, httpMethod: string, queryParams: any, requestBody: any, abortSignal: AbortSignal): Promise<T> {
-        const mmpHostUrl = clientConfig.get("mmp-host") as string;
+        // const mmpHostUrl = clientConfig.get("mmp-host") as string;
+        
         const headers = {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -47,7 +46,7 @@ class MmpClient {
                 const value: string = paramValue instanceof Date ? paramValue.toISOString() : paramValue as string;
                 return `${encodeURIComponent(paramName)}=${encodeURIComponent(value)}`;
             }).join("&");
-        const queryUrl = `${mmpHostUrl}${serviceUrl}${!!queryStr ? "?" : ""}${queryStr}`;
+        const queryUrl = `${API_ENDPOINT}${serviceUrl}${!!queryStr ? "?" : ""}${queryStr}`;
         const response = await fetch(queryUrl, params);
         if (!!response.ok) {
             const actualResponse = await response.json();

@@ -10,7 +10,7 @@ import routes from '../router/routes';
 import { doDateFormat } from '../../utils/utils';
 
 import UserFilter from '../../cbra/models/UserFilter';
-import UserFilterEditor from './user-filter-editor/UserFilterEditor';
+import UserFilterEditor from '../../cbra/components/user-filter-editor/UserFilterEditor';
 
 
 import UserTable from './user-table/UserTable';

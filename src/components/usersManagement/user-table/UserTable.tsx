@@ -1,19 +1,22 @@
 import React from 'react';
+import { Table, TableBody } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import UserFilter from '../../../cbra/models/UserFilter';
 import LazyList from '../../../cbra/components/LazyList';
 import UserRow from './UserRow';
 import MmpClient from '../../../cbra/clients/MmpClient';
-import { Table, TableBody } from '@material-ui/core';
 import User from '../../../cbra/models/User';
 import UserTableHeader from './UserTableHeader';
-
-
-
+import UserRowWrapper from './UserRowWrapper';
 
 
 interface IProps {
     filter: UserFilter;
+}
+
+
+function getUserId(user: User) {
+    return user.identifier;
 }
 
 
@@ -31,7 +34,7 @@ function UserTable(props: IProps) {
         <Table>
             <UserTableHeader />
             <TableBody>
-                <LazyList<User> token={filter} ChildElem={UserRow} fetchPage={fetchUserPage} />
+                <LazyList<User> token={filter} ChildElem={UserRow} fetchPage={fetchUserPage} ChildWrapper={UserRowWrapper} />
             </TableBody>
         </Table>
     );
