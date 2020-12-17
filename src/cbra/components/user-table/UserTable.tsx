@@ -1,3 +1,5 @@
+
+
 import React from 'react';
 import { Table, TableBody } from '@material-ui/core';
 import { useSelector } from 'react-redux';
@@ -12,6 +14,7 @@ import UserRowWrapper from './UserRowWrapper';
 
 interface IProps {
     filter: UserFilter;
+    setFilter: (newFilter: UserFilter) => void;
 }
 
 
@@ -22,7 +25,7 @@ function getUserId(user: User) {
 
 function UserTable(props: IProps) {
 
-    const { filter } = props;
+    const { filter, setFilter } = props;
 
     const sessionToken = useSelector((state: any) => state.login.localUser.token.substring(7));
 
@@ -32,7 +35,7 @@ function UserTable(props: IProps) {
 
     return (
         <Table>
-            <UserTableHeader />
+            <UserTableHeader {...props} />
             <TableBody>
                 <LazyList<User> token={filter} ChildElem={UserRow} fetchPage={fetchUserPage} ChildWrapper={UserRowWrapper} />
             </TableBody>

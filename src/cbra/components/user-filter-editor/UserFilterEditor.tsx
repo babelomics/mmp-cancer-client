@@ -3,9 +3,10 @@ import { Box, Collapse, Grid, IconButton, Paper, TextField } from '@material-ui/
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import DelayedTextField from '../../../cbra/components/DelayedTextField';
-import PeriodField from '../../../cbra/components/PeriodField';
 import UserFilter from '../../../cbra/models/UserFilter';
+import Searchbar from '../Searchbar';
+import UserTypeSelector from './UserTypeSelector';
+import DateField from '../DateField';
 
 
 interface IProps {
@@ -26,38 +27,53 @@ class UserFilterEditor extends React.PureComponent<IProps, IState> {
     };
 
     render() {
-        const { filter } = this.props;
+        const { filter, setFilter } = this.props;
         const searchText = filter.searchText || "";
 
-        const { expanded } = this.state;
+        const complexFilter = undefined !== filter.createdAfter
+            || undefined !== filter.createdBefore
+            || undefined !== filter.lastAccessAfter
+            || undefined !== filter.lastAccessBefore
+            || undefined !== filter.userType;
+        const expanded = !!this.state.expanded || complexFilter;
 
         return (
             <Box margin={2}>
                 <Paper elevation={1}>
-                    <Box padding={2}>
-                        <Grid container>
-                            <Grid item xs={11}>
-                                <DelayedTextField variant="outlined" margin="dense" fullWidth value={searchText} onChange={this.handleSearchTextChange} />
-                            </Grid>
-                            <Grid item xs={1}>
-                                <IconButton onClick={this.handleExpandClick}>
-                                    {!!expanded && <ExpandLessIcon />}
-                                    {!expanded && <ExpandMoreIcon />}
-                                </IconButton>
-                            </Grid>
-                            <Collapse in={!!expanded}>
-                                <Grid item xs={12}>
-                                    <PeriodField variant="outlined" margin="dense" before={filter.createdBefore} after={filter.createdAfter} onBeforeChange={this.handleCreatedBeforeChange} onAfterChange={this.handleCreatedAfterChange} afterLabel="Created after" beforeLabel="Created before" />
+                    <Box display="flex" flexDirection="column" padding={2}>
+                        <Box display="flex" flexDirection="row" padding={2}>
+                            <Box flexGrow={1}>
+                                <Searchbar variant="outlined" margin="dense" fullWidth value={searchText} onChange={this.handleSearchTextChange} />
+                            </Box>
+                            <IconButton onClick={this.handleExpandClick} disabled={complexFilter}>
+                                {!!expanded && <ExpandLessIcon />}
+                                {!expanded && <ExpandMoreIcon />}
+                            </IconButton>
+                        </Box>
+                        <Collapse in={!!expanded}>
+                            <Box padding={2}>
+                                <Grid container justify="space-between" alignItems="center" spacing={1}>
+                                    <Grid item xs={12} sm={4}>
+                                        <UserTypeSelector filter={filter} setFilter={setFilter} />
+                                    </Grid>
+                                    <Grid item xs={6} sm={2}>
+                                        <DateField variant="outlined" margin="dense" value={filter.createdAfter} onChange={this.handleCreatedAfterChange} label="Created after" />
+                                    </Grid>
+                                    <Grid item xs={6} sm={2}>
+                                        <DateField variant="outlined" margin="dense" value={filter.createdBefore} onChange={this.handleCreatedBeforeChange} label="Created before" />
+                                    </Grid>
+                                    <Grid item xs={6} sm={2}>
+                                        <DateField variant="outlined" margin="dense" value={filter.lastAccessAfter} onChange={this.handleLastAccessAfterChange} label="Last access after" />
+                                    </Grid>
+                                    <Grid item xs={6} sm={2}>
+                                        <DateField variant="outlined" margin="dense" value={filter.lastAccessBefore} onChange={this.handleLastAccessBeforeChange} label="Last access before" />
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12}>
-                                    The rest of the filter...
-                            |{filter.searchText}|
-                        </Grid>
-                            </Collapse>
-                        </Grid>
+                            </Box>
+                        </Collapse>
                     </Box>
-                </Paper>
-            </Box>
+                </Paper >
+            </Box >
         );
     }
 
@@ -79,6 +95,18 @@ class UserFilterEditor extends React.PureComponent<IProps, IState> {
     private readonly handleCreatedBeforeChange = (newValue?: Date) => {
         const { filter, setFilter } = this.props;
         const newFilter = { ...filter, createdBefore: newValue };
+        setFilter(newFilter);
+    }
+
+    private readonly handleLastAccessAfterChange = (newValue?: Date) => {
+        const { filter, setFilter } = this.props;
+        const newFilter = { ...filter, lastAccessAfter: newValue };
+        setFilter(newFilter);
+    }
+
+    private readonly handleLastAccessBeforeChange = (newValue?: Date) => {
+        const { filter, setFilter } = this.props;
+        const newFilter = { ...filter, lastAccessBefore: newValue };
         setFilter(newFilter);
     }
 }

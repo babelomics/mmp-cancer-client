@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TextField } from '@material-ui/core';
+import { InputBase } from '@material-ui/core';
 
 
 const DEFAULT_DELAY_MS = 250;
@@ -17,11 +17,17 @@ function DelayedTextField(props: IProps) {
     const [text, setText] = useState(props.value || "");
 
     useEffect(() => {
+        if (value !== text) {
+            setText(value);
+        }
+    }, [value]);
+
+    useEffect(() => {
         if (text != value) {
             const timerId = setTimeout(() => { onChange(text); }, delay || DEFAULT_DELAY_MS);
             return () => { clearTimeout(timerId); };
         }
-    }, [text, value]);
+    }, [text]);
 
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const newValue = event.target.value as string;
@@ -29,7 +35,7 @@ function DelayedTextField(props: IProps) {
     }
 
     return (
-        <TextField {...props} value={text} onChange={handleTextChange} />
+        <InputBase {...props} value={text} onChange={handleTextChange} />
     );
 }
 

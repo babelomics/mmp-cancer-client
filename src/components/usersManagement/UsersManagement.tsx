@@ -11,9 +11,7 @@ import { doDateFormat } from '../../utils/utils';
 
 import UserFilter from '../../cbra/models/UserFilter';
 import UserFilterEditor from '../../cbra/components/user-filter-editor/UserFilterEditor';
-
-
-import UserTable from './user-table/UserTable';
+import UserTable from '../../cbra/components/user-table/UserTable';
 
 
 const defaultUserFilter = {} as UserFilter;
@@ -94,7 +92,7 @@ export const UsersManagement = (props: IProps) => {
   return (
     <GaiaContainer icon="group_add" title={t('usersManagement.title')}>
       <UserFilterEditor filter={filter} setFilter={setFilter} />
-      <UserTable filter={filter} />
+      <UserTable filter={filter} setFilter={setFilter} />
       {/* <UsersTable {...props} t={t} history={history} loading={false} /> */}
     </GaiaContainer>
   );
