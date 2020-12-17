@@ -1,5 +1,3 @@
-// TODO: parametrize this
-
 import User from "../models/User";
 import UserFilter from "../models/UserFilter";
 
@@ -95,9 +93,6 @@ class MmpClient {
         return MmpClient.exchange(sessionToken, serviceUrl, "DELETE", queryParams, undefined, abortSignal);
     }
 }
-
-
-
 
 
 export default MmpClient;

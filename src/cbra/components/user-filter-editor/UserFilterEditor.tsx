@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Collapse, Grid, IconButton, Paper, TextField } from '@material-ui/core';
+import { Box, Collapse, Grid, IconButton, Paper, TextField, Tooltip } from '@material-ui/core';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -45,10 +45,12 @@ class UserFilterEditor extends React.PureComponent<IProps, IState> {
                             <Box flexGrow={1}>
                                 <Searchbar variant="outlined" margin="dense" fullWidth value={searchText} onChange={this.handleSearchTextChange} />
                             </Box>
-                            <IconButton onClick={this.handleExpandClick} disabled={complexFilter}>
-                                {!!expanded && <ExpandLessIcon />}
-                                {!expanded && <ExpandMoreIcon />}
-                            </IconButton>
+                            <Tooltip title={expanded ? "Show advanced filter" : "Hide advanced filter"}>
+                                <IconButton onClick={this.handleExpandClick} disabled={complexFilter}>
+                                    {!!expanded && <ExpandLessIcon />}
+                                    {!expanded && <ExpandMoreIcon />}
+                                </IconButton>
+                            </Tooltip>
                         </Box>
                         <Collapse in={!!expanded}>
                             <Box padding={2}>

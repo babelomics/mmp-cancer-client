@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { Query } from 'material-table';
@@ -12,6 +12,7 @@ import { doDateFormat } from '../../utils/utils';
 import UserFilter from '../../cbra/models/UserFilter';
 import UserFilterEditor from '../../cbra/components/user-filter-editor/UserFilterEditor';
 import UserTable from '../../cbra/components/user-table/UserTable';
+import { Box, Button } from '@material-ui/core';
 
 
 const defaultUserFilter = {} as UserFilter;
@@ -89,8 +90,14 @@ export const UsersManagement = (props: IProps) => {
   const { t } = useTranslation();
   const history = useHistory();
   const [filter, setFilter] = useState(defaultUserFilter);
+  const handleNewUser = useCallback(() => {
+    history.push(routes.PATH_ADMIN_CREATE_USER)
+  }, [history]);
   return (
     <GaiaContainer icon="group_add" title={t('usersManagement.title')}>
+      <Box display="flex" flexDirection="row-reverse">
+        <Button variant="contained" color="primary" onClick={handleNewUser}>New user</Button>
+      </Box>
       <UserFilterEditor filter={filter} setFilter={setFilter} />
       <UserTable filter={filter} setFilter={setFilter} />
       {/* <UsersTable {...props} t={t} history={history} loading={false} /> */}

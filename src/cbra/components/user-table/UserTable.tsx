@@ -1,6 +1,6 @@
 
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Table, TableBody } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import UserFilter from '../../../cbra/models/UserFilter';
@@ -25,19 +25,19 @@ function getUserId(user: User) {
 
 function UserTable(props: IProps) {
 
-    const { filter, setFilter } = props;
+    const { filter } = props;
 
     const sessionToken = useSelector((state: any) => state.login.localUser.token.substring(7));
 
-    const fetchUserPage = (pageSize: number, page: number, abortSignal: AbortSignal) => {
+    const fetchUserPage = useCallback((pageSize: number, page: number, abortSignal: AbortSignal) => {
         return MmpClient.getUserPage(sessionToken, filter, pageSize, page, abortSignal);
-    }
+    }, [sessionToken, filter]);
 
     return (
         <Table>
             <UserTableHeader {...props} />
             <TableBody>
-                <LazyList<User> token={filter} ChildElem={UserRow} fetchPage={fetchUserPage} ChildWrapper={UserRowWrapper} />
+                <LazyList<User> token={filter} ChildElem={UserRow} fetchPage={fetchUserPage} ChildWrapper={UserRowWrapper} getElemId={getUserId} />
             </TableBody>
         </Table>
     );
