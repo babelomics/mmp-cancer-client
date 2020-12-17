@@ -45,7 +45,7 @@ class UserFilterEditor extends React.PureComponent<IProps, IState> {
                             <Box flexGrow={1}>
                                 <Searchbar variant="outlined" margin="dense" fullWidth value={searchText} onChange={this.handleSearchTextChange} />
                             </Box>
-                            <Tooltip title={expanded ? "Show advanced filter" : "Hide advanced filter"}>
+                            <Tooltip title={expanded ? "Hide advanced filter" : "Show advanced filter"}>
                                 <IconButton onClick={this.handleExpandClick} disabled={complexFilter}>
                                     {!!expanded && <ExpandLessIcon />}
                                     {!expanded && <ExpandMoreIcon />}
