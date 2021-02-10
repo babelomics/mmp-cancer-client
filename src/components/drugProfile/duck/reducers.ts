@@ -27,18 +27,17 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
         loading: false,
         error: payload
       };
-    case types.AC_END_FETCH_DATA:      
+    case types.AC_END_FETCH_DATA:
       let result = [...payload];
-      result.forEach((key: any, index:number) => {
+      result.forEach((key: any, index: number) => {
         key.creationDate = doDateFormat(result[index].creationDate);
         if (key.deletionDate) {
           key.deletionDate = doDateFormat(result[index].deletionDate);
         }
         if (key.cost) {
-          key.cost = key.cost.toFixed(2).replace('.', ',', 'g');
-        }
-        else {
-          key.cost='';
+          key.cost = key.cost.toFixed(2).replace(',', '.', 'g');
+        } else {
+          key.cost = '';
         }
       });
       return {

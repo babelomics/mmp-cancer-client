@@ -1,178 +1,94 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
-import { Query } from 'material-table';
-
-import GaiaTable, { ITableFilter } from '../commons/GaiaTable';
-import GaiaButton from '../commons/GaiaButton';
-import IDrugsManagement, { ITableData } from './interfaces';
 import GaiaContainer from '../commons/GaiaContainer';
+import DrugFilterButtons from './drug-filter-buttons/DrugFilterButtons';
+import DrugTable from './drug-table/DrugTable';
+import { DrugFilter } from './interfaces';
+import MmpClient from '../commons/tableFilter/MmpClient';
+import GaiaLoading from '../commons/GaiaLoading';
+import { LinearProgress } from '@material-ui/core';
 import routes from '../router/routes';
-import { doDateFormat } from '../../utils/utils';
-import {Checkbox } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+
+const defaultDrugFilter = { isDeleted: false } as DrugFilter;
 
 interface IProps {
-  fetchDrugs: (query: Query<any>, filters: ITableFilter, previousData: any) => Promise<any>;
   manualDrugsUpdate: () => Promise<any>;
-  changeAvailable: (drugs: string[], available: boolean, user: string) => Promise<any>;
-  drugsManagement: IDrugsManagement;
-  user: string | null | undefined ;
+  changeAvailable: (drugs: string[], available: boolean, user: string, isAllSelected: boolean, filters: any) => Promise<any>;
+  user: string | null | undefined;
 }
 
 export const DrugsManagement = (props: IProps) => {
   const [selectedRows, setSelectedRows] = useState<any>([]);
+  const [selectAll, setSelectAll] = useState<boolean>(false);
+  const [filter, setFilter] = useState<DrugFilter>(defaultDrugFilter);
+  const [loading, setLoading] = useState<boolean>(false);
   const { t } = useTranslation();
   const history = useHistory();
 
-  /*const updateDrugs = () => {
-    props.manualDrugsUpdate();
-  }*/
+  const refreshTableUser = () => {
+    setLoading(true);
+    props.manualDrugsUpdate().then((result) => {
+      if (result.done) {
+        resetSelected();
+        setFilter(defaultDrugFilter);
+        setLoading(false);
+      }
+    });
+  };
 
-  const selectRow = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let rows = [...selectedRows];
-    if(e.target.checked) {
-      rows.push(e.target.value);
+  const changeAvailability = (available: boolean) => {
+    if (props.user) {
+      setLoading(true);
+      let filters: { [k: string]: any } = {};
+      if (!!filter.searchText) {
+        filters.search = filter.searchText;
+      }
+      if (!!filter.standardName) {
+        filters.standardName = filter.standardName;
+      }
+      if (!!filter.commonName) {
+        filters.organization = filter.commonName;
+      }
+      if (filter.hasOwnProperty('available') && (filter.available === true || filter.available === false)) {
+        filters.isAvailable = filter.available;
+      }
+      if (!!filter.lastModificationAfter) {
+        filters.dateModifiedStart = MmpClient.translateDate(filter.lastModificationAfter.toISOString().substring(0, 10));
+      }
+      if (!!filter.lastModificationBefore) {
+        filters.dateModifiedEnd = MmpClient.translateDate(filter.lastModificationBefore.toISOString().substring(0, 10));
+      }
+      if (filter.hasOwnProperty('isDeleted') && (filter.isDeleted === true || filter.isDeleted === false)) {
+        filters.isDeleted = filter.isDeleted.toString();
+      }
+      props.changeAvailable(selectedRows, available, props.user, selectAll, filters).then((result) => {
+        if (result.done) {
+          resetSelected();
+          setLoading(false);
+        }
+      });
     }
-    else {
-      const index = rows.indexOf(e.target.value);
-      rows.splice(index, 1);
-    }
-    setSelectedRows([...rows]);
-  }
+  };
 
-  const selectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(e.target.checked) {
-      let rows: any[] = [];
-      props.drugsManagement.drugsData.forEach(elem => rows.push(elem.standardName));
-      setSelectedRows([...rows]);
-    }
-    else {
-      setSelectedRows([]);
-    }
-  }
-
-  const resetSelected = () =>{
+  const resetSelected = () => {
     setSelectedRows([]);
-  }
+    setSelectAll(false);
+  };
+  const goHome = () => {
+    history.push(routes.PATH_HOME);
+  };
   return (
-    <GaiaContainer icon="local_pharmacy" title={t('drugsManagement.title')}>
-      <GaiaTable
-        showTitle={false}
-        loading={props.drugsManagement.loading}
-        columns={[
-          {
-            title: <Checkbox value='all' color="default" onChange={selectAll} style={{marginLeft: 16}} checked={props.drugsManagement.drugsData.length === selectedRows.length && props.drugsManagement.drugsData.length!==0 }/>,
-            field:'check',
-            type: 'notfilter',
-            disableClick: true,
-            sorting: false,
-            cellStyle: {
-              width: 40,
-              maxWidth: 40
-            },
-            headerStyle: {
-              display: 'inline',
-              padding: 1
-            },
-            size: 'small',
-            render: (rowData: ITableData) => <Checkbox color="default" value={rowData.standardName} checked={selectedRows.includes(rowData.standardName)} onChange={selectRow}/>
-          },
-          {
-            title: t('commons.fields.standardName'),
-            field: 'standardName'
-          },
-          {
-            title: t('commons.fields.commonName'),
-            field: 'commonName'
-          },
-          {
-            title: t('commons.fields.available'),
-            field: 'isAvailable',
-            type: 'dboolean',
-            render: (rowData: ITableData) => {
-              if (rowData.available) {
-                return t('commons.fields.avaType.yes')
-              }
-              else {
-                return t('commons.fields.avaType.no')
-              }
-            },
-            forFilter: {
-              title: '',
-              values: [[t('commons.fields.avaFilter.yes'), 'yes'], [t('commons.fields.avaFilter.no'), 'no']]
-            }
-          },
-          {
-            title: t('commons.fields.cost'),
-            field: 'cost',
-            type: 'numeric',
-            align: 'left',
-            render:(rowData: ITableData) => {
-              if (rowData.cost) {
-                return rowData.cost.toFixed(2).replace('.', ',');
-              }
-              else {
-                return '-';
-              }
-            }
-          },
-          {
-            title: t('commons.fields.lastModificationDate'),
-            field: 'dateModified',
-            type: 'date',
-            headerStyle: {
-              whiteSpace: 'nowrap'
-            },
-            render: (rowData: ITableData) => {
-              if (rowData.deletionDate) {
-                return doDateFormat(rowData.deletionDate);
-              }
-              else {
-                return doDateFormat(rowData.creationDate);
-              }
-            }
-          },
-          {
-            title: t('commons.fields.drugDeleted'),
-            field: 'isDeleted',
-            type: 'dboolean',
-            hidden: true,
-            render: (rowData: ITableData) => {
-              if (rowData.deletionDate) {
-                return true;
-              }
-              else {
-                return false;
-              }
-            },
-            forFilter: {
-              title: t('commons.fields.delFilter.title'),
-              values: [[t('commons.fields.delFilter.yes'), 'yes'], [t('commons.fields.delFilter.no'), 'no']]
-            }
-          }
-        ]}
-        //selection={true}
-        remoteData={props.fetchDrugs}
-        rowStyle={(data: ITableData) => {
-          if (data.deletionDate) {
-            return {
-              backgroundColor: 'lightgray'
-            };
-          }
-
-          return {};
-        }}
-        filtersMenu={true}
-        selectedRows= {selectedRows}
-        changeAvailable={props.changeAvailable}
-        resetSelection={resetSelected}
-        refreshTable={props.manualDrugsUpdate}
-        user={props.user}
-        defaulFilter={{isDeleted: false}}
-        onRowClick={(e, rowData) => {
-          history.push(`${routes.PATH_DRUG_PROFILE}/${rowData.id}`);
-        }}
+    <GaiaContainer icon="local_pharmacy" title={t('drugsManagement.title')} onBack={goHome}>
+      <DrugFilterButtons
+        filter={filter}
+        setFilter={setFilter}
+        loading={loading}
+        manualUpdate={refreshTableUser}
+        changeAvailability={changeAvailability}
+        showAvailability={selectedRows.length !== 0 || selectAll}
       />
+      <DrugTable filter={filter} setFilter={setFilter} loading={loading} selectedRows={selectedRows} setSelectedRows={setSelectedRows} selectAll={selectAll} setSelectAll={setSelectAll} />
     </GaiaContainer>
   );
 };

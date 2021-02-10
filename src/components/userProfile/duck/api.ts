@@ -14,7 +14,7 @@ const updateUser = (identifier: string, data: IData) => {
 };
 
 const changePassword = (identifier: string, password: string) => {
-  return axios.put(`${API_USERS_ENDPOINT}/user/id/${identifier}/changePassword`, { password });
+  return axios.put(`${API_USERS_ENDPOINT}/user/id/${identifier}/changePassword`, password);
 };
 
 const unsubscribeUser = (identifier: string) => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormikErrors, useFormik } from 'formik';
 
@@ -23,6 +23,7 @@ interface IProps {
 
 export const CreateNewUser = (props: IProps) => {
   const { t } = useTranslation();
+  const [showCheck, setShowCheck] = useState(true);
 
   const initialValues = (): IFormData => {
     return {
@@ -45,6 +46,14 @@ export const CreateNewUser = (props: IProps) => {
       props.createUser({ ...values, userType: getUserTypeByValue(values.userType), accessType: getAccessTypeByValue(values.accessType) }, formik.setErrors, t);
     }
   });
+
+  const handleCheck = (event: any, child: any) => {
+    if (event.target.value === 0) {
+      setShowCheck(true);
+    } else {
+      setShowCheck(false);
+    }
+  };
 
   return (
     <GaiaContainer icon="person_add" title={t('createNewUser.title')} onAccept={!props.loading ? formik.handleSubmit : undefined}>
@@ -81,10 +90,11 @@ export const CreateNewUser = (props: IProps) => {
               <GaiaSelectField
                 required
                 name="userType"
-                label={t('commons.fields.userType.title')}
-                items={[t('commons.fields.userType.user'), t('commons.fields.userType.admin')]}
+                label={t('commons.fields.userType')}
+                items={[t('commons.fields.userTypeOptions.user'), t('commons.fields.userTypeOptions.admin')]}
                 formik={formik}
                 fullWidth
+                onChange={handleCheck}
               />
             </Grid>
           </Grid>
@@ -92,9 +102,11 @@ export const CreateNewUser = (props: IProps) => {
             <Grid item xs={6}>
               <GaiaTextField required name="email" formik={formik} label={t('commons.fields.email')} fullWidth />
             </Grid>
-            <Grid item xs={6}>
-              <GaiaCheckBox name="canCreateProject" formik={formik} text={t('commons.fields.projectCreationPermission')} labelPlacement="start" />
-            </Grid>
+            {showCheck && (
+              <Grid item xs={6}>
+                <GaiaCheckBox name="canCreateProject" formik={formik} text={t('commons.fields.projectCreationPermission')} labelPlacement="start" />
+              </Grid>
+            )}
           </Grid>
         </React.Fragment>
       )}

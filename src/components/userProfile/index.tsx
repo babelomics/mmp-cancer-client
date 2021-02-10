@@ -5,18 +5,21 @@ import { RouteComponentProps } from 'react-router-dom';
 import { IRootState } from '../../store';
 import { operations } from './duck';
 import UserProfile from './UserProfile';
-import IUserProfile, { IContactAdminUpdate, IData } from './interfaces';
+import IUserProfile, { IContactAdminUpdate } from './interfaces';
 import routes from '../router/routes';
+import { withTranslation } from 'react-i18next';
 
 interface IProps extends RouteComponentProps {
   login: any;
   userProfile: IUserProfile;
-  fetchUserData: (identifier: string) => void;
-  updateUser: (identifier: string, data: any, t: any) => void;
-  changePassword: (identifier: string, password: string) => void;
+  t: any;
+  fetchUserData: (identifier: string, t: any) => void;
+  updateUser: (identifier: string, data: any, t: any) => Promise<any>;
+  changePassword: (identifier: string, password: string, t: any) => void;
   unsubscribeUser: (identifier: string, t: any) => void;
   setUserSelectionPopupOpen: (open: boolean) => void;
   updateContactAdmin: (params: IContactAdminUpdate, t: any, user: any, isUnsubscribing: boolean) => void;
+  [key: string]: any;
 }
 
 class Wrapper extends React.Component<IProps, {}> {
@@ -28,13 +31,13 @@ class Wrapper extends React.Component<IProps, {}> {
     if (userIdentifier) {
       // Check if user logged is the same as identifier in url
       if (this.props.login.user.sub === userIdentifier || this.props.login.user.isAdmin) {
-        this.props.fetchUserData(userIdentifier);
+        this.props.fetchUserData(userIdentifier, this.props.t);
       } else {
         // Redirect to Home
         this.props.history.push(routes.PATH_HOME);
       }
     } else {
-      this.props.fetchUserData(this.props.login.user.sub);
+      this.props.fetchUserData(this.props.login.user.sub, this.props.t);
     }
   }
 
@@ -49,5 +52,6 @@ const mapStateToProps = (state: IRootState) => ({
 });
 
 const mapDispatchToProps = { ...operations };
+const TranslatedWrapper = withTranslation()<any>(Wrapper);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Wrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(TranslatedWrapper);

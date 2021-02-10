@@ -57,11 +57,14 @@ export const GaiaModalFormik = ({ title, open = false, children, formik, onSubmi
     setOpen(false);
     if (onClose) {
       onClose();
+      setTimeout(() => formik.resetForm(), 1000);
     }
   };
 
   const handleSubmit = () => {
-    formik.handleSubmit();
+    if (!onSubmit) {
+      formik.handleSubmit();
+    }
     if (onSubmit && formik.isValid) {
       onSubmit();
       setTimeout(() => formik.resetForm(), 1000);

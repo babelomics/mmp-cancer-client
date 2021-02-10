@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import { FormikErrors, useFormik } from 'formik';
@@ -37,10 +37,15 @@ export const RegistryRequest = (props: IProps) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const history = useHistory();
+
   const isReviewing = () => {
     // TODO: Check if user is admin
     const path = history.location.pathname.split('/');
     return `/${path[1]}` === routes.PATH_ADMIN_REVIEW_REQUEST;
+  };
+
+  const resetAccessRefusalReason = () => {
+    formik.setFieldValue('accessRefusalReason', '');
   };
 
   const formik = useFormik({
@@ -65,6 +70,9 @@ export const RegistryRequest = (props: IProps) => {
       </div>
     );
   };
+  const backScreenBefore = () => {
+    history.push(routes.PATH_REGISTRATION_MANAGEMENT);
+  };
 
   return (
     <GaiaContainer
@@ -72,6 +80,7 @@ export const RegistryRequest = (props: IProps) => {
       title={isReviewing() ? t('registryRequest.review.title') : t('registryRequest.title')}
       onAccept={props.data.attended === null ? formik.handleSubmit : undefined}
       acceptButtonText={isReviewing() ? t('commons.buttons.process') : undefined}
+      onBack={backScreenBefore}
     >
       {props.loading ? (
         <GaiaLoading />
@@ -112,9 +121,9 @@ export const RegistryRequest = (props: IProps) => {
                   <GaiaSelectField
                     required
                     name="userType"
-                    label={t('commons.fields.userType.title')}
+                    label={t('commons.fields.userType')}
                     formik={formik}
-                    items={[t('commons.fields.userType.user'), t('commons.fields.userType.admin')]}
+                    items={[t('commons.fields.userTypeOptions.user'), t('commons.fields.userTypeOptions.admin')]}
                     disabled={props.data.attended !== null}
                     fullWidth
                   />
@@ -132,6 +141,7 @@ export const RegistryRequest = (props: IProps) => {
                   <GaiaRadioButtonGroup
                     name="attended"
                     formik={formik}
+                    onChange={resetAccessRefusalReason}
                     items={[
                       {
                         label: t('registryRequest.review.approve'),

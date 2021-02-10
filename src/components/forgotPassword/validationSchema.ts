@@ -10,14 +10,14 @@ export const generateValidationSchema = (t: TFunction) =>
         .nullable()
         .when(['email'], {
           is: (email) => !email,
-          then: Yup.string().required('Yeeees')
+          then: Yup.string().required(t('commons.error.invalidIdentifier'))
         }),
       email: Yup.string()
         .nullable()
         .matches(regexpEmail, t('commons.error.invalidEmail'))
         .when(['identifier'], {
           is: (identifier) => !identifier,
-          then: Yup.string().required()
+          then: Yup.string().required(t('commons.error.invalidEmail'))
         })
     },
     [['identifier', 'email']]

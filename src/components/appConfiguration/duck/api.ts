@@ -1,14 +1,9 @@
 import axios from 'axios';
 import { IConfiguration } from '../interfaces';
 
-import { API_ENDPOINT, API_CONFIGURATION, API_PUNDRUGS, API_CELLBASE } from '../../../utils/constants';
+import { API_ENDPOINT, API_CONFIGURATION, API_PUNDRUGS, API_DINAMIC_DICTIONARY } from '../../../utils/constants';
 
 const API_CONFING_ENDPOINT = `${API_ENDPOINT}${API_CONFIGURATION}`;
-
-//const API_USERS_REQUESTS_ENDPOINT = `${API_ENDPOINT}${API_USERS_REQUESTS}`;
-// const fetchRegistrationRequests = (params: any) => {
-//   return axios.get(`${API_USERS_REQUESTS_ENDPOINT}/list`, { params });
-//};
 
 const fetchConfigRequest = () => {
   return axios.get(`${API_CONFING_ENDPOINT}`, {});
@@ -26,8 +21,8 @@ const createPanDrugsUserApi = (userField: string, passwordField: string, urlFiel
   return axios.post(`${API_ENDPOINT}${API_PUNDRUGS}/register`, { user: userField, password: passwordField, baseUrl: urlField, email: emailField });
 };
 
-const validateCellbaseUrlApi = (urlField: string) => {
-  return axios.post(`${API_ENDPOINT}${API_CELLBASE}/validate`, { url: urlField });
+const validateGenomicDictionaryUrlApi = (urlField: string) => {
+  return axios.post(`${API_ENDPOINT}${API_DINAMIC_DICTIONARY}/validate`, { url: urlField });
 };
 
-export default { fetchConfigRequest, setNewConfig, validatePanDrugsApi, validateCellbaseUrlApi, createPanDrugsUserApi };
+export default { fetchConfigRequest, setNewConfig, validatePanDrugsApi, validateGenomicDictionaryUrlApi, createPanDrugsUserApi };

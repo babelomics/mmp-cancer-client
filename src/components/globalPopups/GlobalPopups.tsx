@@ -4,7 +4,7 @@ import GaiaPopup from '../commons/GaiaPopup';
 
 interface IProps {
   open?: boolean;
-  type?: 'info' | 'error' | 'success' | 'warning';
+  type?: 'info' | 'error' | 'success' | 'warning' | 'warningConfirm';
   message?: string;
   onClose?: () => void;
   setPopupOpen: (open: boolean) => void;

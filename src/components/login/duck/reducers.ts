@@ -37,7 +37,8 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
         loading: false,
         localUser: { ...payload, token: `Bearer ${payload.token}` },
         user: loadDecodedData(payload.token),
-        isAuthenticated: true
+        isAuthenticated: true,
+        error: null
       };
     case types.AC_ERR_LOGIN:
       return {

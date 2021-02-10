@@ -34,10 +34,12 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3)
+    padding: theme.spacing(3),
+    width: '100%'
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
+    cursor: 'pointer'
   },
   username: {
     marginRight: 30
@@ -62,12 +64,15 @@ const CustomAppBar: React.FunctionComponent<IProps> = ({ children, isAuthenticat
     return !isAuthenticated && (history.location.pathname === routes.PATH_LAUNCH || history.location.pathname === '/');
   };
 
+  const goHome = () => {
+    history.push(routes.PATH_HOME);
+  };
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed">
         <Toolbar>
-          <Typography variant="h4" noWrap className={classes.title}>
+          <Typography variant="h4" noWrap className={classes.title} onClick={goHome}>
             {t('app.name').toUpperCase()}
           </Typography>
           {showAccessLink() && (

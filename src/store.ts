@@ -16,7 +16,6 @@ import passwordRequest from './components/forgotPassword/duck';
 import setPasswordRequest from './components/setPassword/duck';
 import ISetPassword from './components/setPassword/interfaces';
 
-import usersManagement from './components/usersManagement/duck';
 import IUsersManagement from './components/usersManagement/interfaces';
 
 import userProfile from './components/userProfile/duck';
@@ -28,7 +27,6 @@ import ICreateNewUser from './components/createNewUser/interfaces';
 import registryRequest from './components/registryRequest/duck';
 import IRegistryRequest from './components/registryRequest/interfaces';
 
-import registrationManagement from './components/registrationManagement/duck';
 import IRegistrationManaement from './components/registrationManagement/interfaces';
 
 import drugProfile from './components/drugProfile/duck';
@@ -42,6 +40,20 @@ import IGlobalPopups from './components/globalPopups/interfaces';
 
 import appConfiguration from './components/appConfiguration/duck';
 import IAppConfiguration from './components/appConfiguration/interfaces';
+
+import IPanelSetsManagement from './components/panelSetsManagement/interfaces';
+
+import createNewPanelSet from './components/createNewPanelSet/duck';
+import ICreateNewPanelSet from './components/createNewPanelSet/interfaces';
+
+import panelSetProfile from './components/panelSetProfile/duck';
+import IPanelSetProfile from './components/panelSetProfile/interfaces';
+
+import genomicRefPopup from './components/genomicRefPopup/duck';
+import IGenomicRefPopup from './components/genomicRefPopup/interfaces';
+
+import tabPanelDiagnostic from './components/tabPanelDiagnostic/duck';
+import ITabPanelDiagnostic from './components/tabPanelDiagnostic/interfaces';
 
 import { saveToStorage } from './utils/storage';
 
@@ -65,6 +77,11 @@ export interface IRootState {
   drugProfile: IDrugProfile;
   drugsManagement: IDrugsManagement;
   globalPopups: IGlobalPopups;
+  panelSetsManagement: IPanelSetsManagement;
+  createNewPanelSet: ICreateNewPanelSet;
+  panelSetProfile: IPanelSetProfile;
+  genomicRefPopup: IGenomicRefPopup;
+  tabPanelDiagnostic: ITabPanelDiagnostic;
 }
 
 declare global {
@@ -79,7 +96,24 @@ const middlewares = [thunk, routerMiddleware(history)];
 // Needed for Redux Devs Tools
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
-  combineReducers({ router: connectRouter(history), launch, passwordRequest, setPasswordRequest, login, usersManagement, userProfile, createNewUser, registryRequest, registrationManagement, drugsManagement, globalPopups, drugProfile, appConfiguration }),
+  combineReducers({
+    router: connectRouter(history),
+    launch,
+    passwordRequest,
+    setPasswordRequest,
+    login,
+    userProfile,
+    createNewUser,
+    registryRequest,
+    drugsManagement,
+    globalPopups,
+    drugProfile,
+    appConfiguration,
+    createNewPanelSet,
+    panelSetProfile,
+    genomicRefPopup,
+    tabPanelDiagnostic
+  }),
   compose(applyMiddleware(...middlewares), composeEnhancers())
 );
 

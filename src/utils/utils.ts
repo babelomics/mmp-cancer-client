@@ -1,15 +1,15 @@
 import moment from 'moment';
 
-export const doDateFormat = (date: Date | string | null): string | null => {
+export const doDateFormat = (date: Date | string | null, format?: string): string | null => {
   if (!date) {
     return null;
   }
 
   if (typeof date === 'string' && date.includes('/')) {
     const split = date.split('/');
-    return moment(`${split[1]}/${split[0]}/${split[2]}`).format('DD/MM/YYYY');
+    return moment(`${split[1]}/${split[0]}/${split[2]}`).format(format ?? 'DD/MM/YYYY');
   }
-  return moment(date).format('DD/MM/YYYY');
+  return moment(date).format(format ?? 'DD/MM/YYYY');
 };
 
 export const dateStrToDate = (date: string): Date => {

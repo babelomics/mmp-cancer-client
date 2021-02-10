@@ -5,22 +5,141 @@
     "profile": "My profile",
     "logout": "Logout"
   },
-  
+  "tabPanelDiagnostic": {
+    "title": "Diagnostic Panel",
+    "titlePanelPopup": "Diagnostic Panel Selection",
+    "confirmDeleteRegion": "Are you sure that you want to delete this cromosomic region?",
+    "confirmDeleteVariant": "Are you sure that you want to delete this variant?",
+    "confirmDeleteRelation": "Are you sure that you want to delete the relation between the panel {{panel}} and the current one?",
+    "confirmDeleteRelationRoot": "Are you sure that you want to delete the relation with the panel {{panel}}? The current one will become a root panel.",
+    "confirmDeleteRelationChild": "Are you sure that you want to delete the relation with the panel {{panel}}? This panel {{panel}} will be left without ascendats.You can delete it along with its unique descendants or leave it as root panel.",
+    "tooltip": {
+      "leftArrow": "Previous Version",
+      "rightArrow": "Next version",
+      "delete": "Delete Diagnostic Panel",
+      "save": "Save panel"
+    },
+    "messages": {
+      "successDelete": "Panel Diagnostic delete : successful",
+      "error": "error during the delete process",
+      "unknown": " Unknown error",
+      "chooseDeletion": "Are you sure you want to delete the panel? There are panels that will be left without ascenders. You can delete them along with their unique descendants or leave them as the root panel."
+    },
+    "tabs": {
+      "general": "GENERAL",
+      "icd-10": {
+        "title": "ICD-10",
+        "selectionTitle": "ICD-10 Selection",
+        "columns": {
+          "identifier": "Identifier",
+          "description": "Description",
+          "parents": "Parents",
+          "children": "Childrens"
+        }
+      },
+      "hpo": "HPO",
+      "omim": "OMIM",
+      "gene": "GENE",
+      "transcript": "TRANSCRIPT",
+      "regionVatiant": "REGION AND VARIANT",
+      "ascendingDescending": "ASCENDING AND DESCENDING PANELS"
+    },
+    "fields": {
+      "chromosomeSequence": "Chromosome/Sequence",
+      "initPosition": "Start",
+      "reference": "Reference",
+      "alternative": "Alternative",
+      "endPosition": "End"
+    },
+    "error": {
+      "notValirRegion": "The region is not valid."
+    }
+  },
+  "panelSetCreate": {
+    "title": "Diagnostic Panel Sets",
+    "titlePopup": "Genomic Reference",
+    "subTitlePopupSpecies": "Species or organism",
+    "titlePopupTableSpecies": "Species or organism (NCBI Taxonomy)",
+    "subTitlePopupAssemblies": "Assembly",
+    "titlePopupTableAssemblies": "Assemblies",
+    "ensemblRelease": "Ensembl Release",
+    "importPopupTitle": "Import Diagnostic Panel Set",
+    "messages": {
+      "success": "Panel Set has been created successfully",
+      "error": "Error during the creation process",
+      "errorConflict": "Already exist a panel collection with the same identifier or name.",
+      "importPopupMessage_1": "Select the collection panels diagnostic file (.json or .zip)",
+      "importPopupMessage_2": "Confirmation",
+      "importPopupError": "Error during Diagnostic Panel Set Import",
+      "importPopupError_1": "",
+      "importPopupError_2": "Date selected not valid",
+      "importPopupError_3": "Already exist a panels with the same name or identifier",
+      "importPopupError_4": "Genomic Entity (gene, varianto region) not Valid",
+      "importPopupError_5": "",
+      "importCorrect": "Import File Successfully",
+      "importPopupConfirm_1": "Already exist a panel collection with the same identifier or name. If you confirm the overwrite write OVERWRITE",
+      "importPopupConfirm_2": "If you want rename the collection's indentifier and/or the name insert here.",
+      "exportPopupError": "An error ocurred while exporting the file.",
+      "importPopupSuccess": "Panel set has been imported successfully.",
+      "importError422_InvalidRef": "Identifier or name is invalid. Please, check if identifier field is empty or has spaces and if name is empty.",
+      "importError400_InvalidFileName": "Error: incorrect file name format.",
+      "importError400_NotJson": "Error: incorrect format. (Required .json)",
+      "importError422_InvalidIdOrName": "Error: empty identifier or name.",
+      "importError409_IdentifierExists": "Error: Identifier is already taken!",
+      "importError409_NameExists": "Error: Name is already taken!",
+      "importError422_FutureDates": "Error: Dates cannot be in the future!",
+      "importError422_InvalidTranscript": "Error: There are panels with invalid genomic entities (transcripts, genes, variants or regions).",
+      "importError422_InvalidGenes": "Error: There are panels with invalid genomic entities (transcripts, genes, variants or regions).",
+      "importError422_InvalidNumberOfPanels": "Error: There is more than one current panel.",
+      "importError422_PanelsCoexist": "Error: There are some panels inside of the collection with the same name or id that coexists in the same period of time."
+    },
+    "unsubscribe": {
+      "confirmWord": "OVERWRITE"
+    }
+  },
+  "panelProfileSet": {
+    "messages": {
+      "successDelete": "Panel has been deleted successfully.",
+      "success": "Panel has been updated successfully.",
+      "creationSuccess": "The new panel has been created successfully.",
+      "creationError": "An unexpected error ocurred while creating the new panel",
+      "error": "error during the update process",
+      "errorIdentifierOrName": "Identifier and/or name is already taken!",
+      "unknowwn": " Unknowwn error",
+      "downLoadPopupMessage_1": "The current collection of diagnostic panels will be exported. Do you wish to continue?"
+    },
+    "tooltip": {
+      "export": "Export Diagnostic Panel Set",
+      "delete": "Delete Diagnostic Panel Set"
+    },
+    "delete": {
+      "title": "Delete diagnostic panel set",
+      "description": "Type DELETE to delete the selected diagnostic panel set",
+      "confirmWord": "DELETE",
+      "error": "Entered text doesn't match the required keyword"
+    }
+  },
   "UnderMaintenance": {
     "title": "Under Maintenance",
     "subTitle": "Application Configuration"
   },
   "appConfiguration": {
     "title": "Configuration",
-    "subTitle": "Application Configuration"
+    "subTitle": "Contact manager",
+    "success": "The configuration has been modified succesfully",
+    "alertNotConfigured": "The application is not fully and/or correctly configured.",
+    "conectionError": "Connection failed during the proccess"
   },
   "panDrugsConfig": {
     "title": "Pandrugs Configuration",
     "messages": {
       "success": "Pandrugs service configuration: Correct",
-      "notExist": "Pandrugs service configuration:\nThe user does not exist the service.\nDo you want to register it?\n\n",
+      "successCreate": "User Create Correctly",
+      "errorCreate": "Error during creation User",
+      "notExist": "Pandrugs service configuration:\nThe user does not exist in the service or the credentials are incorrect.\nDo you want to register it?\n\n",
       "invalidUrl": "Pandrugs service configuration: Invalid URL",
-      "unknowwn": "Pandrugs service configuration: Unknowwn error"
+      "unknowwn": "Pandrugs service configuration: Unknown error",
+      "noConnection": "Pandrugs service configuration: Connection issues"
     }
   },
   "genomicDictionaryConfig": {
@@ -28,7 +147,8 @@
     "messages": {
       "success": "Genomic dictionary configuration: Correct",
       "invalid": "Genomic dictionary configuration: Invalid",
-      "unknowwn": "Genomic dictionary configuration: Unknowwn error"
+      "unknowwn": "Genomic dictionary configuration: Unknowwn error",
+      "noConnection": "Genomic dictionary configuration: Connection issues"
     }
   },
   "login": {
@@ -91,30 +211,45 @@
       "user": "User",
       "admin": "Administrator"
     },
+    "updateUser": {
+      "success": "User has been updated successfully"
+    },
     "password": "Password",
     "repeatPassword": "Repeat password",
+    "successPassword": "Password has been changed succesfully",
+    "errorPassword": "Password hasn't been changed succesfully",
+    "connectionError": "Connection failed during the proccess",
     "unsubscribe": {
       "title": "Unsubscribe user",
       "description": "Type DELETE to unsubscribe selected user",
       "confirmWord": "DELETE",
       "error": "Entered text doesn't match the required keyword",
+      "errorConflict": "Error 409 : CONFLICT",
       "success": "User has been unsubscribed successfully",
       "errorAdmin": "Error: It is necessary to have at least one administrator in the system. You must to create a new Admin user in order to delete this user.",
-      "warningContactAdmin": "You will process to delete the contact admin from this application. Do you want to assign a new contact Admin?"
+      "warningContactAdmin": "You will process to delete the contact admin from this application. Do you want to assign a new contact Admin?",
+      "warningContactAdminUpdate": "You will process to change the user type for the contact admin from this application. Do you want to assign a new contact Admin?"
     }
   },
   "launch": {
     "administrationInfoTitle": "Administration information",
     "administrationInfoText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     "installationInfoTitle": "Installation information",
-    "installationInfoText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+    "installationInfoText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
+    "contactEmail": "Contact email: "
   },
   "usersManagement": {
-    "title": "Users Management"
+    "title": "Users Management",
+    "titlePopupAdmin": "Admin Management"
+  },
+  "projectsManagement": {
+    "title": "Projects Management",
+    "titlePopupAdmin": "Admin Management"
   },
   "drugsManagement": {
     "title": "Drugs Management",
-    "refresDrugs": "Manual Drugs Update"
+    "refresDrugs": "Manual Drugs Update",
+    "successUpdateDrugs": "Drug Profile has been updated succesfully"
   },
   "drugProfile": {
     "title": "Drug",
@@ -125,6 +260,9 @@
     "alternativeNames": "Alternative Names",
     "previous": "Previous modification",
     "next": "Next modification"
+  },
+  "panelSetsManagement": {
+    "title": "Diagnostic Panel Sets Management"
   },
   "registrationManagement": {
     "title": "Registration Request Management",
@@ -150,7 +288,7 @@
       "editTooltip": "Edit",
       "filters": {
         "filterPlaceHolder": "",
-        "filterTooltip": "Filter"
+        "filterTooltip": "Show advanced filter"
       },
       "edit": {
         "deleteText": "Are you sure delete this row?",
@@ -198,10 +336,18 @@
     "disagree": "Disagree",
     "agree": "Agree",
     "error": {
+      "maxName": "Name must be at most 50 characters",
+      "maxDescription": "Description must be at most 500 characters",
+      "maxFirstName": "Name must be at most 25 characters",
+      "maxOrganization": "Organization must be at most 150 characters",
+      "maxLastName": "Last Name must be at most 40 characters",
+      "maxEmail": "Email must be at most 35 characters",
+      "maxEmailRegistry": "Email must be at most 30 characters",
+      "maxAccessRequestReason": "Reason for access request must be at most 500 characters",
       "general": "An unexpected error occurred",
       "generalContact": "An unexpected error occurred, please contact the Administrator",
       "required": "This field is mandatory",
-      "invalidCost": "Invalid cost, must be a number with 2 decimals separated by comma.",
+      "invalidCost": "Invalid cost, must be a number with 2 decimals separated by a point.",
       "invalidEmail": "Invalid email address.",
       "invalidIdentifier": "Invalid identifier format.",
       "password": {
@@ -212,6 +358,8 @@
       "user": "Wrong credentials. Try to modify them, please"
     },
     "buttons": {
+      "selection": "SELECTION",
+      "upload": "Upload",
       "signIn": "Sign in",
       "accept": "Accept",
       "cancel": "Cancel",
@@ -229,20 +377,35 @@
       "reset": "RESET",
       "manualDrugUpdate": "Manual Drug Update",
       "available": "Available",
-      "noAvailable": "No Available"
+      "noAvailable": "Not Available",
+      "modifyGenomicRef": "Modify Genomic Reference",
+      "deleteDiagnosticPanel": "Delete Diagnostic Panel Set",
+      "leaveRoot": "Leave as root",
+      "deleteDescendant": "Delete panel",
+      "selectAssemblyFilter": "Select Assembly Filter"
     },
     "fields": {
-      "firstName": "Name",
+      "filSelection": "File Name",
+      "firstName": "First Name",
+      "name": "Name",
       "lastName": "Last Name",
       "identifier": "Identifier",
       "email": "Email",
       "firstName_lastName": "Name and Last Name",
       "user": "User",
       "url": "Url",
-      "userType": {
-        "title": "User type",
+      "diagnosticPanelSet": "Diagnostic Panel Set",
+      "currentVersion": "Current Version",
+      "lastVersion": "Last Version",
+      "deteted": "deteted?",
+      "region": "Region",
+      "cromosomicRegion": "Cromosomic Region",
+      "panelVariant": "Panel's Variant",
+      "variant": "Variant",
+      "userType": "User type",
+      "userTypeOptions": {
         "user": "User",
-        "admin": "Administrator"
+        "admin": "Admin"
       },
       "projectCreationPermission": "Project creation permissions",
       "organization": "Organization",
@@ -256,28 +419,93 @@
       "repeatPassword": "Repeat password",
       "confirmation": "Confirmation",
       "dateCreated": "Creation date",
+      "createdAfter": "Created after",
+      "createdBefore": "Created before",
+      "lastAccessAfter": "Last access after",
+      "lastAccessBefore": "Last access before",
       "dateLastAccess": "Last access date",
-      "dateRequest": "Request date",
-      "attended": "Is attended",
-      "standardName": "Standard Name",
-      "commonName": "Common Name",
-      "available": "Available",
-      "avaType": {
+      "applicationDate": "Request date",
+      "requestedAfter": "Requested after",
+      "requestedBefore": "Requested before",
+      "dateDelete": "Deletion date",
+      "deletedAfter": "Deleted after",
+      "deletedBefore": "Deleted before",
+      "attended": "Attended?",
+      "standardName": "Standard name",
+      "commonName": "Common name",
+      "available": "Is available?",
+      "lastUpdateBefore": "Last update before",
+      "lastUpdateAfter": "Last update after",
+      "avaFilter": {
+        "yes": "Available",
+        "no": "Not Available"
+      },
+      "yesNoField": {
         "yes": "Yes",
         "no": "No"
       },
-      "avaFilter": {
-        "yes": "Available",
-        "no": "No Available"
+      "yesNoFilter": {
+        "drugTitle": "Drug Deleted?",
+        "setsTitle": "Diagnostic Panel Set Deleted?",
+        "panelTitle": "Diagnostic Panel Deleted?"
       },
       "cost": "Cost",
       "lastModificationDate": "Last Modification Date",
-      "drugDeleted": "Drug Deleted",
-      "delFilter": {
-        "title": "Drug Deleted?",
+      "lastModificationAfter": "Modified After",
+      "lastModificationBefore": "Modified Before",
+      "drugDeleted": "Drug Deleted?",
+      "description": "Description",
+      "author": "Author",
+      "panelsNumber": "Diagnostic panels number",
+      "isDeleted": "Deleted?",
+      "assembly": "Assembly",
+      "ensemblRelease": "Ensembl Release",
+      "ncbid": "ncbid",
+      "taxonomyId": "taxonomyId",
+      "scientificName": "Scientific Name",
+      "id": "id",
+      "genBankId": "Gen Bank Id",
+      "refSeqId": "Ref Seq Id",
+      "uscAlias": "uscAlias",
+      "panelsAscDesc": {
         "yes": "Yes",
-        "no": "No"
-      }
+        "no": "No",
+        "descending": "Descending panels?",
+        "ascending": "Ascending Panels?"
+      },
+      "genes": "Genes",
+      "regions": "Cromosomic regions",
+      "transcrits": "Transcrits",
+      "variants": "Variants",
+      "descendingPanels": "Descending panels?",
+      "ascendingPanels": "Ascending Panels?",
+      "genessNumber": "Genes",
+      "transcNumber": "Transcrits",
+      "regionsNumber": "Cromosomic regions",
+      "variantsNumber": "Variants",
+      "descendants": "Descendant Panels",
+      "ascendants": "Ascendant Panels",
+      "hgncName": "HGNC Name",
+      "biotype": "Biotype",
+      "canonicalTranscript": "Canonical Transcript",
+      "hgncGene": "HGNC Gene",
+      "canonical": "Canonical?",
+      "chromosomalRegion": "Chromosomal Region",
+      "refSeqNM": "RefSeq NM",
+      "geneIdentifier": "Gene Identifier",
+      "geneSelection": "Gene Selection",
+      "transcriptSelection": "Transcript Selection",
+      "parents": "Parents",
+      "children": "Children",
+      "fenotypesHPO": "HPO Fenotypes",
+      "species": "Species",
+      "ensembl": "Ensembl",
+      "organism": "Organism",
+      "createDate": "Create Date",
+      "updateDate": "Update Date",
+      "individuals": "Individuals",
+      "samples": "Samples",
+      "analyses": "Analyses"
     }
   }
 }

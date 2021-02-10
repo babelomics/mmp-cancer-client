@@ -9,7 +9,8 @@ export const initialState: IState = {
   loading: false,
   data: {
     configured: localLaunch ?? true,
-    text: ''
+    text: '',
+    email: ''
   }
 };
 
@@ -30,7 +31,7 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
       return {
         ...state,
         loading: false,
-        data:{
+        data: {
           ...state.data,
           configured: configured
         }
@@ -42,7 +43,16 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
         data: {
           ...state.data,
           text: payload.setupInformation,
+          email: payload.contactEmail,
           configured: true
+        }
+      };
+    case types.AC_UPDATE_CONFIG_STATUS:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          configured: payload
         }
       };
     default:

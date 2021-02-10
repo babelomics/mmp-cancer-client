@@ -1,5 +1,5 @@
 import React from 'react';
-import { Assignment, ContactMail, Group, LocalPharmacy,SettingsApplications } from '@material-ui/icons';
+import { Assignment, ContactMail, Group, LocalPharmacy, SettingsApplications, DynamicFeed } from '@material-ui/icons';
 import routes from '../router/routes';
 
 interface IMenuItem {
@@ -8,7 +8,7 @@ interface IMenuItem {
   text: string;
   route: string;
   hidden?: boolean;
-  notConfigured?: boolean
+  notConfigured?: boolean;
 }
 
 const getMenuItems = (t: any): IMenuItem[] => [
@@ -30,7 +30,7 @@ const getMenuItems = (t: any): IMenuItem[] => [
     icon: <Assignment />,
     text: 'Projects Management', // TODO: change this by a proper translation
     route: '/projects-management',
-    notConfigured: false 
+    notConfigured: false
   },
   {
     icon: <SettingsApplications />,
@@ -43,6 +43,13 @@ const getMenuItems = (t: any): IMenuItem[] => [
     icon: <LocalPharmacy />,
     text: t('drugsManagement.title'),
     route: routes.PATH_DRUGS_MANAGEMENT,
+    hidden: true,
+    notConfigured: false
+  },
+  {
+    icon: <DynamicFeed />,
+    text: t('panelSetsManagement.title'),
+    route: routes.PATH_PANEL_SETS_MANAGEMENT,
     hidden: true,
     notConfigured: false
   }

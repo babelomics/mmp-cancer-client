@@ -30,7 +30,12 @@ const useStyles = makeStyles((theme) =>
     innerPaper: {
       padding: theme.spacing(2),
       margin: 'auto',
-      backgroundColor: '#F5F5F5',
+      backgroundColor: '#F5F5F5'
+    },
+    text: {
+      whiteSpace: 'normal',
+      wordBreak: 'break-word',
+      textAlign: 'justify'
     }
   })
 );
@@ -50,8 +55,11 @@ export const Launch = (props: IProps) => {
             <Typography gutterBottom variant="h6">
               {t('launch.administrationInfoTitle')}
             </Typography>
-            <Typography variant="body2" gutterBottom>
+            <Typography className={classes.text} variant="body2" gutterBottom>
               {parse(props.launch.data.text)}
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              {t('launch.contactEmail') + props.launch.data.email}
             </Typography>
           </Paper>
         </Grid>
@@ -60,7 +68,7 @@ export const Launch = (props: IProps) => {
             <Typography gutterBottom variant="h6">
               {t('launch.installationInfoTitle')}
             </Typography>
-            <Typography variant="body2" gutterBottom>
+            <Typography className={classes.text} variant="body2" gutterBottom>
               {t('launch.installationInfoText')}
             </Typography>
           </Paper>

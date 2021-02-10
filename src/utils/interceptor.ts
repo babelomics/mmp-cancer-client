@@ -34,8 +34,8 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    const response = error.response ? error.response.data : undefined;
-    const message = typeof error.response.data === 'string' ? error.response.data : `${error.response.data.status} ${error.response.data.error}`;
+    const response = error.response?.data ?? undefined;
+    const message = error.response ? (typeof error.response.data === 'string' ? error.response.data : `${error.response.data.status} ${error.response.data.error}`) : null;
     const token = getToken();
 
     if (response && parseInt(response.status) === 401 && token) {
@@ -47,6 +47,6 @@ axios.interceptors.response.use(
       );
     }
 
-    return Promise.reject({ status: error.response.status, message: message });
+    return Promise.reject({ status: error.response?.status ?? 500, message: message });
   }
 );

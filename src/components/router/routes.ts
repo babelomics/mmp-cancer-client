@@ -13,6 +13,11 @@ const PATH_ADMIN_CREATE_USER = '/create-user';
 const PATH_ADMIN_REVIEW_REQUEST = '/review-request';
 const PATH_ADMIN_CONFIGURATION = '/app-configuration';
 const PATH_MAINTENANCE = '/maintenance';
+const PATH_PANEL_SETS_MANAGEMENT = '/panel-collections-management';
+const PATH_CREATE_PANEL_SET = '/create-panel-set';
+const PATH_PANEL_SET_PROFILE = '/panel-set-profile';
+const PATH_TAB_PANEL_DIAGNOSTIC = '/tab-panel-diagnostic';
+const PATH_PROJECTS_MANAGEMENT = '/projects-management';
 
 
 export default {
@@ -30,5 +35,10 @@ export default {
   PATH_ADMIN_REVIEW_REQUEST,
   PATH_DRUG_PROFILE,
   PATH_ADMIN_CONFIGURATION,
-  PATH_MAINTENANCE
+  PATH_MAINTENANCE,
+  PATH_PANEL_SETS_MANAGEMENT,
+  PATH_CREATE_PANEL_SET,
+  PATH_PANEL_SET_PROFILE,
+  PATH_TAB_PANEL_DIAGNOSTIC,
+  PATH_PROJECTS_MANAGEMENT
 };

@@ -14,6 +14,7 @@ interface IProps extends RouteComponentProps {
   login: ILoginState;
   launch: ILaunchState;
   doLogin: (data: ILoginForm) => void;
+  errLogin: (textMessage: null | string) => void;
 }
 
 class Wrapper extends React.Component<IProps, {}> {
@@ -23,15 +24,18 @@ class Wrapper extends React.Component<IProps, {}> {
     }
   }
 
+  componentWillUnmount() {
+    this.props.errLogin(null);
+  }
+
   componentDidUpdate(prevProps: IProps, prevState: any) {
     if (prevProps.login.isAuthenticated !== this.props.login.isAuthenticated) {
       if (this.props.login.isAuthenticated) {
         if (!this.props.login.user?.isAdmin && !this.props.launch.data.configured) {
           this.redirectToMaintenance();
-        }
-        else {
-        saveToStorage({ ...this.props.login.localUser, token: `Bearer ${this.props.login.localUser}` }, this.props.launch.data.configured);
-        this.redirectToHome();
+        } else {
+          saveToStorage({ ...this.props.login.localUser, token: `Bearer ${this.props.login.localUser}` }, this.props.launch.data.configured);
+          this.redirectToHome();
         }
       }
     }

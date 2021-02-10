@@ -1,24 +1,16 @@
 import { Dispatch } from 'redux';
-import { Query } from 'material-table';
 import { AxiosResponse } from 'axios';
-
 import actions from './actions';
 import api from './api';
-import { generalTableRemoteFetchOperation } from '../../../utils/tableRemoteFetchOperation';
-import { ITableFilter } from '../../commons/GaiaTable';
 import { operations as drugProfileOperations } from '../../drugProfile/duck';
 
 const setData = drugProfileOperations.setData;
 
-const fetchDrugs = (query: Query<any>, filters: ITableFilter, previousData: any) => (dispatch: Dispatch) => {
-  return generalTableRemoteFetchOperation(api.fetchDrugs, query, filters, previousData, actions.initFetch, actions.errFetch, actions.endFetch)(dispatch);
-};
-
-const changeAvailable = (drugs: string[], available: boolean, user: string) => (dispatch: Dispatch): Promise<any> => {
+const changeAvailable = (drugs: string[], available: boolean, user: string, isAllSelected: boolean, filters: any) => (dispatch: Dispatch): Promise<any> => {
   dispatch(actions.initOperation());
   return new Promise((resolve, reject) => {
     api
-      .changeAvailable(drugs, available, user)
+      .changeAvailable(drugs, available, user, isAllSelected, filters)
       .then((res: AxiosResponse) => {
         dispatch(actions.endOperation())
         resolve({
@@ -50,4 +42,4 @@ const manualDrugsUpdate = () => (dispatch: Dispatch): Promise<any> => {
   })
 };
 
-export default { fetchDrugs, setData, changeAvailable, manualDrugsUpdate };
+export default { setData, changeAvailable, manualDrugsUpdate };

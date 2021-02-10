@@ -2,25 +2,31 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { IRootState } from '../../store';
-//import { ITableFilter } from '../commons/GaiaTable';
 import { operations } from './duck';
 import AppConfiguration from './AppConfiguration';
-import interfaces, { IConfiguration } from './interfaces';
+import { IConfiguration, IGenomicDictConfig, IPandrugsConfig } from './interfaces';
+import { FormikErrors } from 'formik';
+import { withTranslation } from 'react-i18next';
 
 interface IProps extends RouteComponentProps {
   loading: boolean;
   configData: IConfiguration;
-  fetchConfigRequest: () => void;
-  //updateConfigData: (newData: IConfiguration) => void;
-  setNewConfig: (config: IConfiguration) => void;
-  validateCellbaseUrl: (url: string, formikError?: any) => Promise<any>;
-  validatePanDrugs: (user: string, password: string, url: string) => Promise<any>;
-  createPanDrugsUser: (user: string, password: string, url: string, email: string) => Promise<any>;
+  validationPundrugs: boolean;
+  validationGenomDict: boolean;
+  [key: string]: any;
+  fetchConfigRequest: (t: any) => void;
+  setNewConfig: (config: IConfiguration, t: any) => Promise<any>;
+  validateGenomicDictionaryUrl: (url: string, setFormikErrors: (errors: FormikErrors<IGenomicDictConfig>) => void, t: any) => void;
+  validatePanDrugs: (pandrugsConfig: IPandrugsConfig, setFormikErrors: (errors: FormikErrors<IPandrugsConfig>) => void, t: any) => void;
+  updateConfigData: (config: IConfiguration) => void;
+  setValidationPandrug: (validationState: boolean) => void;
+  setValidationGenomDict: (validationState: boolean) => void;
+  resetValidations: () => void;
 }
 
 class Wrapper extends React.Component<IProps, {}> {
   componentDidMount() {
-    this.props.fetchConfigRequest();
+    this.props.fetchConfigRequest(this.props.t);
   }
 
   render() {
@@ -30,9 +36,11 @@ class Wrapper extends React.Component<IProps, {}> {
 
 const mapStateToProps = (state: IRootState) => ({
   loading: state.appConfiguration.loading,
-  configData: state.appConfiguration.configData
+  configData: state.appConfiguration.configData,
+  validationPundrugs: state.appConfiguration.validationPundrugs,
+  validationGenomDict: state.appConfiguration.validationGenomDict
 });
 
 const mapDispatchToProps = { ...operations };
-
-export default connect(mapStateToProps, mapDispatchToProps)(Wrapper);
+const TranslatedWrapper = withTranslation()<any>(Wrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(TranslatedWrapper);

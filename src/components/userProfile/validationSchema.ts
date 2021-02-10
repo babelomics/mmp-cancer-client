@@ -8,7 +8,7 @@ export const generateValidationSchema = (t: TFunction) =>
     email: Yup.string().nullable().required(t('commons.error.required')).matches(regexpEmail, t('commons.error.invalidEmail')),
     firstName: Yup.string().nullable().required(t('commons.error.required')),
     lastName: Yup.string().nullable().required(t('commons.error.required')),
-    userType: Yup.string().nullable().required(t('commons.error.required')),
+    userType: Yup.string().nullable().required(t('commons.error.required'))
   });
 
 export const modifyPasswordSchema = (t: TFunction) =>
@@ -22,6 +22,5 @@ export const modifyPasswordSchema = (t: TFunction) =>
 export const unsubscribeSchema = (t: TFunction) =>
   Yup.object().shape({
     confirmation: Yup.string()
-      .required(t('commons.error.password.required'))
       .test('MatchConfirmWord', t('userProfile.unsubscribe.error'), (value) => value === t('userProfile.unsubscribe.confirmWord'))
   });

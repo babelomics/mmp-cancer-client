@@ -27,7 +27,6 @@ const GaiaDatePicker = ({ label, name, formik, fullWidth, disabled, onChange, In
       });
     } else {
       setDate(date);
-
       if (onChange) {
         onChange(date, value);
       }
@@ -41,11 +40,11 @@ const GaiaDatePicker = ({ label, name, formik, fullWidth, disabled, onChange, In
       format="DD/MM/YYYY"
       margin="normal"
       label={label}
-      value={formik ? (formik.values[name] !== null ?(moment(formik.values[name], 'DD/MM/YYYY')) : null) : dateState}
+      value={formik ? (formik.values[name] !== null ? moment(formik.values[name], 'DD/MM/YYYY') : null) : dateState}
       onChange={handleChange}
       fullWidth={fullWidth}
       disabled={disabled}
-      style={{ margin: 0 }}      
+      style={{ margin: 0 }}
       InputLabelProps={InputLabelProps}
     />
   );

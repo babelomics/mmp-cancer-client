@@ -16,14 +16,17 @@ interface IProps {
   acceptButtonText?: string;
   children?: any;
   hideBackButton?: boolean;
+  backHistory?: boolean;
   onBack?: (e: any) => void;
   onAccept?: (e: any) => void;
+  backActions?: () => void;
 }
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
-    margin: 'auto'
+    margin: 'auto',
+    width: '100%'
   },
   icon: {
     marginRight: 10
@@ -40,22 +43,30 @@ const useStyles = makeStyles((theme) => ({
   childrenWrapper: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    whiteSpace: 'nowrap'
   },
   childrenContainer: {
     paddingTop: 50,
-    paddingBottom: 50
+    paddingBottom: 50,
+    whiteSpace: 'nowrap'
   }
 }));
 
-const GaiaContainer = ({ icon, title, backButtonText, acceptButtonText, onBack, onAccept, children, isLaunchScreen, hideBackButton }: IProps) => {
+const GaiaContainer = ({ icon, title, backButtonText, acceptButtonText, backHistory, onBack, onAccept, backActions, children, isLaunchScreen, hideBackButton }: IProps) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const history = useHistory();
 
   const handleBack = (e: any) => {
+    if (backActions) {
+      backActions();
+    }
     if (onBack) {
       onBack(e);
+      if (backHistory) {
+        history.goBack();
+      }
     } else {
       history.goBack();
     }
@@ -73,14 +84,14 @@ const GaiaContainer = ({ icon, title, backButtonText, acceptButtonText, onBack, 
             <GaiaIconButton icon={<Close />} onClick={handleBack} />
           </div>
           <Divider />
+          <div className={classes.rowSpace} style={{ marginTop: '25px' }}>
+            {!isLaunchScreen && !hideBackButton && <GaiaButton text={backButtonText || t('commons.buttons.goBack')} onClick={handleBack} />}
+            {onAccept && <GaiaButton text={acceptButtonText || t('commons.buttons.accept')} onClick={onAccept} />}
+          </div>
         </React.Fragment>
       )}
       <div className={classes.childrenWrapper}>
         <div className={classes.childrenContainer}>{children}</div>
-        <div className={classes.rowSpace}>
-          {!isLaunchScreen && !hideBackButton && <GaiaButton text={backButtonText || t('commons.buttons.goBack')} onClick={handleBack} />}
-          {onAccept && <GaiaButton text={acceptButtonText || t('commons.buttons.accept')} onClick={onAccept} />}
-        </div>
       </div>
     </Paper>
   );

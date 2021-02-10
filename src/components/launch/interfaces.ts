@@ -8,4 +8,5 @@ export default interface IState {
 export interface IData {
   configured: boolean;
   text: string;
+  email: string;
 }

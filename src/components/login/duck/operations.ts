@@ -6,8 +6,10 @@ import { AxiosResponse } from 'axios';
 
 const setUserData = actions.setUserData;
 const setToken = actions.setToken;
+const errLogin = actions.errLogin;
 
 const doLogin = (data: ILoginForm) => (dispatch: Dispatch) => {
+  localStorage.clear();
   dispatch(actions.initLogin());
   api
     .auth(data.username, data.password)
@@ -27,4 +29,4 @@ const logout = () => (dispatch: Dispatch) => {
   dispatch(actions.logout());
 };
 
-export default { doLogin, setUserData, setToken, logout };
+export default { doLogin, setUserData, setToken, errLogin, logout };

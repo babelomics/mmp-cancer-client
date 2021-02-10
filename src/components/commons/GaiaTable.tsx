@@ -13,13 +13,12 @@ import GaiaDateRangePicker from './GaiaDateRangePicker';
 import GaiaIcon from './GaiaIcon';
 import GaiaCheckBox from './GaiaCheckBox';
 import GaiaDoubleCheckBox from './GaiaDoubleCheckBox';
-import { callbackify } from 'util';
 
 interface IProps {
   loading?: boolean;
   title?: string;
   columns: (IColumn | any)[];
-  remoteData?: (query: Query<any>, filters: ITableFilter, previousData: any, exclude: any) => Promise<QueryResult<any>>;
+  remoteData?: (query: Query<any>, filters: ITableFilter, previousData: any, exclude?: any, idUpperLevel?: any) => Promise<QueryResult<any>>;
   changeAvailable?: (drugs: string[], available: boolean, user: string) => Promise<any>;
   data?: any[];
   pageSize?: number;
@@ -41,6 +40,8 @@ interface IProps {
   refreshUser?: string | null;
   defaulFilter?: object;
   exclude?: string[];
+  idUpperLevel?: string;
+  style?: any;
 }
 
 export interface IColumn {
@@ -100,7 +101,9 @@ const GaiaTable = ({
   user,
   refreshUser,
   defaulFilter = {},
-  exclude = []
+  exclude = [],
+  idUpperLevel = undefined,
+  style
 }: IProps) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -135,11 +138,13 @@ const GaiaTable = ({
   // Filters data when filters object state has changed
   //const prevFilters = usePrevious(filters);
   useEffect(() => {
-    setPreviousData([]);
-    refT.current.dataManager.changeCurrentPage(0);
-    refT.current.onQueryChange({ page: 0 });
-    if (resetSelection) {
-      resetSelection();
+    if (remoteData) {
+      setPreviousData([]);
+      refT.current.dataManager.changeCurrentPage(0);
+      refT.current.onQueryChange({ page: 0 });
+      if (resetSelection) {
+        resetSelection();
+      }
     }
   }, [filters]);
 
@@ -389,6 +394,7 @@ const GaiaTable = ({
   };
 
   const onScrollBottom = () => {
+    if (remoteData) {
     const tableDiv = refS.current;
     const table = refT.current;
     if (tableDiv.scrollTop == tableDiv.scrollHeight - tableDiv.clientHeight) {
@@ -398,9 +404,11 @@ const GaiaTable = ({
         table.dataManager.changeCurrentPage(table.dataManager.currentPage + 1);
       }
     }
+  }
   };
 
   const changeAvailability = (available: boolean) => {
+    if (remoteData) {
     const table = refT.current;
     if (changeAvailable && user) {
       changeAvailable(selectedRows, available, user).then((result) => {
@@ -414,9 +422,11 @@ const GaiaTable = ({
         }
       });
     }
+  }
   };
 
   const refreshTableUser = () => {
+    if (remoteData) {
     const table = refT.current;
     if (refreshTable) {
       refreshTable().then((result) => {
@@ -430,6 +440,7 @@ const GaiaTable = ({
         }
       });
     }
+  }
   };
 
   const GaiaButtonPopover = withPopover(GaiaIcon);
@@ -439,7 +450,7 @@ const GaiaTable = ({
       onScroll={onScrollBottom}
       style={{
         maxHeight: 'calc(' + wSize.height.toString() + 'px - 340px)',
-        overflowY: 'scroll'
+        overflowY: 'auto'
       }}
     >
       <MaterialTable
@@ -447,7 +458,7 @@ const GaiaTable = ({
         isLoading={loading}
         title={title || 'Table title'}
         columns={columnsState}
-        data={remoteData ? (query: Query<any>) => remoteData(query, filters, previousData, exclude) : dataState}
+        data={remoteData ? (query: Query<any>) => remoteData(query, filters, previousData, exclude, idUpperLevel) : dataState}
         options={{
           debounceInterval: 1000,
           showTitle: showTitle,
@@ -550,6 +561,7 @@ const GaiaTable = ({
         onRowClick={onRowClick}
         onChangeRowsPerPage={(pageSize) => setPageSize(pageSize)}
         onSelectionChange={onSelectionChange}
+        style={style}
       />
     </div>
   );

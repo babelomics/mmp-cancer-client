@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { Box, GridList, GridListTile } from '@material-ui/core';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+import Alert from '@material-ui/lab/Alert';
 
 import getMenuItems from './menuItems';
 import GaiaIconButtonWithText from '../commons/GaiaIconButtonWithText';
@@ -73,6 +74,9 @@ export const Home = (props: IProps) => {
   return (
     <Box boxShadow={1}>
       <div className={classes.root}>
+        {!props.configured && (
+        <Alert severity="error">{t('appConfiguration.alertNotConfigured')}</Alert>
+        )}      
         <GridList spacing={10} cols={getGridListCols()} className={classes.gridList}>
           {getMenuItems(t).map((item, i) => {
             return (

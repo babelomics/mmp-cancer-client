@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generateValidationSchema } from './validationSchema';
 import { Grid, Typography } from '@material-ui/core';
@@ -18,6 +18,7 @@ import routes from '../router/routes';
 interface IProps {
   login: ILoginState;
   doLogin: (data: ILoginForm) => void;
+  errLogin: (textMessage: null | string) => void;
 }
 
 const useStyles = makeStyles((theme) => ({

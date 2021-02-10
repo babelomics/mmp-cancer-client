@@ -11,16 +11,16 @@ interface IProps {
   type?: string;
   className?: string;
   fullWidth?: boolean;
-  debounce?: number;
+  //debounce?: number;
   multiline?: boolean;
   rows?: number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   InputLabelProps?: any;
 }
 
-const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, multiline, className, fullWidth = true, debounce = 50, onChange, InputLabelProps = {}, variant }: IProps) => {
+const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, multiline, className, fullWidth = true, onChange, InputLabelProps = {}, variant }: IProps) => {
   const [valueState, setValue] = useState(formik ? formik.values[name] : '');
-  const [timer, setTimer] = useState<any>(debounce);
+  //const [timer, setTimer] = useState<any>(debounce);
 
   useEffect(() => {
     setValue(formik.values[name]);
@@ -39,9 +39,10 @@ const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, mu
   const handleChange = (e: React.ChangeEvent<any>) => {
     e.persist();
     const value = e.target.value;
-    clearTimeout(timer);
+    //  clearTimeout(timer);
     setValue(value);
-    setTimer(setTimeout(() => triggerChange(e), debounce));
+    //setTimer(setTimeout(() => triggerChange(e), debounce));
+    triggerChange(e);
   };
 
   let blueStyle = {};

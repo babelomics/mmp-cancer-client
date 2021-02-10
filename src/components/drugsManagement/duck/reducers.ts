@@ -11,23 +11,7 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
   const { type } = action;
 
   switch (type) {
-    case types.AC_INIT_FETCH:
-      return {
-        ...state,
-        loading: true
-      };
-    case types.AC_ERR_FETCH:
-      return {
-        ...state,
-        loading: false
-      };
-    case types.AC_END_FETCH:
-      return {
-        ...state,
-        drugsData: action.payload,
-        loading: false
-      };
-      case types.AC_INIT_AVAILABLE:
+    case types.AC_INIT_AVAILABLE:
       return {
         ...state,
         loading: true

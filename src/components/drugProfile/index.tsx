@@ -10,7 +10,7 @@ import IDrugProfile from './interfaces';
 interface IProps extends RouteComponentProps {
   drugProfile: IDrugProfile;
   fetchDrugData: (identifier: string) => void;
-  updateDrug: (data: any) => Promise<any>;
+  updateDrug: (data: any, t: any) => Promise<any>;
 }
 
 class Wrapper extends React.Component<IProps, {}> {
@@ -19,8 +19,8 @@ class Wrapper extends React.Component<IProps, {}> {
     const drugIdentifier = pathParts[2];
 
     // If an drug id exists in url
-    if (drugIdentifier) {      
-        this.props.fetchDrugData(drugIdentifier);
+    if (drugIdentifier) {
+      this.props.fetchDrugData(drugIdentifier);
     }
   }
 

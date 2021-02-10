@@ -7,7 +7,7 @@ export default interface IState {
   localUser: IUserData | null;
   user: ITokenData | null;
   isAuthenticated: boolean;
-  error: string | null;
+  error: null | string;
 }
 
 export interface ILoginForm {

@@ -1,30 +1,20 @@
 export default interface IState {
   loading: boolean;
   configData: IConfiguration;
-  validationDirGenCodeURL: number;
+  validationPundrugs: boolean;
+  validationGenomDict: boolean;
 }
 export interface IConfiguration {
-  cellbaseURL?: string;
   contactEmail?: string;
   contactIdentifier?: string;
   contactLastName?: string;
   contactName?: string;
+  setupInformation?: string;
   pandrugPassword?: string;
   pandrugURL?: string;
   pandrugUser?: string;
   pandrugEmail?: string;
-  setupInformation?: string;
-}
-
-export interface IFormDataPanDrugs {
-  url: string;
-  user: string;
-  password: string;
-  email: string;
-}
-
-export interface IFormDataDicGen {
-  url: string;
+  genomicDictionaryURL?: string;
 }
 
 export interface IAdminConfig {
@@ -43,4 +33,8 @@ export interface IPandrugsConfig {
 
 export interface IGenomicDictConfig {
   url: string;
+}
+
+export interface ISetupInformation {
+  textValue: string;
 }

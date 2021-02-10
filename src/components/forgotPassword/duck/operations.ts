@@ -15,7 +15,6 @@ const requestPassword = (data: string, t: any) => (dispatch: any) => {
     })
     .catch(() => {
       dispatch(actions.endPasswordRequest());
-      dispatch(globalPopupOperations.showMessagePopup(t('commons.error.generalContact'), 'error'));
     });
 };
 

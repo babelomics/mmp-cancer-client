@@ -20,22 +20,20 @@ export const loadFromStorageUser = (): IUserData | null => {
 
 export const loadFromStorageLaunch = (): boolean | null => {
   const data = localStorage.getItem('configured');
-  console.log(data);
   let result = true;
   if (data === 'true') {
     result = true;
-  }
-  else if (data === 'false') {
-    result =  false;
+  } else if (data === 'false') {
+    result = false;
   }
   return result;
 };
 
-export const saveToStorageLaunch = (launch:any) : void => {
+export const saveToStorageLaunch = (launch: any): void => {
   try {
     localStorage.setItem('configured', launch);
   } catch (err) {}
-}
+};
 
 export const saveToStorage = (user: any, launch: any): void => {
   try {

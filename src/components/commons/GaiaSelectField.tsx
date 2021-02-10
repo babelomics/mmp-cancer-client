@@ -50,6 +50,9 @@ const GaiaSelectField = ({ required, disabled, items, valueAccessor, labelAccess
 
     if (formik) {
       formik.handleChange(e);
+      if (onChange) {
+        onChange(e, child);
+      }
     } else {
       setValue(value as string);
       if (onChange) {

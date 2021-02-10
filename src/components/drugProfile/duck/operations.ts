@@ -1,10 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { Dispatch } from 'redux';
-import { push } from 'connected-react-router';
-
 import actions from './actions';
 import api from './api';
-import routes from '../../router/routes';
 import { operations as globalPopupOperations } from '../../globalPopups/duck';
 
 const setData = actions.setData;
@@ -17,22 +14,23 @@ const fetchDrugData = (identifier: string) => (dispatch: Dispatch) => {
     .catch((err: any) => dispatch(actions.errOperation(err)));
 };
 
-const updateDrug = (data: any) => (dispatch: Dispatch) => {
+const updateDrug = (data: any, t: any) => (dispatch: any) => {
   dispatch(actions.initOperation());
   return new Promise((resolve, reject) => {
-  api
-    .updateDrug(data)
-    .then((res: AxiosResponse) => {
-      dispatch(actions.endUpdateDrug());
-      resolve({
-        done: true
+    api
+      .updateDrug(data)
+      .then((res: AxiosResponse) => {
+        dispatch(actions.endUpdateDrug());
+        dispatch(globalPopupOperations.showMessagePopup(t('drugsManagement.successUpdateDrugs'), 'success'));
+        resolve({
+          done: true
+        });
+      })
+      .catch((err: any) => {
+        dispatch(actions.errOperation(err));
+        reject(err);
       });
-    })
-    .catch((err: any) => {
-      dispatch(actions.errOperation(err));
-      reject(err);
-    });
-  })
+  });
 };
 
 export default { fetchDrugData, updateDrug, setData };

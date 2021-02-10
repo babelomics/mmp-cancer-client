@@ -11,9 +11,12 @@ interface IProps {
   message: string;
   title?: string;
   open?: boolean;
-  type?: 'info' | 'error' | 'success' | 'warning';
+  type?: 'info' | 'error' | 'success' | 'warning' | 'warningConfirm' | 'warningTwoOptions';
+  buttonType?: number | null;
   onClose?: () => void;
   onAccept?: () => void;
+  onFirstAction?: () => void;
+  onSecondAction?: () => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -45,7 +48,7 @@ const DialogTitle = (props: any) => {
   );
 };
 
-export const GaiaPopup = ({ message, title, open = false, type = 'info', onClose, onAccept }: IProps) => {
+export const GaiaPopup = ({ message, title, open = false, type = 'info', buttonType = null, onClose, onAccept, onFirstAction, onSecondAction }: IProps) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [openState, setOpen] = useState(open);
@@ -68,6 +71,20 @@ export const GaiaPopup = ({ message, title, open = false, type = 'info', onClose
     }
   };
 
+  const handleFirst = () => {
+    setOpen(false);
+    if (onFirstAction) {
+      onFirstAction();
+    }
+  };
+
+  const handleSecond = () => {
+    setOpen(false);
+    if (onSecondAction) {
+      onSecondAction();
+    }
+  };
+
   const renderTitle = () => {
     if (!title) {
       if (type === 'info') {
@@ -82,7 +99,7 @@ export const GaiaPopup = ({ message, title, open = false, type = 'info', onClose
         return 'Success!';
       }
 
-      if (type === 'warning') {
+      if (type === 'warning' || 'warningConfirm') {
         return 'Warning';
       }
     }
@@ -103,7 +120,7 @@ export const GaiaPopup = ({ message, title, open = false, type = 'info', onClose
       return <GaiaIcon icon="check_circle" size={60} />;
     }
 
-    if (type === 'warning') {
+    if (type === 'warning' || 'warningConfirm') {
       return <GaiaIcon icon="report_problem" size={60} color="inherit" style={{ color: '#FEC000' }} />;
     }
   };
@@ -124,7 +141,18 @@ export const GaiaPopup = ({ message, title, open = false, type = 'info', onClose
         </Grid>
       </DialogContent>
       <DialogActions>
-        <GaiaButton text={t('commons.buttons.accept')} onClick={handleAccept} />
+        {type !== 'warningTwoOptions' ? (
+          <>
+            {type === 'warningConfirm' && <GaiaButton text={t('commons.buttons.cancel')} onClick={handleClose} />}
+            <GaiaButton text={t('commons.buttons.accept')} onClick={handleAccept} />
+          </>
+        ) : (
+          <>
+            <GaiaButton text={t('commons.buttons.cancel')} onClick={handleClose} />
+            <GaiaButton text={t('commons.buttons.leaveRoot')} onClick={handleFirst} />
+            <GaiaButton text={t('commons.buttons.deleteDescendant')} onClick={handleSecond} />
+          </>
+        )}
       </DialogActions>
     </Dialog>
   );

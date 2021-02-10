@@ -25,6 +25,9 @@ const GaiaRadioButtonGroup = ({ items, labelPlacement, color = 'primary', value,
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (formik) {
       formik.handleChange(e);
+      if (onChange) {
+        onChange(e);
+      }
     } else {
       setValue(e.target.value);
       if (onChange) {
