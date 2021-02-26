@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import routes from '../../router/routes';
 import { Box, Chip, Grid, IconButton, makeStyles, Popover, Tooltip } from '@material-ui/core';
 import { FilterList, Add } from '@material-ui/icons';
 import GaiaButton from '../../commons/GaiaButton';
@@ -10,8 +9,9 @@ import { IProjectsFilter } from '../interfaces';
 import Searchbar from '../../commons/tableFilter/Searchbar';
 import FilterDateField from '../../commons/tableFilter/FilterDateField';
 import FilterTextField from '../../commons/tableFilter/FilterTextField';
-import { ITableAssemblyData, ITableSpeciesData } from '../../genomicRefPopup/interfaces';
+import { ITableAssemblyData } from '../../genomicRefPopup/interfaces';
 import ModalTableAssembly from '../../genomicRefPopup/ModalTableAssembly';
+import routes from '../../router/routes';
 
 interface IProps {
   filter: any;
@@ -33,10 +33,10 @@ const ProjectsFilterButtons = (props: IProps) => {
   const [expanded, setExpanded] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [openAssemblyPopup, setOpenAssemblyPopup] = useState<boolean>(false);
-  const searchText = filter.searchText || '';
+  const search = filter.search || '';
 
   const handleSearchTextChange = (newValue: string) => {
-    props.setFilter({ ...props.filter, searchText: newValue });
+    props.setFilter({ ...props.filter, search: newValue });
   };
 
   const handleExpandClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -77,9 +77,13 @@ const ProjectsFilterButtons = (props: IProps) => {
   };
 
   const handleClickRow = (assembly: ITableAssemblyData) => {
-    handleFilter(assembly.name, 'assembly');
+    handleFilter(assembly.accession, 'assembly');
     setOpenAssemblyPopup(false);
   };
+
+  const handleProject = useCallback(() => {
+    history.push(routes.PATH_PROJECT_PROFILE);
+  }, [history]);
   return (
     <>
       <Box display="flex" flexDirection="column">
@@ -89,14 +93,14 @@ const ProjectsFilterButtons = (props: IProps) => {
               e.preventDefault();
             }}
           >
-            <Searchbar variant="outlined" margin="dense" value={searchText} onChange={handleSearchTextChange} />
+            <Searchbar variant="outlined" margin="dense" value={search} onChange={handleSearchTextChange} />
           </form>
           <Tooltip title={tooltipFilter}>
             <IconButton onClick={handleExpandClick}>
               <FilterList />
             </IconButton>
           </Tooltip>
-          <Tooltip title={addTooltip}>
+          <Tooltip title={addTooltip} onClick={handleProject}>
             <IconButton>
               <Add />
             </IconButton>
@@ -121,22 +125,22 @@ const ProjectsFilterButtons = (props: IProps) => {
         >
           <Grid container justify="space-between" alignItems="center" spacing={1}>
             <Grid item xs={12}>
-              <FilterTextField label={t('commons.fields.identifier')} value={filter.projectId} onChange={handleFilter} field="projectId" />
+              <FilterTextField label={t('commons.fields.projectId')} value={filter.projectId} onChange={handleFilter} field="projectId" />
             </Grid>
             <Grid item xs={12}>
               <FilterTextField label={t('commons.fields.name')} value={filter.name} onChange={handleFilter} field="name" />
             </Grid>
             <Grid item xs={12}>
-              <FilterTextField label={t('commons.fields.species')} value={filter.species} onChange={handleFilter} field="species" />
+              <FilterTextField label={t('commons.fields.organism')} value={filter.organism} onChange={handleFilter} field="organism" />
             </Grid>
             <Grid item xs={12}>
-              <FilterTextField label={t('commons.fields.assembly')} disabled value={filter.assembly} onChange={handleFilter} field="assembly" />
+              <FilterTextField label={t('commons.fields.assembly')} disabled value={filter.assembly || ''} onChange={handleFilter} field="assembly" />
             </Grid>
             <Grid item xs={12}>
               <GaiaButton text={t('commons.buttons.selectAssemblyFilter')} fullWidth onClick={clicAssemblyButton} />
             </Grid>
             <Grid item xs={12}>
-              <FilterTextField label={t('commons.fields.ensembl')} disabled value={filter.ensemblRelease} onChange={handleFilter} field="ensemblRelease" />
+              <FilterTextField label={t('commons.fields.ensemblRelease')} value={filter.ensemblRelease} onChange={handleFilter} field="ensemblRelease" />
             </Grid>
             <Grid item xs={6}>
               <FilterDateField value={filter.creationDateStart} onChange={handleFilter} label={t('commons.fields.createdBefore')} field="creationDateStart" />
@@ -158,7 +162,7 @@ const ProjectsFilterButtons = (props: IProps) => {
         <Box display="flex" flexDirection="row">
           {Object.keys(filter).map((k: string) => (
             <>
-              {(filter[k] || filter[k] === false) && k !== 'searchText' && k !== 'sortBy' && k !== 'sortDirection' && (
+              {(filter[k] || filter[k] === false) && k !== 'search' && k !== 'sortBy' && k !== 'sortDirection' && (
                 <Chip label={t('commons.fields.' + k)} color="primary" style={{ marginRight: 5 }} onDelete={() => deleteFilter(k)} />
               )}
             </>

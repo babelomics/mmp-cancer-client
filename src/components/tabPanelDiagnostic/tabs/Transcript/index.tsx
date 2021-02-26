@@ -8,6 +8,7 @@ import TranscriptTable from './Transcript-table/TranscriptTable';
 interface IProps {
   assembly: string;
   itemsList: any[];
+  isDeleted?: boolean;
   setTranscriptOpenPopup: () => void;
   deleteTranscript: (id: string) => void;
 }
@@ -24,8 +25,8 @@ const TranscriptList = (props: IProps) => {
 
   return (
     <React.Fragment>
-      <TranscriptFilterButtons filter={filter} setFilter={setFilter} setTranscriptOpenPopup={props.setTranscriptOpenPopup} />
-      <TranscriptTable filter={filter} setFilter={setFilter} {...props} onDelete={handleDelete} itemsList={props.itemsList} />
+      <TranscriptFilterButtons filter={filter} setFilter={setFilter} setTranscriptOpenPopup={props.setTranscriptOpenPopup} hideAddBtn={props.isDeleted ?? false} />
+      <TranscriptTable filter={filter} setFilter={setFilter} {...props} onDelete={handleDelete} itemsList={props.itemsList} isDeleted={props.isDeleted ?? false} />
     </React.Fragment>
   );
 };

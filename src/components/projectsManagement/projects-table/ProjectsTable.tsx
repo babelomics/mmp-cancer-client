@@ -1,19 +1,19 @@
 import React, { useCallback } from 'react';
 import { Table, TableBody, TableContainer } from '@material-ui/core';
-import { IProjectsFilter, IProjects } from '../interfaces';
+import { IProjectsFilter, IProject } from '../interfaces';
 import LazyList from '../../commons/tableFilter/LazyList';
-import ProjectsRow from './ProjectsRow';
+import ProjectRow from './ProjectRow';
 import MmpClient from '../../commons/tableFilter/MmpClient';
-import ProjectsTableHeader from './ProjectsTableHeader';
-import ProjectsRowWrapper from './ProjectsRowWrapper';
+import ProjectTableHeader from './ProjectsTableHeader';
+import ProjectRowWrapper from './ProjectRowWrapper';
 
 interface IProps {
   filter: IProjectsFilter;
   setFilter: (newFilter: IProjectsFilter) => void;
 }
 
-function getUserId(projects: IProjects) {
-  return projects.projectId;
+function getProjectId(project: IProject) {
+  return project.projectId;
 }
 
 function ProjectsTable(props: IProps) {
@@ -22,7 +22,6 @@ function ProjectsTable(props: IProps) {
   const fetchProjectsPage = useCallback(
     (pageSize: number, page: number) => {
       return MmpClient.getProjectsPage(filter, pageSize, page);
-      // return MmpClient.getProjectsPage(filter, pageSize, page);
     },
     [filter]
   );
@@ -30,9 +29,9 @@ function ProjectsTable(props: IProps) {
   return (
     <TableContainer>
       <Table>
-        <ProjectsTableHeader {...props} />
+        <ProjectTableHeader {...props} />
         <TableBody>
-          <LazyList<IProjects> token={filter} ChildElem={ProjectsRow} fetchPage={fetchProjectsPage} ChildWrapper={ProjectsRowWrapper} getElemId={getUserId} />
+          <LazyList<IProject> token={filter} ChildElem={ProjectRow} fetchPage={fetchProjectsPage} ChildWrapper={ProjectRowWrapper} getElemId={getProjectId} />
         </TableBody>
       </Table>
     </TableContainer>

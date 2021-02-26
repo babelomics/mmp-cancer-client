@@ -5,6 +5,7 @@ import { RemoveCircle } from '@material-ui/icons';
 
 interface IProps {
   item: IHPO;
+  isDeleted: boolean;
   rowClick: (hpo: IHPO) => void;
   onDelete?: (hpo: IHPO) => void;
 }
@@ -46,11 +47,13 @@ function HPORow(props: IProps) {
       <CeteredCell>
         <div style={{ whiteSpace: 'normal' }}>{hpo.def}</div>
       </CeteredCell>
-      <CeteredCell>
-        <IconButton edge="end" onClick={handleDelete}>
-          <RemoveCircle />
-        </IconButton>
-      </CeteredCell>
+      {!props.isDeleted && (
+        <CeteredCell>
+          <IconButton edge="end" onClick={handleDelete}>
+            <RemoveCircle />
+          </IconButton>
+        </CeteredCell>
+      )}
     </TableRow>
   );
 }

@@ -5,6 +5,7 @@ import Icd10Table from './icd10-table/Icd10Table';
 
 interface IProps {
   itemsList: any[];
+  isDeleted?: boolean;
   setIcd10OpenPopup: () => void;
   deleteIcd10: (id: string) => void;
 }
@@ -20,8 +21,8 @@ const Icd10 = (props: IProps) => {
 
   return (
     <React.Fragment>
-      <Icd10TableFilterButtons filter={filter} setFilter={setFilter} setIcd10OpenPopup={props.setIcd10OpenPopup} />
-      <Icd10Table filter={filter} setFilter={setFilter} {...props} onDelete={handleDelete} itemsList={props.itemsList} />
+      <Icd10TableFilterButtons filter={filter} setFilter={setFilter} setIcd10OpenPopup={props.setIcd10OpenPopup} hideAddBtn={props.isDeleted ?? false} />
+      <Icd10Table filter={filter} setFilter={setFilter} {...props} onDelete={handleDelete} itemsList={props.itemsList} isDeleted={props.isDeleted ?? false} />
     </React.Fragment>
   );
 };

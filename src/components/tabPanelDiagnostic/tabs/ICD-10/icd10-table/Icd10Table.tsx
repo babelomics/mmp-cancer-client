@@ -10,6 +10,7 @@ import Icd10Row from './Icd10Row';
 interface IProps {
   filter: ICommonFilter;
   itemsList: any[];
+  isDeleted?: boolean;
   setFilter: (newFilter: ICommonFilter) => void;
   onDelete: (gene: IIcd10) => void;
 }
@@ -33,7 +34,16 @@ function Icd10Table(props: IProps) {
       <Table>
         <Icd10TableHeader {...props} />
         <TableBody>
-          <LazyList<IIcd10> token={filter} ChildElem={Icd10Row} fetchPage={fetchIcd10List} ChildWrapper={Icd10RowWrapper} getElemId={getIgcd10Id} onDelete={onDelete} isReduxOnly />
+          <LazyList<IIcd10>
+            token={filter}
+            ChildElem={Icd10Row}
+            fetchPage={fetchIcd10List}
+            ChildWrapper={Icd10RowWrapper}
+            getElemId={getIgcd10Id}
+            onDelete={onDelete}
+            rowProps={{ isDeleted: props.isDeleted }}
+            isReduxOnly
+          />
         </TableBody>
       </Table>
     </TableContainer>

@@ -99,7 +99,7 @@ function DrugTableHeader(props: IProps) {
 
         <ColumnHeader label={t('commons.fields.cost')} sortId="cost" filter={filter} setFilter={setFilter} loading={loading} />
 
-        <ColumnHeader label={t('commons.fields.lastModificationDate')} sortId="lastModificationDate" filter={filter} setFilter={setFilter} loading={loading} />
+        <ColumnHeader label={t('commons.fields.lastModificationDate')} filter={filter} setFilter={setFilter} loading={loading} />
       </TableRow>
     </TableHead>
   );

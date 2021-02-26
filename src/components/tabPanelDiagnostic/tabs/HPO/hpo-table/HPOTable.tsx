@@ -11,6 +11,7 @@ interface IProps {
   filter: IHPOFilter;
   itemsList: any[];
   assembly: string;
+  isDeleted?: boolean;
   onDelete: (transcript: IHPO) => void;
   setFilter: (newFilter: IHPOFilter) => void;
 }
@@ -34,7 +35,16 @@ function HPOTable(props: IProps) {
       <Table>
         <HPOTableHeader {...props} />
         <TableBody>
-          <LazyList<IHPO> token={filter} ChildElem={HPORow} fetchPage={fetchHPOList} ChildWrapper={HPORowWrapper} getElemId={HPOId} onDelete={onDelete} isReduxOnly />
+          <LazyList<IHPO>
+            token={filter}
+            ChildElem={HPORow}
+            fetchPage={fetchHPOList}
+            ChildWrapper={HPORowWrapper}
+            getElemId={HPOId}
+            onDelete={onDelete}
+            rowProps={{ isDeleted: props.isDeleted }}
+            isReduxOnly
+          />
         </TableBody>
       </Table>
     </TableContainer>

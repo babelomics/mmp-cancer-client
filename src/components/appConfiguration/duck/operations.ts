@@ -56,7 +56,7 @@ const validatePanDrugs = (panDrugsConfig: IPandrugsConfig, setFormikErrors: (err
       dispatch(actions.endFetch());
       dispatch(actions.updateConfigData({ pandrugPassword: panDrugsConfig.password, pandrugURL: panDrugsConfig.url, pandrugUser: panDrugsConfig.user, pandrugEmail: panDrugsConfig.email }));
       dispatch(actions.setValidationPandrug(false));
-      dispatch(globalPopupOperations.showMessagePopup(t('genomicDictionaryConfig.messages.success'), 'success'));
+      dispatch(globalPopupOperations.showMessagePopup(t('panDrugsConfig.messages.success'), 'success'));
     })
     .catch((err: any) => {
       dispatch(actions.endFetch());

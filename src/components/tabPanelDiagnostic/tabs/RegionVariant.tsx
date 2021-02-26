@@ -12,6 +12,7 @@ interface IProps {
   loading: boolean;
   regionList: any;
   variantList: any;
+  isDeleted?: boolean;
   clickAddRegion: () => void;
   clickAddVariant: () => void;
   deleteRegion: (region: any) => void;
@@ -83,11 +84,13 @@ const RegionVariant = (props: IProps) => {
             <List>
               <ListItem>
                 <ListItemText primary={t('commons.fields.regionsNumber')} primaryTypographyProps={{ variant: 'h6', color: 'primary' }} />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" color="primary" onClick={props.clickAddRegion}>
-                    <AddCircle />
-                  </IconButton>
-                </ListItemSecondaryAction>
+                {!props.isDeleted && (
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" color="primary" onClick={props.clickAddRegion}>
+                      <AddCircle />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                )}
               </ListItem>
               {props.regionList.map((i: any) => (
                 <ListItem className={classes.itemList}>
@@ -107,11 +110,13 @@ const RegionVariant = (props: IProps) => {
             <List>
               <ListItem>
                 <ListItemText primary={t('commons.fields.variantsNumber')} primaryTypographyProps={{ variant: 'h6', color: 'primary' }} />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" color="primary" onClick={props.clickAddVariant}>
-                    <AddCircle />
-                  </IconButton>
-                </ListItemSecondaryAction>
+                {!props.isDeleted && (
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" color="primary" onClick={props.clickAddVariant}>
+                      <AddCircle />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                )}
               </ListItem>
               {props.variantList.map((i: any) => (
                 <ListItem className={classes.itemList}>

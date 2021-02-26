@@ -16,9 +16,10 @@ interface IProps {
   rows?: number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   InputLabelProps?: any;
+  style?: any;
 }
 
-const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, multiline, className, fullWidth = true, onChange, InputLabelProps = {}, variant }: IProps) => {
+const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, multiline, className, fullWidth = true, onChange, InputLabelProps = {}, variant, style = {} }: IProps) => {
   const [valueState, setValue] = useState(formik ? formik.values[name] : '');
   //const [timer, setTimer] = useState<any>(debounce);
 
@@ -45,7 +46,7 @@ const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, mu
     triggerChange(e);
   };
 
-  let blueStyle = {};
+  let blueStyle = { ...style };
   if (variant === 'filled') {
     blueStyle = { backgroundColor: '#dbecfb' };
   }

@@ -70,10 +70,10 @@ function TranscriptTableHeader(props: IProps) {
       <TableRow>
         <ColumnHeader label={t('commons.fields.identifier')} sortId="transcriptId" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.biotype')} sortId="biotype" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.geneIdentifier')} sortId="gengeneIdeIdentifier" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.geneIdentifier')} sortId="geneId" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.hgncGene')} sortId="name" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.canonical')} sortId="canonical" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.refSeqNM')} sortId="refseq" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.refSeqNM')} filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.chromosomalRegion')} sortId="seqRegion" filter={filter} setFilter={setFilter} />
         <TableCell />
       </TableRow>

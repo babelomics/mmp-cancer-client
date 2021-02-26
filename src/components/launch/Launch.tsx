@@ -69,7 +69,7 @@ export const Launch = (props: IProps) => {
               {t('launch.installationInfoTitle')}
             </Typography>
             <Typography className={classes.text} variant="body2" gutterBottom>
-              {t('launch.installationInfoText')}
+              {t('launch.administrationInfoText')}
             </Typography>
           </Paper>
         </Grid>

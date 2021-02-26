@@ -33,7 +33,7 @@ class ColumnHeader extends React.PureComponent<CHProps> {
     if (!!sortId) {
       const selected = !!sortId && sortId === filter.sortBy;
       return (
-        <TableCell style={hideColumn ? { display: 'none' } : { maxWidth: '100px', overflowWrap: 'break-word', wordWrap: 'break-word', textAlign: 'center' }}>
+        <TableCell style={hideColumn ? { display: 'none' } : { textAlign: 'center', whiteSpace: 'normal' }}>
           <BootstrapButton color={selected ? 'primary' : 'default'} onClick={this.handleClick}>
             {label}
             {selected && SortDirection.ASC === filter.sortDirection && <ArrowDownwardIcon fontSize="small" />}
@@ -42,7 +42,7 @@ class ColumnHeader extends React.PureComponent<CHProps> {
         </TableCell>
       );
     } else {
-      return <TableCell style={{ maxWidth: '100px', overflowWrap: 'break-word', wordWrap: 'break-word' }}>{label}</TableCell>;
+      return <TableCell style={{ textAlign: 'center', whiteSpace: 'normal' }}>{label}</TableCell>;
     }
   }
 
@@ -68,11 +68,11 @@ function HPOPopupTableHeader(props: IProps) {
   return (
     <TableHead>
       <TableRow>
-        <ColumnHeader label={t('commons.fields.identifier')} sortId="hpoId" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.name')} sortId="name" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.description')} sortId="def" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.parents')} sortId="parents" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.children')} sortId="children" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.identifier')} filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.name')} filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.description')} filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.parents')} filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.children')} filter={filter} setFilter={setFilter} />
       </TableRow>
     </TableHead>
   );

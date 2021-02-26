@@ -16,11 +16,12 @@ interface IProps {
   ascendants: any;
   descendants: any;
   panelIdentifier: string;
+  isDeleted?: boolean;
   clickAddAsc: () => void;
   clickAddDesc: () => void;
   deleteAscendant: (ascendant: any) => void;
   deleteDescendant: (data: any) => void;
-  navegateTo: (guid: string) => void;
+  navegateTo: (guid: string, general?: boolean) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -105,14 +106,16 @@ export const AscendantsDescendants = (props: IProps) => {
             <List>
               <ListItem>
                 <ListItemText primary={t('commons.fields.ascendants')} primaryTypographyProps={{ variant: 'h6', color: 'primary' }} />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" color="primary" onClick={props.clickAddAsc}>
-                    <AddCircle />
-                  </IconButton>
-                </ListItemSecondaryAction>
+                {!props.isDeleted && (
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" color="primary" onClick={props.clickAddAsc}>
+                      <AddCircle />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                )}
               </ListItem>
               {props.ascendants.map((i: Panel) => (
-                <ListItem className={classes.itemList} onClick={() => props.navegateTo(i.guid)}>
+                <ListItem className={classes.itemList} onClick={() => props.navegateTo(i.guid, true)}>
                   <Grid item xs={6}>
                     <ListItemText>
                       <Link text={i.diagnosticPanelIdentifier} tooltip={i.diagnosticPanelIdentifier} placement={'bottom-start'}></Link>
@@ -138,16 +141,18 @@ export const AscendantsDescendants = (props: IProps) => {
             <List>
               <ListItem>
                 <ListItemText primary={t('commons.fields.descendants')} primaryTypographyProps={{ variant: 'h6', color: 'primary' }} />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" color="primary" onClick={props.clickAddDesc}>
-                    <AddCircle />
-                  </IconButton>
-                </ListItemSecondaryAction>
+                {!props.isDeleted && (
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" color="primary" onClick={props.clickAddDesc}>
+                      <AddCircle />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                )}
               </ListItem>
               {props.descendants.map((i: any) => (
                 <>
                   {i.toDelete !== true && (
-                    <ListItem className={classes.itemList} onClick={() => props.navegateTo(i.guid)}>
+                    <ListItem className={classes.itemList} onClick={() => props.navegateTo(i.guid, true)}>
                       <Grid item xs={6}>
                         <ListItemText classes={{ root: classes.idList }}>
                           <Link text={i.diagnosticPanelIdentifier} tooltip={i.diagnosticPanelIdentifier} placement={'bottom-start'}></Link>

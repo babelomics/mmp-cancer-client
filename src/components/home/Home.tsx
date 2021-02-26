@@ -64,7 +64,7 @@ export const Home = (props: IProps) => {
   const isHidden = (item: any) => {
     if (props.user) {
       if (!props.configured && props.user.isAdmin) {
-        return (!item.notConfigured && props.user.isAdmin);
+        return !item.notConfigured && props.user.isAdmin;
       }
       return item.hidden && !props.user.isAdmin;
     }
@@ -74,9 +74,7 @@ export const Home = (props: IProps) => {
   return (
     <Box boxShadow={1}>
       <div className={classes.root}>
-        {!props.configured && (
-        <Alert severity="error">{t('appConfiguration.alertNotConfigured')}</Alert>
-        )}      
+        {!props.configured && <Alert severity="error">{t('appConfiguration.alertNotConfigured')}</Alert>}
         <GridList spacing={10} cols={getGridListCols()} className={classes.gridList}>
           {getMenuItems(t).map((item, i) => {
             return (
@@ -87,7 +85,7 @@ export const Home = (props: IProps) => {
                 }}
                 hidden={isHidden(item)} // TODO: Uncomment this
               >
-                <GaiaIconButtonWithText icon={item.icon} iconSize={item.iconSize} text={item.text} onClick={() => history.push(item.route)} />
+                <GaiaIconButtonWithText icon={item.icon} iconSize={item.iconSize} text={item.text} onClick={() => history.push(item.route)} fixedSize />
               </GridListTile>
             );
           })}

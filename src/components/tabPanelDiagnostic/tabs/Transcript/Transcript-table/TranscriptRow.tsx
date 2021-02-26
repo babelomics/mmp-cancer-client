@@ -8,6 +8,7 @@ import { RemoveCircle } from '@material-ui/icons';
 
 interface IProps {
   item: ITranscript;
+  isDeleted: boolean;
   rowClick: (transcript: ITranscript) => void;
   onDelete?: (transcript: ITranscript) => void;
 }
@@ -52,7 +53,7 @@ function TranscriptRow(props: IProps) {
       <CeteredCell>{transcript.canonical.toString()}</CeteredCell>
       <CeteredCell>{transcript.refseq.join(',')}</CeteredCell>
       <CeteredCell>{transcript.seqRegion}</CeteredCell>
-      {!transcript.isChildren && (
+      {!transcript.isChildren && !props.isDeleted && (
         <CeteredCell>
           <IconButton edge="end" onClick={handleDelete}>
             <RemoveCircle />

@@ -4,19 +4,19 @@ import { Button, makeStyles } from '@material-ui/core';
 interface IProps {
   icon: React.ReactNode | (() => React.ReactNode);
   iconSize?: number;
+  buttonSizeHeight?: number;
+  buttonSizeWidth?: number;
   text: string;
   textAlign?: 'bottom' | 'top' | 'right' | 'left';
   color?: 'primary' | 'inherit' | 'secondary' | 'default' | undefined;
   variant?: 'outlined' | 'text' | 'contained' | undefined;
   disabled?: boolean;
+  style?: any;
+  fixedSize?: boolean;
   onClick?: (e: any) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
-  button: {
-    height: 150,
-    width: 150
-  },
   labelBottom: {
     flexDirection: 'column'
   },
@@ -34,7 +34,20 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const GaiaIconButtonWithText = ({ icon, iconSize = 32, text, textAlign = 'bottom', color = 'primary', variant = 'outlined', disabled, onClick }: IProps) => {
+const GaiaIconButtonWithText = ({
+  icon,
+  iconSize = 32,
+  buttonSizeWidth = 150,
+  buttonSizeHeight = 150,
+  text,
+  textAlign = 'bottom',
+  color = 'primary',
+  variant = 'outlined',
+  disabled,
+  style,
+  fixedSize,
+  onClick
+}: IProps) => {
   const classes = useStyles();
 
   const getTextAlign = (): string => {
@@ -47,8 +60,16 @@ const GaiaIconButtonWithText = ({ icon, iconSize = 32, text, textAlign = 'bottom
   };
 
   return (
-    <Button classes={{ root: classes.button, label: getTextAlign() }} variant={variant} color={color} disableRipple={true} disabled={disabled} onClick={onClick}>
-      {React.cloneElement(icon as React.ReactElement<any>, { className: classes.icon, style: { fontSize: iconSize } })}
+    <Button
+      classes={{ label: getTextAlign() }}
+      variant={variant}
+      color={color}
+      disableRipple={true}
+      disabled={disabled}
+      onClick={onClick}
+      style={{ ...style, width: fixedSize ? buttonSizeHeight : 'auto', minWidth: buttonSizeWidth, height: buttonSizeHeight, justifyContent: 'space-between' }}
+    >
+      {React.cloneElement(icon as React.ReactElement<any>, { className: textAlign === 'bottom' ? classes.icon : '', style: { fontSize: iconSize } })}
       {text}
     </Button>
   );

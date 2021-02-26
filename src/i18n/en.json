@@ -20,7 +20,7 @@
       "save": "Save panel"
     },
     "messages": {
-      "successDelete": "Panel Diagnostic delete : successful",
+      "successDelete": "The Diagnostic Panel has been deleted succesfully",
       "error": "error during the delete process",
       "unknown": " Unknown error",
       "chooseDeletion": "Are you sure you want to delete the panel? There are panels that will be left without ascenders. You can delete them along with their unique descendants or leave them as the root panel."
@@ -52,7 +52,11 @@
       "endPosition": "End"
     },
     "error": {
-      "notValirRegion": "The region is not valid."
+      "notValirRegion": "The region is not valid.",
+      "notValidPosition": "Positions must be natural numbers",
+      "notValidVariant": "Position must be a natural number",
+      "notValidReference": "Reference must be [ACGT]",
+      "notValidAlternative": "Alternative must be [ACGT]"
     }
   },
   "panelSetCreate": {
@@ -70,7 +74,7 @@
       "errorConflict": "Already exist a panel collection with the same identifier or name.",
       "importPopupMessage_1": "Select the collection panels diagnostic file (.json or .zip)",
       "importPopupMessage_2": "Confirmation",
-      "importPopupError": "Error during Diagnostic Panel Set Import",
+      "importPopupError": "An error ocurred while importing a panel set collection.",
       "importPopupError_1": "",
       "importPopupError_2": "Date selected not valid",
       "importPopupError_3": "Already exist a panels with the same name or identifier",
@@ -81,7 +85,7 @@
       "importPopupConfirm_2": "If you want rename the collection's indentifier and/or the name insert here.",
       "exportPopupError": "An error ocurred while exporting the file.",
       "importPopupSuccess": "Panel set has been imported successfully.",
-      "importError422_InvalidRef": "Identifier or name is invalid. Please, check if identifier field is empty or has spaces and if name is empty.",
+      "importError422_InvalidRef": "Error: some panels contain references to panels that do not exist.",
       "importError400_InvalidFileName": "Error: incorrect file name format.",
       "importError400_NotJson": "Error: incorrect format. (Required .json)",
       "importError422_InvalidIdOrName": "Error: empty identifier or name.",
@@ -89,9 +93,13 @@
       "importError409_NameExists": "Error: Name is already taken!",
       "importError422_FutureDates": "Error: Dates cannot be in the future!",
       "importError422_InvalidTranscript": "Error: There are panels with invalid genomic entities (transcripts, genes, variants or regions).",
+      "importError422_InvalidAssociations": "Error: There are panels with invalid associations (HPO, ICD-10).",
       "importError422_InvalidGenes": "Error: There are panels with invalid genomic entities (transcripts, genes, variants or regions).",
       "importError422_InvalidNumberOfPanels": "Error: There is more than one current panel.",
-      "importError422_PanelsCoexist": "Error: There are some panels inside of the collection with the same name or id that coexists in the same period of time."
+      "importError422_PanelsCoexist": "Error: There are some panels inside of the collection with the same name or id that coexists in the same period of time.",
+      "importError422_Author": "The Author does not exit in the system!",
+      "importErrorInvalidFile": "Error: invalid files cannot be imported"
+
     },
     "unsubscribe": {
       "confirmWord": "OVERWRITE"
@@ -128,12 +136,13 @@
     "subTitle": "Contact manager",
     "success": "The configuration has been modified succesfully",
     "alertNotConfigured": "The application is not fully and/or correctly configured.",
-    "conectionError": "Connection failed during the proccess"
+    "conectionError": "Connection failed during the proccess",
+    "contactManagementPopupTitle": "Contact Management"
   },
   "panDrugsConfig": {
     "title": "Pandrugs Configuration",
     "messages": {
-      "success": "Pandrugs service configuration: Correct",
+      "success": "Pandrugs service configuration has been modify succesfully",
       "successCreate": "User Create Correctly",
       "errorCreate": "Error during creation User",
       "notExist": "Pandrugs service configuration:\nThe user does not exist in the service or the credentials are incorrect.\nDo you want to register it?\n\n",
@@ -145,7 +154,7 @@
   "genomicDictionaryConfig": {
     "title": "Genomic Dictionary Configuration",
     "messages": {
-      "success": "Genomic dictionary configuration: Correct",
+      "success": "Genomic dictionary configuration has been modify succesfully",
       "invalid": "Genomic dictionary configuration: Invalid",
       "unknowwn": "Genomic dictionary configuration: Unknowwn error",
       "noConnection": "Genomic dictionary configuration: Connection issues"
@@ -232,7 +241,7 @@
     }
   },
   "launch": {
-    "administrationInfoTitle": "Administration information",
+    "administrationInfoTitle": "About this installation",
     "administrationInfoText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     "installationInfoTitle": "Installation information",
     "installationInfoText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
@@ -245,6 +254,26 @@
   "projectsManagement": {
     "title": "Projects Management",
     "titlePopupAdmin": "Admin Management"
+  },
+  "projectProfile": {
+    "title": "Project",
+    "nSamples": "Nº Samples",
+    "nIndividuals": "Nº Individuals",
+    "nVCF": "Nº VCF",
+    "nDiagnosticsPanels": "Nº Diagnostic Panel",
+    "nAnalyses": "Nº Analyses",
+    "nDrugs": "Nº Drugs",
+    "usersAndPermissions": "Permissions and users",
+    "deleteTitle": "Delete project",
+    "deleteActionText": "to confirm deletion of this project. ATTENTION!: If you delete this project it will become inaccessible!",
+    "connectionError": "Connection failed during the proccess",
+    "deleteSuccess": "The project profile has been deleted successfully",
+    "deleteError": "The project profile could not be deleted",
+    "createProject": "The project profile has been created successfully",
+    "errorCreateProject": "The project profile could not be created",
+    "modifyProjectSuccess": "The project profile has been modified successfully",
+    "errorModifyProject": "The project profile could not be modified",
+    "errorModifyDeletedProject": "The project profile could not modify a removed project"
   },
   "drugsManagement": {
     "title": "Drugs Management",
@@ -281,6 +310,9 @@
     "title": "Page not found!"
   },
   "commons": {
+    "deleteConfirmWord": "DELETE",
+    "deleteConfirmWordNotMatch": "Entered text doesn't match the required keyword",
+    "deleteConfirmText": "Type DELETE {{action}}",
     "table": {
       "emptyDataSourceMessage": "No records to display",
       "addTooltip": "Add",
@@ -349,7 +381,7 @@
       "required": "This field is mandatory",
       "invalidCost": "Invalid cost, must be a number with 2 decimals separated by a point.",
       "invalidEmail": "Invalid email address.",
-      "invalidIdentifier": "Invalid identifier format.",
+      "invalidIdentifier": "Invalid identifier format. Identifier must be between 3 - 32 characters and without blank spaces.",
       "password": {
         "required": "Password is required",
         "dontMatch": "Password do not match"
@@ -505,7 +537,36 @@
       "updateDate": "Update Date",
       "individuals": "Individuals",
       "samples": "Samples",
-      "analyses": "Analyses"
+      "analyses": "Analyses",
+      "drugs": "Drugs",
+      "diagnosticPanels": "Diagnostic Panels",
+      "vfcFiles": "VCF Files",
+      "projectId": "Identifier",
+      "creationDateStart": "Created before",
+      "creationDateEnd": "Created after",
+      "modificationDateStart": "Last update before",
+      "modificationDateEnd": "Last update after",
+      "permission":"Permissions"
+    }
+  },
+   "permissionsAndUsers": {
+    "title": "Permissions and Users",
+    "tooltip": {
+      "leftArrow": "Previous Version",
+      "rightArrow": "Next version",
+      "delete": "Delete Diagnostic Panel",
+      "save": "Save panel"
+    },
+    "messages": {
+      "successDelete": "The Diagnostic Panel has been deleted succesfully",
+      "error": "error during the delete process",
+      "unknown": " Unknown error",
+      "chooseDeletion": "Are you sure you want to delete the panel? There are panels that will be left without ascenders. You can delete them along with their unique descendants or leave them as the root panel."
+    },
+    "tabs": {
+      "usersGroups": "Users Group",
+      "specifics": "Users with specific permissions",
+      "associated": "Associated users and permissions"
     }
   }
 }

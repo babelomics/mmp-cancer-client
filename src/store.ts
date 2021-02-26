@@ -55,6 +55,12 @@ import IGenomicRefPopup from './components/genomicRefPopup/interfaces';
 import tabPanelDiagnostic from './components/tabPanelDiagnostic/duck';
 import ITabPanelDiagnostic from './components/tabPanelDiagnostic/interfaces';
 
+import projectProfile from './components/projectProfile/duck';
+import IProject from './components/projectProfile/interfaces';
+
+import permissionsAndUsers from './components/permissionsAndUsers/duck';
+import IPermissionsAndUsers from './components/permissionsAndUsers/interfaces';
+
 import { saveToStorage } from './utils/storage';
 
 /**
@@ -82,6 +88,8 @@ export interface IRootState {
   panelSetProfile: IPanelSetProfile;
   genomicRefPopup: IGenomicRefPopup;
   tabPanelDiagnostic: ITabPanelDiagnostic;
+  projectProfile: IProject;
+  permissionsData: IPermissionsAndUsers;
 }
 
 declare global {
@@ -112,7 +120,9 @@ const store = createStore(
     createNewPanelSet,
     panelSetProfile,
     genomicRefPopup,
-    tabPanelDiagnostic
+    tabPanelDiagnostic,
+    projectProfile,
+    permissionsAndUsers
   }),
   compose(applyMiddleware(...middlewares), composeEnhancers())
 );

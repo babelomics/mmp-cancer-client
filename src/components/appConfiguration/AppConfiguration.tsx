@@ -56,10 +56,10 @@ export const AppConfiguration = (props: IProps) => {
         <>
           <ContactAdminConfig
             updateConfigData={props.updateConfigData}
-            identifier={props.configData.contactIdentifier}
-            name={props.configData.contactName}
-            surname={props.configData.contactLastName}
-            email={props.configData.contactEmail}
+            identifier={props.configData.contactIdentifier || ''}
+            name={props.configData.contactName || ''}
+            surname={props.configData.contactLastName || ''}
+            email={props.configData.contactEmail || ''}
           />
           <TextConfig textValue={props.configData.setupInformation ?? ''} updateConfigData={props.updateConfigData} />
           <PanDrugsConfig

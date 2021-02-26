@@ -79,8 +79,8 @@ function PanelTableHeader(props: IProps) {
         <ColumnHeader label={t('commons.fields.transcNumber')} sortId="transcNumber" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.regionsNumber')} sortId="regionsNumber" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.variantsNumber')} sortId="variantsNumber" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.dateCreated')} sortId="dateCreated" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.dateDelete')} sortId="dateDelete" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.dateCreated')} sortId="creationDate" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.dateDelete')} sortId="deletionDate" filter={filter} setFilter={setFilter} />
       </TableRow>
     </TableHead>
   );

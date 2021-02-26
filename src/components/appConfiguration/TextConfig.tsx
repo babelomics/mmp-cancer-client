@@ -20,7 +20,7 @@ export const PanDrugsConfig = (props: IProps) => {
   return (
     <React.Fragment>
       <Typography variant="subtitle2" style={{ marginBottom: 10, marginTop: 30 }}>
-        {t('launch.installationInfoTitle')}
+        {t('launch.administrationInfoTitle')}
       </Typography>
       <div style={{ height: 200, marginBottom: 25 }}>
         <ReactQuill

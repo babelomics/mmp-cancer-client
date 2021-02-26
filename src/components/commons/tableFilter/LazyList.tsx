@@ -21,11 +21,14 @@ interface LLPVIProps<T> {
   selectAll?: boolean;
   onDelete?: (data: T) => void;
   setFilter?: (newToken: any) => void;
+  rowProps?: {
+    [key: string]: any;
+  };
 }
 
 class LazyListPageView<T> extends React.PureComponent<LLPVIProps<T>> {
   render() {
-    const { elems, ChildElem, rowClick, exclude, setSelectedRows, selectedRows, selectAll, onDelete, setFilter } = this.props;
+    const { elems, ChildElem, rowClick, exclude, setSelectedRows, selectedRows, selectAll, onDelete, setFilter, rowProps } = this.props;
     const getId = this.props.getElemId || defaultGetElemId;
     return elems.map((elem: any) => (
       <>
@@ -39,6 +42,7 @@ class LazyListPageView<T> extends React.PureComponent<LLPVIProps<T>> {
             selectAll={selectAll}
             onDelete={() => (onDelete ? onDelete(elem) : undefined)}
             setFilter={setFilter}
+            {...rowProps}
           />
         )}
       </>
@@ -68,6 +72,9 @@ interface IProps<T> {
   isReduxOnly?: boolean;
   setFilter?: (newToken: any) => void;
   scrollModal?: string;
+  rowProps?: {
+    [key: string]: any;
+  };
 }
 
 interface IState<T> {
@@ -113,7 +120,7 @@ class LazyList<T> extends React.PureComponent<IProps<T>, IState<T>> {
 
   private readonly renderTable = () => {
     const { status, pages, firstPage } = this.state;
-    const { ChildElem, ChildWrapper, rowClick, exclude, selectedRows, setSelectedRows, selectAll, onDelete, setFilter, scrollModal } = this.props;
+    const { ChildElem, ChildWrapper, rowClick, exclude, selectedRows, setSelectedRows, selectAll, onDelete, setFilter, scrollModal, rowProps } = this.props;
     const getElemId = this.props.getElemId || defaultGetElemId;
     const lastPage = firstPage + pages.length;
     const isStartProbeVisible = 0 < firstPage && 0 < pages.length;
@@ -143,6 +150,7 @@ class LazyList<T> extends React.PureComponent<IProps<T>, IState<T>> {
             selectAll={selectAll}
             onDelete={onDelete}
             setFilter={setFilter}
+            rowProps={rowProps}
           />
         ))}
         {Status.NORMAL === status && isEndProbeVisible && (

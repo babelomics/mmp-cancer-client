@@ -8,6 +8,7 @@ import Searchbar from '../../../../commons/tableFilter/Searchbar';
 
 interface IProps {
   filter: any;
+  hideAddBtn: boolean;
   setFilter: (newGeneFilter: ICommonFilter) => void;
   setGenesOpenPopup: () => void;
 }
@@ -20,14 +21,6 @@ const GeneFilterButtons = (props: IProps) => {
 
   const handleSearchTextChange = (newValue: string) => {
     props.setFilter({ ...props.filter, searchText: newValue });
-  };
-
-  const deleteFilter = (key: string) => {
-    const obj = { ...filter } as any;
-    if (obj[key] || obj[key] === false) {
-      delete obj[key];
-    }
-    setFilter(obj);
   };
 
   const addTooltip = t('commons.table.addTooltip');
@@ -43,11 +36,13 @@ const GeneFilterButtons = (props: IProps) => {
           >
             <Searchbar variant="outlined" margin="dense" value={searchText} onChange={handleSearchTextChange} />
           </form>
-          <Tooltip title={addTooltip}>
-            <IconButton onClick={props.setGenesOpenPopup}>
-              <Add />
-            </IconButton>
-          </Tooltip>
+          {!props.hideAddBtn && (
+            <Tooltip title={addTooltip}>
+              <IconButton onClick={props.setGenesOpenPopup}>
+                <Add />
+              </IconButton>
+            </Tooltip>
+          )}
         </Box>
       </Box>
     </>

@@ -5,6 +5,7 @@ import { RemoveCircle } from '@material-ui/icons';
 
 interface IProps {
   item: IGene;
+  isDeleted: boolean;
   rowClick?: (gene: IGene) => void;
   onDelete?: (gene: IGene) => void;
 }
@@ -48,7 +49,7 @@ function GeneRow(props: IProps) {
       <CeteredCell>{gene.seqRegion}</CeteredCell>
       <CeteredCell>{gene.transcripts.map((x) => x.name).join(',')}</CeteredCell>
       <CeteredCell>{gene.description}</CeteredCell>
-      {!gene.isChildren && (
+      {!gene.isChildren && !props.isDeleted && (
         <CeteredCell>
           <IconButton edge="end" onClick={handleDelete}>
             <RemoveCircle />

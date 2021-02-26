@@ -5,6 +5,7 @@ import { RemoveCircle } from '@material-ui/icons';
 
 interface IProps {
   item: IIcd10;
+  isDeleted: boolean;
   onDelete?: (gene: IIcd10) => void;
 }
 interface ICell {
@@ -41,11 +42,13 @@ function Icd10Row(props: IProps) {
     <TableRow>
       <CeteredCell>{icd10.id}</CeteredCell>
       <CeteredCell>{icd10.desc}</CeteredCell>
-      <CeteredCell>
-        <IconButton edge="end" onClick={handleDelete}>
-          <RemoveCircle />
-        </IconButton>
-      </CeteredCell>
+      {!props.isDeleted && (
+        <CeteredCell>
+          <IconButton edge="end" onClick={handleDelete}>
+            <RemoveCircle />
+          </IconButton>
+        </CeteredCell>
+      )}
     </TableRow>
   );
 }

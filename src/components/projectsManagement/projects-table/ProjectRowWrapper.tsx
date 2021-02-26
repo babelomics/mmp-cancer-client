@@ -5,7 +5,7 @@ interface IProps {
   children: React.ReactChild;
 }
 
-function ProjectsRowWrapper(props: IProps) {
+function ProjectRowWrapper(props: IProps) {
   const { children } = props;
   return (
     <TableRow>
@@ -14,4 +14,4 @@ function ProjectsRowWrapper(props: IProps) {
   );
 }
 
-export default ProjectsRowWrapper;
+export default ProjectRowWrapper;

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GaiaContainer from '../../GaiaContainer';
-import { Dialog, TextField } from '@material-ui/core';
+import { Dialog, Grid, TextField } from '@material-ui/core';
 import { useStyles } from '../popupStyle';
-import { string } from 'yup';
+import { useFormik } from 'formik';
+import { checkValidationSchema } from './validationSchema';
+import GaiaTextField from '../../GaiaTextField';
 
 interface IProps {
   open?: boolean;
@@ -17,27 +19,22 @@ interface IProps {
 export const PopupUsersSelection = ({ open = false, onClose, openPopupParent, setValueField, titlePopup, assembly }: IProps) => {
   const classes = useStyles();
   const [openState, setOpen] = useState(open);
-  const [chromosome, setChromosome] = useState('');
-  const [initPosition, setInitPosition] = useState('');
-  const [reference, setReference] = useState('');
-  const [alternative, setAlternative] = useState('');
-  const [error, setError] = useState(false);
   const { t } = useTranslation();
 
   useEffect(() => {
     setOpen(open);
   }, [open]);
 
-  const handleClickAccept = () => {
+  const handleClickAccept = (values: any) => {
     const variant = {
-      variantIdentifier: `${chromosome}${initPosition}${reference}${alternative}`,
-      chromosomeSequence: chromosome !== '' ? chromosome : null,
-      initPosition: initPosition !== '' ? initPosition : null,
-      reference: reference !== '' ? reference : null,
-      alternative: alternative !== '' ? alternative : null,
+      variantIdentifier: `${values.chromosome}:${values.initPosition}:${values.reference}:${values.alternative}`,
+      chromosomeSequence: values.chromosome !== '' ? values.chromosome : null,
+      initPosition: values.initPosition !== '' ? values.initPosition : null,
+      reference: values.reference !== '' ? values.reference : null,
+      alternative: values.alternative !== '' ? values.alternative : null,
       isChildren: false
     };
-    if (chromosome && initPosition && reference && alternative) {
+    if (values.chromosome && values.initPosition && values.reference && values.alternative) {
       setValueField(variant);
     }
     handleClose();
@@ -54,43 +51,43 @@ export const PopupUsersSelection = ({ open = false, onClose, openPopupParent, se
     }
   };
 
+  const initialValues = () => {
+    return {
+      variantIdentifier: '',
+      chromosome: '',
+      initPosition: '',
+      reference: '',
+      alternative: '',
+      isChildren: false
+    };
+  };
+
+  const checkFormik = useFormik({
+    initialValues: initialValues(),
+    enableReinitialize: true,
+    validationSchema: checkValidationSchema(t),
+    onSubmit: (values) => {
+      handleClickAccept(values);
+    }
+  });
+
+  console.log(checkFormik);
+
   return (
     <Dialog open={openState} classes={{ paper: classes.dialogPaper }}>
-      <GaiaContainer title={titlePopup} onBack={handleClose} onAccept={handleClickAccept}>
+      <GaiaContainer title={titlePopup} onBack={handleClose} onAccept={checkFormik.handleSubmit} style={{ overflow: 'hidden', padding: '30px' }}>
         <div style={{ marginBottom: '10px' }}>
           {t('tabPanelDiagnostic.fields.chromosomeSequence')} : {t('tabPanelDiagnostic.fields.initPosition')} : {t('tabPanelDiagnostic.fields.reference')} :{' '}
           {t('tabPanelDiagnostic.fields.alternative')}
         </div>
         <div>
-          <TextField size="small" style={{ marginRight: '10px', width: '60px' }} value={chromosome} onChange={(e) => setChromosome(e.target.value)} /> :
-          <TextField size="small" style={{ marginLeft: '10px', width: '200px', marginRight: '10px' }} value={initPosition} onChange={(e) => setInitPosition(e.target.value)} /> :
-          <TextField
-            size="small"
-            style={{ marginLeft: '10px', width: '35px', marginRight: '10px' }}
-            value={reference}
-            onChange={(e) => {
-              const ACGT = ['A', 'C', 'G', 'T'];
-              const stringAllow = e.target.value.replace(/[^a-zA-Z]+/g, '');
-              if (ACGT.includes(stringAllow.toUpperCase()) || stringAllow === '') {
-                setReference(e.target.value.toUpperCase());
-              }
-            }}
-          />
+          <GaiaTextField required name="chromosome" style={{ marginRight: '10px', width: '220px' }} label={''} formik={checkFormik} fullWidth /> :
+          <GaiaTextField name="initPosition" style={{ marginLeft: '10px', width: '150px', marginRight: '10px' }} label={''} formik={checkFormik} fullWidth />
           :
-          <TextField
-            size="small"
-            style={{ marginLeft: '10px', width: '35px', marginRight: '10px' }}
-            value={alternative}
-            onChange={(e) => {
-              const ACGT = ['A', 'C', 'G', 'T'];
-              const stringAllow = e.target.value.replace(/[^a-zA-Z]+/g, '');
-              if (ACGT.includes(stringAllow.toUpperCase()) || stringAllow === '') {
-                setAlternative(e.target.value.toUpperCase());
-              }
-            }}
-          />
+          <GaiaTextField required name="reference" style={{ marginLeft: '10px', width: '35px', marginRight: '10px' }} label={''} formik={checkFormik} fullWidth />
+          :
+          <GaiaTextField required name="alternative" style={{ marginLeft: '10px', width: '35px', marginRight: '10px' }} label={''} formik={checkFormik} fullWidth />
         </div>
-        {error && <div style={{ marginTop: '10px', color: 'red' }}>{t('tabPanelDiagnostic.error.notValirRegion')}</div>}
       </GaiaContainer>
     </Dialog>
   );

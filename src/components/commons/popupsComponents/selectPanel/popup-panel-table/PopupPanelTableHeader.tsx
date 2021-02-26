@@ -67,8 +67,8 @@ function PopupPanelTableHeader(props: IProps) {
   return (
     <TableHead>
       <TableRow>
-        <ColumnHeader label={t('commons.fields.identifier')} sortId="identifier" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.name')} sortId="firstName" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.identifier')} sortId="diagnosticPanelIdentifier" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.name')} sortId="name" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.description')} sortId="description" filter={filter} setFilter={setFilter} />
       </TableRow>
     </TableHead>

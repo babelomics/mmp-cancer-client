@@ -18,6 +18,8 @@ const PATH_CREATE_PANEL_SET = '/create-panel-set';
 const PATH_PANEL_SET_PROFILE = '/panel-set-profile';
 const PATH_TAB_PANEL_DIAGNOSTIC = '/tab-panel-diagnostic';
 const PATH_PROJECTS_MANAGEMENT = '/projects-management';
+const PATH_PROJECT_PROFILE = '/project';
+const PATH_PERMISSIONS_AND_USERS = '/permissions';
 
 
 export default {
@@ -40,5 +42,7 @@ export default {
   PATH_CREATE_PANEL_SET,
   PATH_PANEL_SET_PROFILE,
   PATH_TAB_PANEL_DIAGNOSTIC,
-  PATH_PROJECTS_MANAGEMENT
+  PATH_PROJECTS_MANAGEMENT,
+  PATH_PROJECT_PROFILE,
+  PATH_PERMISSIONS_AND_USERS
 };

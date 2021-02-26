@@ -7,6 +7,7 @@ import { IHPOFilter } from '../../interfaces';
 
 interface IProps {
   filter: any;
+  hideAddBtn: boolean;
   setFilter: (newHPOFilter: IHPOFilter) => void;
   setHPOOpenPopup: () => void;
 }
@@ -20,11 +21,13 @@ const HPOFilterButtons = (props: IProps) => {
     <>
       <Box display="flex" flexDirection="column">
         <Box display="flex" flexDirection="row" padding={2} alignSelf="end" justifyContent="flex-end" style={{ width: '100%' }}>
-          <Tooltip title={addTooltip}>
-            <IconButton onClick={props.setHPOOpenPopup}>
-              <Add />
-            </IconButton>
-          </Tooltip>
+          {!props.hideAddBtn && (
+            <Tooltip title={addTooltip}>
+              <IconButton onClick={props.setHPOOpenPopup}>
+                <Add />
+              </IconButton>
+            </Tooltip>
+          )}
         </Box>
       </Box>
     </>

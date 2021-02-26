@@ -2,7 +2,7 @@ import { UserFilter, User } from '../../usersManagement/interfaces';
 import { RegistrationFilter, Registration } from '../../registrationManagement/interfaces';
 import { PanelSet, PanelSetFilter } from '../../panelSetsManagement/interfaces';
 
-import { API_DINAMIC_DICTIONARY, API_DRUGS, API_ENDPOINT, API_PANELS, API_PANEL_SETS, API_PROJECTS, API_USERS, API_USERS_REQUESTS } from '../../../utils/constants';
+import { API_DINAMIC_DICTIONARY, API_DRUGS, API_ENDPOINT, API_GROUPS, API_PANELS, API_PANEL_SETS, API_PROJECTS, API_USERS, API_USERS_REQUESTS } from '../../../utils/constants';
 import axios from 'axios';
 import { Panel, PanelFilter } from '../../panelSetProfile/interfaces';
 import { Drug, DrugFilter } from '../../drugsManagement/interfaces';
@@ -12,8 +12,8 @@ import { IPopupSearchGeneFilter } from '../popupsComponents/searchGenes/interfac
 import { ArrayUtils } from '../../../utils/arrayUtils';
 import { ITranscriptPopupFilter } from '../../commons/popupsComponents/transcriptPopup/interfaces';
 import { IHPOPopupFilter } from '../../commons/popupsComponents/hpoPopup/interfaces';
-import { IProjectsFilter, IProjects } from '../../projectsManagement/interfaces';
-
+import { IProjectsFilter, IProject } from '../../projectsManagement/interfaces';
+import { IFilterUsersGroups, IGroup } from '../../permissionsAndUsers/interfaces';
 class MmpClient {
   static async getUserPage(filter: UserFilter, pageSize: number, page: number): Promise<User[]> {
     const params = {} as any;
@@ -470,13 +470,13 @@ class MmpClient {
         });
     });
   }
-  static async getProjectsPage(filter: IProjectsFilter, pageSize: number, page: number): Promise<IProjects[]> {
+  static async getProjectsPage(filter: IProjectsFilter, pageSize: number, page: number): Promise<IProject[]> {
     const params = {} as any;
     params.size = pageSize;
     params.page = page;
 
-    if (!!filter.searchText) {
-      params.searchText = filter.searchText;
+    if (!!filter.search) {
+      params.search = filter.search;
     }
     if (!!filter.projectId) {
       params.projectId = filter.projectId;
@@ -509,9 +509,35 @@ class MmpClient {
     if (!!filter.ensemblRelease) {
       params.ensemblRelease = filter.ensemblRelease;
     }
+    if (!!filter.organism) {
+      params.organism = filter.organism;
+    }
     return new Promise((resolve, reject) => {
       axios
         .get(`${API_ENDPOINT}${API_PROJECTS}/list`, { params })
+        .then((res: any) => {
+          resolve(res.data.content);
+        })
+        .catch((error: any) => {
+          reject(error);
+        });
+    });
+  }
+
+  static getGroupsList(filter: IFilterUsersGroups, pageSize: number, page: number): Promise<IGroup[]> {
+    const params = {} as any;
+    params.size = pageSize;
+    params.page = page;
+
+    if (!!filter.searchText) {
+      params.search = filter.searchText;
+    }
+    if (!!filter.permission) {
+      params.permission = filter.permission;
+    }
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${API_ENDPOINT}${API_GROUPS}/list`, { params })
         .then((res: any) => {
           resolve(res.data.content);
         })

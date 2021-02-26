@@ -53,7 +53,13 @@ const SpeciesOrganism = (props: IProps) => {
           <TextField label={t('commons.fields.commonName')} fullWidth disabled name="commonName" value={props.dataSpeciesOrganism.commonName ?? ''} />
         </Grid>
         <Grid item xs={2}>
-          <GaiaIconButton icon={<EditIcon />} onClick={() => clickModify()} />
+          <GaiaIconButton
+            icon={<EditIcon />}
+            onClick={() => clickModify()}
+            onKeyPress={(e) => {
+              e.key === 'Enter' && e.preventDefault();
+            }}
+          />
         </Grid>
       </Grid>
     </React.Fragment>

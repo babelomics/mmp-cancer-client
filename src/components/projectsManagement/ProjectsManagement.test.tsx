@@ -4,7 +4,7 @@ import Example from './Example';
 import i18n from '../../i18n';
 import { I18nextProvider } from 'react-i18next';
 import { initialExampleState } from './duck/reducers';
-import IState from './interfaces';
+import IState, { IProjectsFilter } from './interfaces';
 
 // Note: running cleanup afterEach is done automatically for you in @testing-library/react@9.0.0 or higher
 // unmount and cleanup DOM after the test is finished.

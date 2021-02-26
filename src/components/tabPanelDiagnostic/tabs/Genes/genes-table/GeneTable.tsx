@@ -10,6 +10,7 @@ import GeneRow from './GeneRow';
 interface IProps {
   filter: ICommonFilter;
   itemsList: any[];
+  isDeleted?: boolean;
   setFilter: (newFilter: ICommonFilter) => void;
   onDelete: (gene: IGene) => void;
 }
@@ -33,7 +34,16 @@ function GenesTable(props: IProps) {
       <Table>
         <GeneTableHeader {...props} />
         <TableBody>
-          <LazyList<IGene> token={filter} ChildElem={GeneRow} fetchPage={fetchGenesList} ChildWrapper={GeneRowWrapper} getElemId={getGeneId} onDelete={onDelete} isReduxOnly />
+          <LazyList<IGene>
+            token={filter}
+            ChildElem={GeneRow}
+            fetchPage={fetchGenesList}
+            ChildWrapper={GeneRowWrapper}
+            getElemId={getGeneId}
+            onDelete={onDelete}
+            rowProps={{ isDeleted: props.isDeleted }}
+            isReduxOnly
+          />
         </TableBody>
       </Table>
     </TableContainer>

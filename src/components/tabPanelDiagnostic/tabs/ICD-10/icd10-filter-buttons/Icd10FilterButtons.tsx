@@ -8,6 +8,7 @@ import { ICommonFilter } from '../../interfaces';
 
 interface IProps {
   filter: any;
+  hideAddBtn: boolean;
   setFilter: (newGeneFilter: ICommonFilter) => void;
   setIcd10OpenPopup: () => void;
 }
@@ -30,11 +31,13 @@ const Icd10FilterButtons = (props: IProps) => {
     <>
       <Box display="flex" flexDirection="column">
         <Box display="flex" flexDirection="row" padding={2} alignSelf="end" justifyContent="flex-end" style={{ width: '100%' }}>
-          <Tooltip title={addTooltip}>
-            <IconButton onClick={props.setIcd10OpenPopup}>
-              <Add />
-            </IconButton>
-          </Tooltip>
+          {!props.hideAddBtn && (
+            <Tooltip title={addTooltip}>
+              <IconButton onClick={props.setIcd10OpenPopup}>
+                <Add />
+              </IconButton>
+            </Tooltip>
+          )}
         </Box>
       </Box>
     </>

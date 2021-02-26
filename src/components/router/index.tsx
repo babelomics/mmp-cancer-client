@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
+import axios, { AxiosResponse } from 'axios';
 
 import routes from './routes';
 import Template from './template';
@@ -28,9 +29,20 @@ import CreateNewPanelSet from '../createNewPanelSet';
 import PanelSetProfile from '../panelSetProfile';
 import TabPanelDiagnostic from '../tabPanelDiagnostic';
 import ProjectsManagement from '../projectsManagement';
+import ProjectProfile from '../projectProfile';
+import PermissionsAndUsers from '../permissionsAndUsers';
+import { API_AUTH, API_ENDPOINT, API_USERS } from '../../utils/constants';
 
 const Router = (props: any) => {
   const { login, logout, launch } = props;
+
+  // Interval para la auto-renovacion del token cada hora
+  const REFRESH_URL = `${API_ENDPOINT}${API_USERS}/refreshToken`;
+  useEffect(() => {
+    setInterval(() => {
+      axios.post(REFRESH_URL);
+    }, 3600000); //3600000
+  }, []);
 
   return (
     <ConnectedRouter history={history}>
@@ -43,7 +55,7 @@ const Router = (props: any) => {
           <Route path={routes.PATH_SIGNUP} component={RegistryRequest} />
           <Route path={routes.PATH_LAUNCH} component={Launch} />
           <SecuredRoute path={routes.PATH_USERS_MANAGEMENT} component={UsersManagement} login={login} launch={launch} adminOnly />
-          <SecuredRoute path={routes.PATH_PROJECTS_MANAGEMENT} component={NotFoundPage} login={login} launch={launch} adminOnly />
+          <SecuredRoute path={routes.PATH_PROJECTS_MANAGEMENT} component={ProjectsManagement} login={login} launch={launch} adminOnly />
           <SecuredRoute path={routes.PATH_DRUGS_MANAGEMENT} component={DrugsManagement} login={login} launch={launch} adminOnly />
           <SecuredRoute path={routes.PATH_REGISTRATION_MANAGEMENT} component={RegistrationManagement} login={login} launch={launch} adminOnly />
           <SecuredRoute path={routes.PATH_USER_PROFILE} component={UserProfile} login={login} launch={launch} />
@@ -55,6 +67,8 @@ const Router = (props: any) => {
           <SecuredRoute path={routes.PATH_CREATE_PANEL_SET} component={CreateNewPanelSet} login={login} launch={launch} adminOnly />
           <SecuredRoute path={routes.PATH_PANEL_SET_PROFILE} component={PanelSetProfile} login={login} launch={launch} adminOnly />
           <SecuredRoute path={routes.PATH_TAB_PANEL_DIAGNOSTIC} component={TabPanelDiagnostic} login={login} launch={launch} adminOnly />
+          <SecuredRoute path={routes.PATH_PROJECT_PROFILE} component={ProjectProfile} login={login} launch={launch} adminOnly />
+          <SecuredRoute path={routes.PATH_PERMISSIONS_AND_USERS} component={PermissionsAndUsers} login={login} launch={launch} adminOnly />
           <Route path={routes.PATH_MAINTENANCE} component={underMaintenance} />
           <Route path="/" exact component={Launch} />
           <Route component={NotFoundPage} />

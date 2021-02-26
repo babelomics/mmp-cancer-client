@@ -17,9 +17,16 @@ interface IProps {
   children?: any;
   hideBackButton?: boolean;
   backHistory?: boolean;
+  actions?: IAction[];
   onBack?: (e: any) => void;
   onAccept?: (e: any) => void;
   backActions?: () => void;
+  style?: any;
+}
+
+interface IAction {
+  icon: React.ReactElement;
+  onClick?: () => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -53,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const GaiaContainer = ({ icon, title, backButtonText, acceptButtonText, backHistory, onBack, onAccept, backActions, children, isLaunchScreen, hideBackButton }: IProps) => {
+const GaiaContainer = ({ icon, title, backButtonText, acceptButtonText, backHistory, onBack, onAccept, backActions, children, isLaunchScreen, hideBackButton, actions, style }: IProps) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const history = useHistory();
@@ -73,7 +80,7 @@ const GaiaContainer = ({ icon, title, backButtonText, acceptButtonText, backHist
   };
 
   return (
-    <Paper className={classes.root}>
+    <Paper className={classes.root} style={style}>
       {!isLaunchScreen && (
         <React.Fragment>
           <div className={classes.rowSpace}>
@@ -81,7 +88,12 @@ const GaiaContainer = ({ icon, title, backButtonText, acceptButtonText, backHist
               <GaiaIcon className={classes.icon} color="inherit" icon={icon} size={30} />
               <Typography variant="h5">{title}</Typography>
             </div>
-            <GaiaIconButton icon={<Close />} onClick={handleBack} />
+            <div>
+              {actions?.map((a) => (
+                <GaiaIconButton icon={a.icon} onClick={a.onClick} color="primary" />
+              ))}
+              <GaiaIconButton icon={<Close />} onClick={handleBack} />
+            </div>
           </div>
           <Divider />
           <div className={classes.rowSpace} style={{ marginTop: '25px' }}>

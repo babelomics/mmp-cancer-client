@@ -71,7 +71,15 @@ const Assembly = (props: IProps) => {
           <TextField label={t('commons.fields.uscAlias')} fullWidth disabled name="uscAlias" value={props.dataAssembly.ucscAlias} />
         </Grid>
         <Grid item xs={1}>
-          {props.taxonomyId && <GaiaIconButton icon={<EditIcon />} onClick={() => clickModify()} />}
+          {props.taxonomyId && (
+            <GaiaIconButton
+              icon={<EditIcon />}
+              onClick={() => clickModify()}
+              onKeyPress={(e) => {
+                e.key === 'Enter' && e.preventDefault();
+              }}
+            />
+          )}
         </Grid>
       </Grid>
     </React.Fragment>

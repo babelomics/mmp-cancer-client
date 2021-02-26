@@ -1,28 +1,29 @@
 import SortDirection from '../commons/tableFilter/interfaces/SortDirection';
-import { IDiagnosticPanel } from '../tabPanelDiagnostic/interfaces';
 
 export default interface IState {
   loading: boolean;
+  mode: 'new' | 'edit';
 }
 
-export interface IProjects {
-  analyses: Analysis[];
-  assembly: string;
-  author: string;
-  creationDate: Date;
-  deletionDate: Date;
-  description: string;
-  diagnosticPanels: IDiagnosticPanel[];
-  drugs: Drug[];
-  ensemblRelease: string;
-  files: Analysis[];
-  individuals: Analysis[];
-  modificationDate: Date;
-  name: string;
+export interface IProject {
   projectId: string;
-  samples: Analysis[];
+  name: string;
+  description: string;
+  author: string;
+  creationDate: Date | string | null;
+  modificationDate: Date | string | null;
+  assembly: string;
+  ensemblRelease: string;
+  organism: string;
+  accessType: string;
+  samplesNumber: number;
+  individualsNumber: number;
+  analysesNumber: number;
+  filesNumber: number;
+  diagnosticPanelsNumber: number;
+  drugsNumber: number;
+  deletionDate: Date | string | null;
 }
-
 export interface IProjectsFilter {
   projectId?: string;
   name?: string;
@@ -32,41 +33,9 @@ export interface IProjectsFilter {
   modificationDateEnd?: Date;
   assembly?: string;
   ensemblRelease?: string;
+  organism?: string;
   isDeleted?: boolean;
   sortBy?: string;
   sortDirection?: SortDirection;
-  searchText?: string;
-}
-
-export interface Analysis {}
-
-export interface Association {
-  source: string;
-  value: string;
-}
-
-export interface Feature {
-  diagnosticPanelFeatureIdentifier: string;
-  inheritance: string;
-  mode: string;
-  type: string;
-}
-
-export interface Drug {
-  alternativeNames: AlternativeName[];
-  available: boolean;
-  commonName: string;
-  cost: number;
-  creationDate: Date;
-  deletionDate: Date;
-  id: string;
-  previousVersion: number;
-  standardName: string;
-  userId: string;
-  version: number;
-}
-
-export interface AlternativeName {
-  name: string;
-  source: string;
+  search?: string;
 }

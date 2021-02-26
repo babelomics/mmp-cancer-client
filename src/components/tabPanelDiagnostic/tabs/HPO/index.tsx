@@ -6,6 +6,7 @@ import HPOTable from './hpo-table/HPOTable';
 interface IProps {
   assembly: string;
   itemsList: any[];
+  isDeleted?: boolean;
   setHPOOpenPopup: () => void;
   deleteHPO: (id: string) => void;
 }
@@ -21,8 +22,8 @@ const HPOList = (props: IProps) => {
 
   return (
     <React.Fragment>
-      <HPOFilterButtons filter={filter} setFilter={setFilter} setHPOOpenPopup={props.setHPOOpenPopup} />
-      <HPOTable filter={filter} setFilter={setFilter} {...props} onDelete={handleDelete} itemsList={props.itemsList} />
+      <HPOFilterButtons filter={filter} setFilter={setFilter} setHPOOpenPopup={props.setHPOOpenPopup} hideAddBtn={props.isDeleted ?? false} />
+      <HPOTable filter={filter} setFilter={setFilter} {...props} onDelete={handleDelete} itemsList={props.itemsList} isDeleted={props.isDeleted ?? false} />
     </React.Fragment>
   );
 };

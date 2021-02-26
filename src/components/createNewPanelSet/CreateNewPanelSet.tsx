@@ -24,7 +24,8 @@ interface IProps {
   createPanelSetData: (dataPanelProfile: IPanelSetData, t: any) => Promise<any>;
   apiSendPanelSetData: (data: any, t: any) => void;
   updateFormValue: (data: IUpdatePanelSetData) => void;
-  uploadFile: (formData: FormData, t: any) => Promise<any>;
+  uploadFile: (formData: FormData, t: any, showCustomConflictCodes: boolean) => Promise<any>;
+  showMessage: (message: string, error: 'error' | 'info' | 'warning') => void;
 }
 
 const CreateNewPanelSet = (props: IProps) => {
@@ -77,7 +78,7 @@ const CreateNewPanelSet = (props: IProps) => {
         formData.set('isOverwritten', 'false');
       }
       setImportFormData(formData);
-      props.uploadFile(formData, t);
+      props.uploadFile(formData, t, true);
       closeImportConfirmModal();
     }
   });
@@ -100,6 +101,7 @@ const CreateNewPanelSet = (props: IProps) => {
 
   const closeImportConfirmModal = () => {
     setOpenImportConfirmModal(false);
+    confirmFormik.resetForm();
   };
 
   const clickUpload = async (file: File) => {
@@ -111,7 +113,7 @@ const CreateNewPanelSet = (props: IProps) => {
 
     if (ext === 'json') {
       const result: any = await readJsonFile(file);
-      json = result.json;
+      json = result?.json;
       jsonFile = result.jsonFile;
     }
 
@@ -135,8 +137,10 @@ const CreateNewPanelSet = (props: IProps) => {
         }).length;
 
         if (numJsonZippedFiles === 1 && zippedJson) {
-          json = JSON.parse(await zip.files[zippedJson].async('text')) as IJsonFile;
-          jsonFile = new File([await zip.files[zippedJson].async('uint8array')], zippedJson);
+          try {
+            json = JSON.parse(await zip.files[zippedJson].async('text')) as IJsonFile;
+            jsonFile = new File([await zip.files[zippedJson].async('uint8array')], zippedJson);
+          } catch {}
         }
       });
     }
@@ -151,11 +155,13 @@ const CreateNewPanelSet = (props: IProps) => {
       formData.append('file', jsonFile);
       setImportFormData(formData);
 
-      props.uploadFile(formData, t).catch((err) => {
+      props.uploadFile(formData, t, false).catch((err) => {
         if (err.status === 409) {
           setOpenImportConfirmModal(true);
         }
       });
+    } else {
+      props.showMessage(t('panelSetCreate.messages.importErrorInvalidFile'), 'error');
     }
   };
 
@@ -163,11 +169,16 @@ const CreateNewPanelSet = (props: IProps) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = async function () {
-        const data = reader.result as string;
-        const json = JSON.parse(data) as IJsonFile;
-        const jsonFile = new File([new TextEncoder().encode(data)], 'import.json');
+        try {
+          const data = reader.result as string;
+          const json = JSON.parse(data) as IJsonFile;
+          const jsonFile = new File([new TextEncoder().encode(data)], 'import.json');
 
-        resolve({ json, jsonFile });
+          resolve({ json, jsonFile });
+        } catch {
+          reject(null);
+          props.showMessage(t('panelSetCreate.messages.importErrorInvalidFile'), 'error');
+        }
       };
       reader.readAsText(file);
     });
@@ -262,7 +273,6 @@ const CreateNewPanelSet = (props: IProps) => {
               </Grid>
             </Grid>
           </GaiaModalFormik>
-
           <Grid style={{ paddingBottom: '20px', display: 'flex', justifyContent: 'flex-end' }}>
             <Tooltip title="Import Diagnostic Panel Set" placement="top-start">
               <Fab color="primary" size="small" component="span" aria-label="add" variant="extended" onClick={openPopupImport}>

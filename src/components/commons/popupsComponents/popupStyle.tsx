@@ -20,6 +20,6 @@ export const useStyles = makeStyles((theme) => ({
   },
   dialogPaper: {
     maxHeight: '96vh',
-    maxWidth: '140vh'
+    maxWidth: '170vh'
   }
 }));

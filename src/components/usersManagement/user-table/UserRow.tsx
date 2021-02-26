@@ -34,7 +34,7 @@ function UserRow(props: IProps) {
   );
   const CeteredCell = (props: ICell) => {
     return (
-      <TableCell className={`${classes.cursor} ${props.hide ? classes.hideCell : ''}`} style={{ textAlign: 'center' }}>
+      <TableCell className={`${classes.cursor} ${props.hide ? classes.hideCell : ''}`} style={{ textAlign: 'center', whiteSpace: 'normal' }}>
         {props.children}
       </TableCell>
     );

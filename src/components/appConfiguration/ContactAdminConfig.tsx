@@ -38,7 +38,7 @@ export const ContactAdminConfig = (props: IProps) => {
           <TextField label={t('commons.fields.identifier')} fullWidth disabled required name="id" value={props.identifier} />
         </Grid>
         <Grid item xs={4}>
-          <TextField label={t('commons.fields.name')} fullWidth disabled required name="name" value={`${props.name} ${props.surname}`} />
+          <TextField label={t('commons.fields.name')} fullWidth disabled required name="name" value={props.name && props.surname ? `${props.name} ${props.surname}` : ''} />
         </Grid>
         <Grid item xs={4}>
           <TextField label={t('commons.fields.email')} fullWidth disabled required name="email" value={props.email} />
@@ -47,7 +47,9 @@ export const ContactAdminConfig = (props: IProps) => {
           <GaiaButton text={t('commons.buttons.modify')} onClick={clicModify} />
         </Grid>
       </Grid>
-      {openPopup && <PopupUsersSelection titlePopup={t('usersManagement.titlePopupAdmin')} open={true} openPopupParent={setOpenPopup} setValueField={setValueField} exclude={[props.identifier]} />}
+      {openPopup && (
+        <PopupUsersSelection titlePopup={t('appConfiguration.contactManagementPopupTitle')} open={true} openPopupParent={setOpenPopup} setValueField={setValueField} exclude={[props.identifier]} />
+      )}
     </React.Fragment>
   );
 };

@@ -73,6 +73,8 @@ export const GaiaPopupUpload = ({ message, title, open = false, type = 'info', b
     setOpen(false);
     if (onClose) {
       onClose();
+      setSelectedFile(null);
+      setFileName('');
     }
   };
 

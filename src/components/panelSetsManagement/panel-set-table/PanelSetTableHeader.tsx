@@ -71,11 +71,11 @@ function PanelSetTableHeader(props: IProps) {
         <ColumnHeader label={t('commons.fields.name')} sortId="name" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.description')} sortId="description" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.author')} sortId="author" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.assembly')} sortId="assembly" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.ensemblRelease')} sortId="ensemblRelease" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.panelsNumber')} sortId="panelsNumber" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.dateCreated')} sortId="dateCreated" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.dateDelete')} sortId="dateDelete" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.assembly')} sortId="reference.assembly" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.ensemblRelease')} sortId="reference.ensemblRelease" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.panelsNumber')} filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.dateCreated')} sortId="creationDate" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.dateDelete')} sortId="deletionDate" filter={filter} setFilter={setFilter} />
       </TableRow>
     </TableHead>
   );

@@ -25,6 +25,8 @@ export interface IAuthData {
 
 export interface ITokenData {
   sub: string;
+  firstName: string;
+  lastName: string;
   exp: number;
   iat: number;
   userType: string;

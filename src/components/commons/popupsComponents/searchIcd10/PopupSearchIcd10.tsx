@@ -22,8 +22,6 @@ export const PopupSearchIcd10 = ({ open = false, onClose, openPopupParent, title
   const classes = useStyles();
   const [openState, setOpen] = useState(open);
   const [filter, setFilter] = useState<ICommonFilter>(defaultPanelFilter);
-  const { t } = useTranslation();
-
   useEffect(() => {
     setOpen(open);
   }, [open]);

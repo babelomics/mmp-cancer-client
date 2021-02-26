@@ -8,6 +8,7 @@ import Searchbar from '../../../../commons/tableFilter/Searchbar';
 
 interface IProps {
   filter: any;
+  hideAddBtn: boolean;
   setFilter: (newTranscriptFilter: ITranscriptFilter) => void;
   setTranscriptOpenPopup: () => void;
 }
@@ -43,11 +44,13 @@ const TranscriptFilterButtons = (props: IProps) => {
             <Searchbar variant="outlined" margin="dense" value={searchText} onChange={handleSearchTextChange} />
           </form>
 
-          <Tooltip title={addTooltip}>
-            <IconButton onClick={props.setTranscriptOpenPopup}>
-              <Add />
-            </IconButton>
-          </Tooltip>
+          {!props.hideAddBtn && (
+            <Tooltip title={addTooltip}>
+              <IconButton onClick={props.setTranscriptOpenPopup}>
+                <Add />
+              </IconButton>
+            </Tooltip>
+          )}
         </Box>
         <Box display="flex" flexDirection="row">
           {Object.keys(filter).map((k: string) => (

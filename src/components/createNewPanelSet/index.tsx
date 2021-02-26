@@ -16,7 +16,8 @@ interface IProps extends RouteComponentProps {
   apiSendPanelSetData: (data: any, t: any) => void;
   updateFormValue: (data: IUpdatePanelSetData) => void;
   resetRedux: () => void;
-  uploadFile: (formData: FormData, t: any) => Promise<any>;
+  uploadFile: (formData: FormData, t: any, showCustomConflictCodes: boolean) => Promise<any>;
+  showMessage: (message: string, error: 'error' | 'info' | 'warning') => void;
 }
 
 class Wrapper extends React.Component<IProps, {}> {
@@ -30,7 +31,8 @@ class Wrapper extends React.Component<IProps, {}> {
 
 const mapStateToProps = (state: IRootState) => ({
   genomicReference: state.genomicRefPopup.genomicReference,
-  formValues: state.createNewPanelSet.formValues
+  formValues: state.createNewPanelSet.formValues,
+  loading:state.createNewPanelSet.loading
 });
 
 const mapDispatchToProps = { ...operations };

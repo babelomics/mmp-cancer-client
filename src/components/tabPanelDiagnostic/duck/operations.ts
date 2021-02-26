@@ -66,7 +66,7 @@ const deletePanelGlobal = (PanelSetIdentifier: string, PanelGuid: string, childr
   api
     .apiDeletePanelGlobal(PanelSetIdentifier, PanelGuid, children)
     .then((result: any) => {
-      dispatch(globalPopupOperations.showMessagePopup(t('tabPanelDiagnostic.messages.successDelete'), 'success', () => dispatch(push(routes.PATH_PANEL_SETS_MANAGEMENT))));
+      dispatch(globalPopupOperations.showMessagePopup(t('tabPanelDiagnostic.messages.successDelete'), 'success', () => dispatch(push(`${routes.PATH_PANEL_SET_PROFILE}/${PanelSetIdentifier}`))));
       dispatch(actions.endFetch());
     })
     .catch((err: any) => {

@@ -6,6 +6,7 @@ import GeneTable from './genes-table/GeneTable';
 interface IProps {
   panelId: string;
   itemsList: any[];
+  isDeleted?: boolean;
   setGenesOpenPopup: () => void;
   deleteGene: (id: string) => void;
 }
@@ -19,10 +20,11 @@ const GenesList = (props: IProps) => {
     props.deleteGene(gene.geneId);
   };
 
+  console.log(props.isDeleted);
   return (
     <React.Fragment>
-      <GeneFilterButtons filter={filter} setFilter={setFilter} setGenesOpenPopup={props.setGenesOpenPopup} />
-      <GeneTable filter={filter} setFilter={setFilter} {...props} onDelete={handleDelete} itemsList={props.itemsList} />
+      <GeneFilterButtons filter={filter} setFilter={setFilter} setGenesOpenPopup={props.setGenesOpenPopup} hideAddBtn={props.isDeleted ?? false} />
+      <GeneTable filter={filter} setFilter={setFilter} {...props} onDelete={handleDelete} itemsList={props.itemsList} isDeleted={props.isDeleted ?? false} />
     </React.Fragment>
   );
 };

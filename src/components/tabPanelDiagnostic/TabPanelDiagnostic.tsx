@@ -248,9 +248,13 @@ export const TabPanelDiagnostic = (props: IProps) => {
     props.deletePanelGlobal(props.panelSetIdentifier, props.panelguid, true, t);
   };
 
-  const navegateTo = (guid: string) => {
+  const navegateTo = (guid: string, general?: boolean) => {
     history.push(`${routes.PATH_TAB_PANEL_DIAGNOSTIC}/${guid}`);
+    if (general) {
+      setValue(0);
+    }
   };
+
   const backScreenBefore = () => {
     props.resetRedux();
 
@@ -305,16 +309,28 @@ export const TabPanelDiagnostic = (props: IProps) => {
                 </Fab>
               </Tooltip>
             </Grid>
-            <Grid item xs={1}>
-              <Tooltip title={t('tabPanelDiagnostic.tooltip.delete') ?? ''} placement="top-start">
-                <Fab color="primary" size="small" component="span" aria-label="add" variant="extended" onClick={clickDelete}>
-                  <DeleteIcon />
-                </Fab>
-              </Tooltip>
-            </Grid>
+            {props.mode === 'edit' && (
+              <React.Fragment>
+                <Grid item xs={1}>
+                  <Tooltip title={t('tabPanelDiagnostic.tooltip.delete') ?? ''} placement="top-start">
+                    <Fab color="primary" size="small" component="span" aria-label="add" variant="extended" onClick={clickDelete} disabled={props.diagnosticPanelGeneral.deletionDate ? true : false}>
+                      <DeleteIcon />
+                    </Fab>
+                  </Tooltip>
+                </Grid>
+              </React.Fragment>
+            )}
             <Grid item xs={1}>
               <Tooltip title={t('tabPanelDiagnostic.tooltip.save') ?? ''} placement="top-start">
-                <Fab color="primary" size="small" component="span" aria-label="add" variant="extended" onClick={() => generalFormik.handleSubmit()} disabled={props.panelNextVersion ? true : false}>
+                <Fab
+                  color="primary"
+                  size="small"
+                  component="span"
+                  aria-label="add"
+                  variant="extended"
+                  onClick={() => generalFormik.handleSubmit()}
+                  disabled={props.diagnosticPanelGeneral.deletionDate ? true : false}
+                >
                   <Save />
                 </Fab>
               </Tooltip>
@@ -324,11 +340,18 @@ export const TabPanelDiagnostic = (props: IProps) => {
           <GaiaTabsPanel value={value} onChange={handleChange}>
             <GaiaTab
               title={t('tabPanelDiagnostic.tabs.general')}
-              component={<General formik={generalFormik} loading={props.loading} nextVersion={props.panelNextVersion ? true : false} mode={props.mode} />}
+              component={<General formik={generalFormik} loading={props.loading} isDeleted={props.diagnosticPanelGeneral.deletionDate ? true : false} mode={props.mode} />}
             />
             <GaiaTab
               title={t('tabPanelDiagnostic.tabs.icd-10.title')}
-              component={<Icd10 deleteIcd10={props.deleteIcd10} itemsList={props.icd10List} setIcd10OpenPopup={() => setOpenPopupSearchIcd10(true)} />}
+              component={
+                <Icd10
+                  deleteIcd10={props.deleteIcd10}
+                  itemsList={props.icd10List}
+                  setIcd10OpenPopup={() => setOpenPopupSearchIcd10(true)}
+                  isDeleted={props.diagnosticPanelGeneral.deletionDate ? true : false}
+                />
+              }
               hidden={!props.isHuman}
             />
             <GaiaTab
@@ -341,6 +364,7 @@ export const TabPanelDiagnostic = (props: IProps) => {
                     props.deleteHPO(id);
                   }}
                   itemsList={props.hpoList}
+                  isDeleted={props.diagnosticPanelGeneral.deletionDate ? true : false}
                 />
               }
               hidden={!props.isHuman}
@@ -356,6 +380,7 @@ export const TabPanelDiagnostic = (props: IProps) => {
                     props.deleteGene(id);
                   }}
                   itemsList={props.geneList}
+                  isDeleted={props.diagnosticPanelGeneral.deletionDate ? true : false}
                 />
               }
             />
@@ -369,11 +394,18 @@ export const TabPanelDiagnostic = (props: IProps) => {
                     props.deleteTranscript(id);
                   }}
                   itemsList={props.transcriptList}
+                  isDeleted={props.diagnosticPanelGeneral.deletionDate ? true : false}
                 />
               }
             />
-            <GaiaTab title={t('tabPanelDiagnostic.tabs.regionVatiant')} component={<RegionVariant clickAddRegion={clickAddRegion} clickAddVariant={clickAddVariant} />} />
-            <GaiaTab title={t('tabPanelDiagnostic.tabs.ascendingDescending')} component={<AscendantsDescendants clickAddAsc={clickAddAsc} clickAddDesc={clickAddDesc} navegateTo={navegateTo} />} />
+            <GaiaTab
+              title={t('tabPanelDiagnostic.tabs.regionVatiant')}
+              component={<RegionVariant clickAddRegion={clickAddRegion} clickAddVariant={clickAddVariant} isDeleted={props.diagnosticPanelGeneral.deletionDate ? true : false} />}
+            />
+            <GaiaTab
+              title={t('tabPanelDiagnostic.tabs.ascendingDescending')}
+              component={<AscendantsDescendants clickAddAsc={clickAddAsc} clickAddDesc={clickAddDesc} navegateTo={navegateTo} isDeleted={props.diagnosticPanelGeneral.deletionDate ? true : false} />}
+            />
           </GaiaTabsPanel>
 
           {openPopupAsc && (

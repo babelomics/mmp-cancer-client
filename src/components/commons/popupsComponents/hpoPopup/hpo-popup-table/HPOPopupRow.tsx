@@ -46,7 +46,7 @@ function HPOPopupRow(props: IProps) {
   );
   const CeteredCell = (props: ICell) => {
     return (
-      <TableCell className={`${classes.cursor} ${props.hide ? classes.hideCell : ''} ${props.size ? classes.sizeCell : ''}`} style={{ textAlign: 'center' }}>
+      <TableCell className={`${classes.cursor} ${props.hide ? classes.hideCell : ''} ${props.size ? classes.sizeCell : ''}`} style={{ textAlign: 'center', whiteSpace: 'normal' }}>
         {props.children}
       </TableCell>
     );
@@ -62,7 +62,7 @@ function HPOPopupRow(props: IProps) {
       <CeteredCell>{hpo.hpoId}</CeteredCell>
       <CeteredCell>{hpo.name}</CeteredCell>
       <CeteredCell>
-        <div style={{ whiteSpace: 'normal', width: '500px', maxWidth: '500px', textAlign: 'justify' }}>{hpo.def}</div>
+        <div style={{ whiteSpace: 'normal', textAlign: 'justify', maxWidth: 300 }}>{hpo.def}</div>
       </CeteredCell>
       <CeteredCell size>
         {hpo.parents && (

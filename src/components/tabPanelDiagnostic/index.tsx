@@ -89,6 +89,10 @@ class Wrapper extends React.Component<IProps, IState> {
     }
   }
 
+  componentWillUnmount() {
+    this.props.resetRedux();
+  }
+
   render() {
     return <TabPanelDiagnostic {...this.props} />;
   }
@@ -115,7 +119,7 @@ const mapStateToProps = (state: IRootState) => ({
   icd10List: state.tabPanelDiagnostic.diagnosticPanelGlobal.icd10List,
   mode: state.tabPanelDiagnostic.mode,
   panelSetData: state.panelSetProfile.panelSetData,
-  author: state.tabPanelDiagnostic.diagnosticPanelGlobal.author || state.login.user?.sub || ''
+  author: state.tabPanelDiagnostic.diagnosticPanelGlobal.author || `${state.login.user?.sub} - ${state.login.user?.firstName} ${state.login.user?.lastName}` || ''
 });
 
 const mapDispatchToProps = { ...operations };

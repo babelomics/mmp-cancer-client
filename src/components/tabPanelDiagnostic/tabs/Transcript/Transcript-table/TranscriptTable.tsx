@@ -11,6 +11,7 @@ interface IProps {
   filter: ITranscriptFilter;
   itemsList: any[];
   assembly: string;
+  isDeleted?: boolean;
   onDelete: (transcript: ITranscript) => void;
   setFilter: (newFilter: ITranscriptFilter) => void;
 }
@@ -41,6 +42,7 @@ function TranscriptTable(props: IProps) {
             ChildWrapper={TranscriptRowWrapper}
             getElemId={getTranscriptId}
             onDelete={onDelete}
+            rowProps={{ isDeleted: props.isDeleted }}
             isReduxOnly
           />
         </TableBody>

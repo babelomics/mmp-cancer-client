@@ -7,7 +7,7 @@ import GaiaLoading from '../../commons/GaiaLoading';
 interface IProps {
   loading: boolean;
   formik: any;
-  nextVersion: boolean;
+  isDeleted: boolean;
   mode: string;
 }
 
@@ -41,7 +41,7 @@ const General = (props: IProps) => {
             <Grid container spacing={3}>
               {props.mode === 'new' && renderIdentifierField()}
               <Grid item xs={props.mode === 'edit' ? 3 : 4}>
-                <GaiaTextField formik={props.formik} name="name" label={`${t('commons.fields.name')} *`} fullWidth disabled={props.nextVersion || props.formik.deletionDate ? true : false} />
+                <GaiaTextField formik={props.formik} name="name" label={`${t('commons.fields.name')} *`} fullWidth disabled={props.isDeleted} />
               </Grid>
               {props.mode === 'edit' && (
                 <React.Fragment>
@@ -56,13 +56,7 @@ const General = (props: IProps) => {
             </Grid>
             <Grid container spacing={3}>
               <Grid item xs={11}>
-                <GaiaTextField
-                  formik={props.formik}
-                  name="description"
-                  label={`${t('commons.fields.description')} *`}
-                  fullWidth
-                  disabled={props.nextVersion || props.formik.deletionDate ? true : false}
-                />
+                <GaiaTextField formik={props.formik} name="description" label={`${t('commons.fields.description')} *`} fullWidth disabled={props.isDeleted} />
               </Grid>
             </Grid>
           </React.Fragment>
