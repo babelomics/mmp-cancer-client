@@ -10,11 +10,10 @@ import GaiaContainer from '../commons/GaiaContainer';
 interface IProps {
   taxonomyId?: string;
   open?: boolean;
-  buttonType?: number | null;
-  onClose?: () => void;
   openPopupParent?: any;
-  setValueField?: (data: ITableAssemblyData) => void;
   titlePopup?: string;
+  onClose?: () => void;
+  setValueField?: (data: ITableAssemblyData) => void;
   handleClickRow: (data: ITableAssemblyData) => void;
 }
 
@@ -44,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const PopupTableSpecies = ({ handleClickRow, open = false, buttonType = null, onClose, openPopupParent, taxonomyId, titlePopup = 'TITLE POPUP' }: IProps) => {
+const PopupTableSpecies = ({ handleClickRow, open = false, onClose, openPopupParent, taxonomyId, titlePopup = 'TITLE POPUP' }: IProps) => {
   const classes = useStyles();
   const [openState, setOpen] = useState(open);
 
@@ -70,20 +69,10 @@ const PopupTableSpecies = ({ handleClickRow, open = false, buttonType = null, on
 
   return (
     <Dialog open={openState} classes={{ paper: classes.dialogPaper }}>
-      <GaiaContainer icon="group_add" title={titlePopup} onBack={handleClose}>
+      <GaiaContainer title={titlePopup} onBack={handleClose}>
         <AssemblyFilterButtons filter={filter} setFilter={setFilter} />
         <AssemblyTable rowClick={handleClickRow} filter={filter} setFilter={setFilter} taxonomyId={taxonomyId} />
       </GaiaContainer>
-      <DialogActions>
-        {buttonType === 0 && <GaiaButton text={t('commons.buttons.accept')} onClick={handleClose} />}
-        {buttonType === 1 && <GaiaButton text={t('commons.buttons.ok')} onClick={handleClose} />}
-        {buttonType === 2 && (
-          <>
-            <GaiaButton text={t('commons.buttons.yes')} onClick={handleClose} />
-            <GaiaButton text={t('commons.buttons.no')} onClick={handleClose} />
-          </>
-        )}
-      </DialogActions>
     </Dialog>
   );
 };

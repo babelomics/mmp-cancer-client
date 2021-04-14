@@ -10,8 +10,7 @@ import GaiaSelectField from '../commons/GaiaSelectField';
 import GaiaTextField from '../commons/GaiaTextField';
 import GaiaCheckBox from '../commons/GaiaCheckBox';
 import GaiaLoading from '../commons/GaiaLoading';
-import { getUserTypeByValue } from '../../utils/roles';
-import { getAccessTypeByValue } from '../../utils/accessType';
+import { useHistory } from 'react-router';
 
 interface IProps {
   loading: boolean;
@@ -23,16 +22,17 @@ interface IProps {
 
 export const CreateNewUser = (props: IProps) => {
   const { t } = useTranslation();
-  const [showCheck, setShowCheck] = useState(true);
+  const [showCheck, setShowCheck] = useState(false);
+  const history = useHistory();
 
   const initialValues = (): IFormData => {
     return {
-      accessType: 0,
+      accessType: '',
       identifier: '',
       organization: '',
       firstName: '',
       lastName: '',
-      userType: 0,
+      userType: '',
       email: '',
       canCreateProject: false
     };
@@ -43,12 +43,12 @@ export const CreateNewUser = (props: IProps) => {
     enableReinitialize: true,
     validationSchema: generateValidationSchema(t),
     onSubmit: (values) => {
-      props.createUser({ ...values, userType: getUserTypeByValue(values.userType), accessType: getAccessTypeByValue(values.accessType) }, formik.setErrors, t);
+      props.createUser(values, formik.setErrors, t);
     }
   });
 
   const handleCheck = (event: any, child: any) => {
-    if (event.target.value === 0) {
+    if (event.target.value === 'User') {
       setShowCheck(true);
     } else {
       setShowCheck(false);
@@ -56,7 +56,7 @@ export const CreateNewUser = (props: IProps) => {
   };
 
   return (
-    <GaiaContainer icon="person_add" title={t('createNewUser.title')} onAccept={!props.loading ? formik.handleSubmit : undefined}>
+    <GaiaContainer icon="person_add" title={t('createNewUser.title')} onAccept={!props.loading ? formik.handleSubmit : undefined} onCancel={() => history.goBack()}>
       {props.loading ? (
         <GaiaLoading />
       ) : (
@@ -67,7 +67,22 @@ export const CreateNewUser = (props: IProps) => {
                 required
                 name="accessType"
                 label={t('commons.fields.typeOfAccess.title')}
-                items={[t('commons.fields.typeOfAccess.local'), t('commons.fields.typeOfAccess.ldap'), t('commons.fields.typeOfAccess.elixir')]}
+                valueAccessor="key"
+                labelAccessor="value"
+                items={[
+                  {
+                    key: 'Local',
+                    value: t('commons.fields.typeOfAccess.local')
+                  },
+                  {
+                    key: 'LDAP',
+                    value: t('commons.fields.typeOfAccess.ldap')
+                  },
+                  {
+                    key: 'Elixir',
+                    value: t('commons.fields.typeOfAccess.elixir')
+                  }
+                ]}
                 formik={formik}
                 fullWidth
               />
@@ -91,7 +106,18 @@ export const CreateNewUser = (props: IProps) => {
                 required
                 name="userType"
                 label={t('commons.fields.userType')}
-                items={[t('commons.fields.userTypeOptions.user'), t('commons.fields.userTypeOptions.admin')]}
+                valueAccessor="key"
+                labelAccessor="value"
+                items={[
+                  {
+                    key: 'User',
+                    value: t('commons.fields.userTypeOptions.user')
+                  },
+                  {
+                    key: 'Admin',
+                    value: t('commons.fields.userTypeOptions.admin')
+                  }
+                ]}
                 formik={formik}
                 fullWidth
                 onChange={handleCheck}

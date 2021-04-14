@@ -14,13 +14,14 @@ import { ITokenData } from './interfaces';
 interface IProps extends RouteComponentProps {
   login: any;
   loading: boolean;
-  signup: (identifier: string, password: string, t: any) => void;
+  signup: (token: string, identifier: string, password: string, t: any) => void;
   showMessagePopup: (message: string, type: 'success' | 'error' | 'info' | 'warning', onClose: () => void) => void;
 }
 
 class Wrapper extends React.Component<IProps, {}> {
   state = {
-    tokenData: undefined
+    tokenData: undefined,
+    token: ''
   };
 
   componentDidMount() {
@@ -31,7 +32,7 @@ class Wrapper extends React.Component<IProps, {}> {
       if (parsed.token) {
         const decodedToken = decodeJwt<ITokenData>(parsed.token as string);
         if (decodedToken) {
-          this.setState({ tokenData: decodedToken });
+          this.setState({ tokenData: decodedToken, token: parsed.token });
           // Check token expired
           if (moment().isAfter(moment.unix(decodedToken.exp))) {
             this.props.showMessagePopup('Token is invalid or has expired', 'error', () => this.props.history.push(routes.PATH_LOGIN));
@@ -44,7 +45,7 @@ class Wrapper extends React.Component<IProps, {}> {
   }
 
   render() {
-    return <SetPassword {...this.props} tokenData={this.state.tokenData} />;
+    return <SetPassword {...this.props} tokenData={this.state.tokenData} token={this.state.token} />;
   }
 }
 

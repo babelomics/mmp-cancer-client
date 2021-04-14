@@ -1,13 +1,12 @@
 import { AxiosResponse } from 'axios';
-import { Dispatch } from 'redux';
 import { push } from 'connected-react-router';
 
 import actions from './actions';
 import api from './api';
 import routes from '../../router/routes';
 import { operations as globalPopupOperations } from '../../globalPopups/duck';
+import { operations as loginOperations } from '../../login/duck';
 import { IContactAdminUpdate } from '../interfaces';
-import { Tune } from '@material-ui/icons';
 
 const setData = actions.setData;
 const setUserSelectionPopupOpen = actions.setUserSelectionPopupOpen;
@@ -23,14 +22,29 @@ const fetchUserData = (identifier: string, t: any) => (dispatch: any) => {
     });
 };
 
-const updateUser = (identifier: string, data: any, t: any) => (dispatch: any) => {
+const updateUser = (identifier: string, data: any, t: any, currentUser?: any) => (dispatch: any) => {
   dispatch(actions.initOperation());
   return new Promise((resolve) => {
     api
       .updateUser(identifier, data)
       .then((res: AxiosResponse) => {
         dispatch(actions.endUpdateUser());
-        dispatch(globalPopupOperations.showMessagePopup(t('userProfile.updateUser.success'), 'success'));
+
+        if (currentUser) {
+          if (currentUser.sub === identifier && currentUser.userType !== data.userType) {
+            dispatch(
+              globalPopupOperations.showMessagePopup(t('userProfile.updateUser.ownSuccess'), 'success', () => {
+                dispatch(loginOperations.logout());
+                dispatch(push(routes.PATH_LOGIN));
+              })
+            );
+          } else {
+            dispatch(globalPopupOperations.showMessagePopup(t('userProfile.updateUser.success'), 'success'));
+          }
+        } else {
+          dispatch(globalPopupOperations.showMessagePopup(t('userProfile.updateUser.success'), 'success'));
+        }
+
         resolve({
           done: true
         });
@@ -59,7 +73,8 @@ const changePassword = (identifier: string, password: string, t: any) => (dispat
   api
     .changePassword(identifier, password)
     .then((res: AxiosResponse) => {
-      dispatch(actions.endUpdateUser());
+      dispatch(actions.endOperation());
+      dispatch(actions.endFetchData(res.data));
       dispatch(globalPopupOperations.showMessagePopup(t('userProfile.successPassword'), 'success'));
     })
     .catch((err: any) => {

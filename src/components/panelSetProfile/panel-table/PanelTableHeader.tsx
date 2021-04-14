@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Table, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
+import { Button, TableCell, TableHead, TableRow, Typography, withStyles } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { PanelFilter } from '../interfaces';
 import SortDirection from '../../commons/tableFilter/interfaces/SortDirection';
@@ -34,7 +34,7 @@ class ColumnHeader extends React.PureComponent<CHProps> {
       const selected = !!sortId && sortId === filter.sortBy;
       return (
         <TableCell style={hideColumn ? { display: 'none' } : { textAlign: 'center' }}>
-          <BootstrapButton color={selected ? 'primary' : 'default'} onClick={this.handleClick}>
+          <BootstrapButton color={'primary'} onClick={this.handleClick}>
             {label}
             {selected && SortDirection.ASC === filter.sortDirection && <ArrowDownwardIcon fontSize="small" />}
             {selected && SortDirection.DESC === filter.sortDirection && <ArrowUpwardIcon fontSize="small" />}
@@ -42,7 +42,13 @@ class ColumnHeader extends React.PureComponent<CHProps> {
         </TableCell>
       );
     } else {
-      return <TableCell style={{ textAlign: 'center' }}>{label}</TableCell>;
+      return (
+        <TableCell style={{ textAlign: 'center' }}>
+          <Typography variant="body2" color="primary">
+            {label}
+          </Typography>
+        </TableCell>
+      );
     }
   }
 
@@ -73,12 +79,12 @@ function PanelTableHeader(props: IProps) {
         <ColumnHeader label={t('commons.fields.name')} sortId="name" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.description')} sortId="description" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.author')} sortId="author" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.ascendingPanels')} sortId="ascendingPanels" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.descendingPanels')} sortId="descendingPanels" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.genessNumber')} sortId="genessNumber" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.transcNumber')} sortId="transcNumber" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.regionsNumber')} sortId="regionsNumber" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.variantsNumber')} sortId="variantsNumber" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.ascendingPanels')} filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.descendingPanels')} filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.genessNumber')} filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.transcNumber')} filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.regionsNumber')} filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.variantsNumber')} filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.dateCreated')} sortId="creationDate" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.dateDelete')} sortId="deletionDate" filter={filter} setFilter={setFilter} />
       </TableRow>

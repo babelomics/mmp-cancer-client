@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { IconButton, makeStyles, TableCell, TableRow } from '@material-ui/core';
 import { IIcd10 } from '../../interfaces';
 import { RemoveCircle } from '@material-ui/icons';

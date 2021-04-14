@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
 import { makeStyles, TableCell, TableRow } from '@material-ui/core';
 import { IHPOPopup } from '../interfaces';
 import GaiaLink from '../../../GaiaLink';
@@ -9,6 +8,8 @@ import { ICommonFilter } from '../../../../tabPanelDiagnostic/tabs/interfaces';
 interface IProps {
   item: IHPOPopup;
   filters: ICommonFilter;
+  hideParents?: boolean;
+  hideChildren?: boolean;
   rowClick?: (data: IHPOPopup) => void;
   setFilter: (newFilter: ICommonFilter) => void;
 }
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function HPOPopupRow(props: IProps) {
-  const { item: hpo, rowClick, filters, setFilter } = props;
+  const { item: hpo, rowClick, filters, setFilter, hideParents, hideChildren } = props;
   const classes = useStyles();
 
   const handleClick = useCallback(
@@ -64,32 +65,38 @@ function HPOPopupRow(props: IProps) {
       <CeteredCell>
         <div style={{ whiteSpace: 'normal', textAlign: 'justify', maxWidth: 300 }}>{hpo.def}</div>
       </CeteredCell>
-      <CeteredCell size>
-        {hpo.parents && (
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {hpo.parents.map((p: string, i: number) => (
-              <React.Fragment>
-                <Link text={p} tooltip={p} onClick={(e) => handleLinkClick(e, p)} />
-                {i < hpo.parents.length - 1 && <span style={{ marginRight: 5 }}>, </span>}
-                {/* <span style={{ marginRight: 5 }}>, </span> */}
-              </React.Fragment>
-            ))}
-          </div>
-        )}
-      </CeteredCell>
-      <CeteredCell size>
-        {hpo.children && (
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {hpo.children.map((c: string, i: number) => (
-              <React.Fragment>
-                <Link text={c} tooltip={c} onClick={(e) => handleLinkClick(e, c)} />
-                {i < hpo.children.length - 1 && <span style={{ marginRight: 5 }}>, </span>}
-                {/* <span style={{ marginRight: 5 }}>, </span> */}
-              </React.Fragment>
-            ))}
-          </div>
-        )}
-      </CeteredCell>
+
+      {!hideParents && (
+        <CeteredCell size>
+          {hpo.parents && (
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              {hpo.parents.map((p: string, i: number) => (
+                <React.Fragment>
+                  <Link text={p} tooltip={p} onClick={(e) => handleLinkClick(e, p)} />
+                  {i < hpo.parents.length - 1 && <span style={{ marginRight: 5 }}>, </span>}
+                  {/* <span style={{ marginRight: 5 }}>, </span> */}
+                </React.Fragment>
+              ))}
+            </div>
+          )}
+        </CeteredCell>
+      )}
+
+      {!hideChildren && (
+        <CeteredCell size>
+          {hpo.children && (
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              {hpo.children.map((c: string, i: number) => (
+                <React.Fragment>
+                  <Link text={c} tooltip={c} onClick={(e) => handleLinkClick(e, c)} />
+                  {i < hpo.children.length - 1 && <span style={{ marginRight: 5 }}>, </span>}
+                  {/* <span style={{ marginRight: 5 }}>, </span> */}
+                </React.Fragment>
+              ))}
+            </div>
+          )}
+        </CeteredCell>
+      )}
     </TableRow>
   );
 }

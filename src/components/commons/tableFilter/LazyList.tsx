@@ -66,12 +66,12 @@ interface IProps<T> {
   rowClick?: (data: T) => void;
   exclude?: any;
   selectedRows?: any[];
-  setSelectedRows?: (selected: any[]) => void;
+  setSelectedRows?: (selected: any[], item?: T, checked?: boolean) => void;
   selectAll?: boolean;
   onDelete?: (data: T) => void;
   isReduxOnly?: boolean;
   setFilter?: (newToken: any) => void;
-  scrollModal?: string;
+  scrollAncestor?: string;
   rowProps?: {
     [key: string]: any;
   };
@@ -95,7 +95,7 @@ class LazyList<T> extends React.PureComponent<IProps<T>, IState<T>> {
   async componentDidUpdate(prevProps: IProps<T>, prevState: IState<T>) {
     const { token } = this.props;
     const { token: prevToken } = prevProps;
-    if (token !== prevToken) {
+    if (!_.isEqual(token, prevToken)) {
       this.reset();
     }
 
@@ -120,11 +120,12 @@ class LazyList<T> extends React.PureComponent<IProps<T>, IState<T>> {
 
   private readonly renderTable = () => {
     const { status, pages, firstPage } = this.state;
-    const { ChildElem, ChildWrapper, rowClick, exclude, selectedRows, setSelectedRows, selectAll, onDelete, setFilter, scrollModal, rowProps } = this.props;
+    const { ChildElem, ChildWrapper, rowClick, exclude, selectedRows, setSelectedRows, selectAll, onDelete, setFilter, scrollAncestor, rowProps } = this.props;
     const getElemId = this.props.getElemId || defaultGetElemId;
     const lastPage = firstPage + pages.length;
     const isStartProbeVisible = 0 < firstPage && 0 < pages.length;
     const isEndProbeVisible = 0 === pages.length || PAGE_SIZE === pages[pages.length - 1].length;
+
     return (
       <>
         {isStartProbeVisible && (
@@ -133,7 +134,7 @@ class LazyList<T> extends React.PureComponent<IProps<T>, IState<T>> {
           </ChildWrapper>
         )}
         {Status.NORMAL === status && isStartProbeVisible && (
-          <Waypoint key={firstPage} onEnter={this.handleStartProbeEnter} scrollableAncestor={scrollModal ? document.getElementById(scrollModal) : window}>
+          <Waypoint key={firstPage} onEnter={this.handleStartProbeEnter} scrollableAncestor={scrollAncestor ? document.getElementById(scrollAncestor) : window}>
             <TableRow />
           </Waypoint>
         )}
@@ -154,7 +155,7 @@ class LazyList<T> extends React.PureComponent<IProps<T>, IState<T>> {
           />
         ))}
         {Status.NORMAL === status && isEndProbeVisible && (
-          <Waypoint key={lastPage} onEnter={this.handleEndProbeEnter} scrollableAncestor={scrollModal ? document.getElementById(scrollModal) : window}>
+          <Waypoint key={lastPage} onEnter={this.handleEndProbeEnter} scrollableAncestor={scrollAncestor ? document.getElementById(scrollAncestor) : window}>
             <TableRow />
           </Waypoint>
         )}

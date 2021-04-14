@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
+import { Button, TableCell, TableHead, TableRow, Typography, withStyles } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { IPopupSearchGeneFilter } from '../interfaces';
 import SortDirection from '../../../tableFilter/interfaces/SortDirection';
@@ -41,7 +41,13 @@ class ColumnHeader extends React.PureComponent<CHProps> {
         </TableCell>
       );
     } else {
-      return <TableCell style={{ textAlign: 'center' }}>{label}</TableCell>;
+      return (
+        <TableCell style={{ textAlign: 'center' }}>
+          <Typography variant="body2" color="primary">
+            {label}
+          </Typography>
+        </TableCell>
+      );
     }
   }
 

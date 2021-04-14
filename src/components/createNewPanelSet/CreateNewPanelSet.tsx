@@ -31,7 +31,11 @@ interface IProps {
 const CreateNewPanelSet = (props: IProps) => {
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [openPupImport, setOpenPopupImport] = useState<boolean>(false);
-  const [openImportConfirmModal, setOpenImportConfirmModal] = useState<boolean>(false);
+  const [openImportConfirmModal, setOpenImportConfirmModal] = useState<{
+    open: boolean;
+    panelSetId?: string;
+    panelSetName?: string;
+  }>({ open: false });
   const [importFormData, setImportFormData] = useState<FormData>(new FormData());
 
   const history = useHistory();
@@ -73,8 +77,8 @@ const CreateNewPanelSet = (props: IProps) => {
       if (values.confirmation) {
         formData.set('isOverwritten', 'true');
       } else {
-        formData.set('id', values.identifier);
-        formData.set('name', values.name);
+        formData.set('id', values.identifier || openImportConfirmModal.panelSetId || '');
+        formData.set('name', values.name || openImportConfirmModal.panelSetName || '');
         formData.set('isOverwritten', 'false');
       }
       setImportFormData(formData);
@@ -100,7 +104,7 @@ const CreateNewPanelSet = (props: IProps) => {
   };
 
   const closeImportConfirmModal = () => {
-    setOpenImportConfirmModal(false);
+    setOpenImportConfirmModal({ ...openImportConfirmModal, open: false });
     confirmFormik.resetForm();
   };
 
@@ -146,8 +150,8 @@ const CreateNewPanelSet = (props: IProps) => {
     }
 
     if (json && jsonFile) {
-      const panelSetId = json.id;
-      const panelSetName = json.name;
+      const panelSetId = json.id || '';
+      const panelSetName = json.name || '';
 
       formData.append('id', panelSetId);
       formData.append('name', panelSetName);
@@ -157,7 +161,7 @@ const CreateNewPanelSet = (props: IProps) => {
 
       props.uploadFile(formData, t, false).catch((err) => {
         if (err.status === 409) {
-          setOpenImportConfirmModal(true);
+          setOpenImportConfirmModal({ panelSetId, panelSetName, open: true });
         }
       });
     } else {
@@ -225,8 +229,20 @@ const CreateNewPanelSet = (props: IProps) => {
     });
   };
 
+  const getActions = () => {
+    const actions = [
+      {
+        icon: <PublishIcon />,
+        onClick: openPopupImport,
+        tooltip: 'Import Diagnostic Panel Set'
+      }
+    ] as any[];
+
+    return actions;
+  };
+
   return (
-    <GaiaContainer icon="dynamic_feed" title={t('panelSetCreate.title')} onAccept={!props.loading ? panelSetFormik.handleSubmit : undefined}>
+    <GaiaContainer icon="dynamic_feed" title={t('panelSetCreate.title')} onAccept={!props.loading ? panelSetFormik.handleSubmit : undefined} actions={getActions()} onCancel={() => history.goBack()}>
       {props.loading ? (
         <GaiaLoading />
       ) : (
@@ -251,7 +267,7 @@ const CreateNewPanelSet = (props: IProps) => {
           />
 
           {/* Confirm Modal */}
-          <GaiaModalFormik open={openImportConfirmModal} title={t('panelSetCreate.messages.importPopupMessage_2')} formik={confirmFormik} onClose={closeImportConfirmModal}>
+          <GaiaModalFormik open={openImportConfirmModal.open} title={t('panelSetCreate.messages.importPopupMessage_2')} formik={confirmFormik} onClose={closeImportConfirmModal}>
             <Typography variant="body1">{t('panelSetCreate.messages.importPopupConfirm_1')}</Typography>
             <GaiaTextField
               required
@@ -261,6 +277,7 @@ const CreateNewPanelSet = (props: IProps) => {
               fullWidth
               disabled={confirmFormik.values.identifier !== '' || confirmFormik.values.name !== ''}
             />
+
             <Grid style={{ paddingTop: '20px' }}>
               <Typography variant="body1">{t('panelSetCreate.messages.importPopupConfirm_2')}</Typography>
               <Grid container spacing={3}>
@@ -273,13 +290,7 @@ const CreateNewPanelSet = (props: IProps) => {
               </Grid>
             </Grid>
           </GaiaModalFormik>
-          <Grid style={{ paddingBottom: '20px', display: 'flex', justifyContent: 'flex-end' }}>
-            <Tooltip title="Import Diagnostic Panel Set" placement="top-start">
-              <Fab color="primary" size="small" component="span" aria-label="add" variant="extended" onClick={openPopupImport}>
-                <PublishIcon />
-              </Fab>
-            </Tooltip>
-          </Grid>
+
           {props.loading ? (
             <GaiaLoading />
           ) : (

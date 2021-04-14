@@ -1,9 +1,23 @@
+import axios from 'axios';
+
 import { UserFilter, User } from '../../usersManagement/interfaces';
 import { RegistrationFilter, Registration } from '../../registrationManagement/interfaces';
 import { PanelSet, PanelSetFilter } from '../../panelSetsManagement/interfaces';
 
-import { API_DINAMIC_DICTIONARY, API_DRUGS, API_ENDPOINT, API_GROUPS, API_PANELS, API_PANEL_SETS, API_PROJECTS, API_USERS, API_USERS_REQUESTS } from '../../../utils/constants';
-import axios from 'axios';
+import {
+  API_DINAMIC_DICTIONARY,
+  API_DRUGS,
+  API_ENDPOINT,
+  API_GROUPS,
+  API_INDIVIDUALS,
+  API_PANELS,
+  API_PANEL_SETS,
+  API_PERMISSIONS,
+  API_PROJECTS,
+  API_USERS,
+  API_USERS_REQUESTS
+} from '../../../utils/constants';
+
 import { Panel, PanelFilter } from '../../panelSetProfile/interfaces';
 import { Drug, DrugFilter } from '../../drugsManagement/interfaces';
 import { ITableAssemblyData, ITableAssemblyDataFilter, ITableSpeciesData, ITableSpeciesDataFilter } from '../../genomicRefPopup/interfaces';
@@ -13,7 +27,13 @@ import { ArrayUtils } from '../../../utils/arrayUtils';
 import { ITranscriptPopupFilter } from '../../commons/popupsComponents/transcriptPopup/interfaces';
 import { IHPOPopupFilter } from '../../commons/popupsComponents/hpoPopup/interfaces';
 import { IProjectsFilter, IProject } from '../../projectsManagement/interfaces';
-import { IFilterUsersGroups, IGroup } from '../../permissionsAndUsers/interfaces';
+import { IFilterUsersGroups, IFilterUsersPermissions, IGroup, IUserPermission } from '../../permissionsAndUsers/interfaces';
+
+import store from '../../../store';
+import { operations as permissionsAndUsersOperations } from '../../permissionsAndUsers/duck';
+import { operations as individualDetailsOperations } from '../../individualsDetails/duck';
+import { IIndividual, IIndividualsFilter, IHumanPhenotype, IHumanDisease } from '../../individualsManagement/interfaces';
+
 class MmpClient {
   static async getUserPage(filter: UserFilter, pageSize: number, page: number): Promise<User[]> {
     const params = {} as any;
@@ -330,10 +350,11 @@ class MmpClient {
     });
   }
 
-  static async getGenesSelectionList(filter: IPopupSearchGeneFilter, pageSize: number, page: number, assembly: string): Promise<IGene[]> {
+  static async getGenesSelectionList(filter: IPopupSearchGeneFilter, pageSize: number, page: number, assembly: string, ensmblRelease: string): Promise<IGene[]> {
     const params = {} as any;
     params.pageSize = pageSize;
     params.page = page;
+    params.ensmblRelease = ensmblRelease;
 
     if (!!filter.searchText) {
       params.searchText = filter.searchText;
@@ -369,10 +390,11 @@ class MmpClient {
       resolve(filteredItems);
     });
   }
-  static async getTranscriptModalList(filter: ITranscriptPopupFilter, pageSize: number, page: number, assembly: string): Promise<ITranscript[]> {
+  static async getTranscriptModalList(filter: ITranscriptPopupFilter, pageSize: number, page: number, assembly: string, ensmblRelease: string): Promise<ITranscript[]> {
     const params = {} as any;
     params.pageSize = pageSize;
     params.page = page;
+    params.ensmblRelease = ensmblRelease;
 
     if (!!filter.searchText) {
       params.searchText = filter.searchText;
@@ -408,7 +430,7 @@ class MmpClient {
       resolve(filteredItems);
     });
   }
-  static async getHPOModalList(filter: IHPOPopupFilter, pageSize: number, page: number, assembly: string): Promise<IHPO[]> {
+  static async getHPOModalList(filter: IHPOPopupFilter, pageSize: number, page: number, abnormality: boolean): Promise<IHPO[]> {
     const params = {} as any;
     params.pageSize = pageSize;
     params.page = page;
@@ -422,9 +444,16 @@ class MmpClient {
       params.sort = value;
     }
 
+    let url = '';
+    if (abnormality === true) {
+      url = `${API_ENDPOINT}${API_DINAMIC_DICTIONARY}/hpos/phenotypicAbnormality/list`;
+    } else {
+      url = `${API_ENDPOINT}${API_DINAMIC_DICTIONARY}/hpos/list`;
+    }
+
     return new Promise((resolve, reject) => {
       axios
-        .get(`${API_ENDPOINT}${API_DINAMIC_DICTIONARY}/hpos/list`, { params })
+        .get(url, { params })
         .then((res: any) => {
           resolve(res.data);
         })
@@ -470,7 +499,8 @@ class MmpClient {
         });
     });
   }
-  static async getProjectsPage(filter: IProjectsFilter, pageSize: number, page: number): Promise<IProject[]> {
+
+  static async getProjectsList(filter: IProjectsFilter, pageSize: number, page: number): Promise<IProject[]> {
     const params = {} as any;
     params.size = pageSize;
     params.page = page;
@@ -524,7 +554,7 @@ class MmpClient {
     });
   }
 
-  static getGroupsList(filter: IFilterUsersGroups, pageSize: number, page: number): Promise<IGroup[]> {
+  static getGroupsList(filter: IFilterUsersGroups, pageSize: number, page: number, projectId: string): Promise<IGroup[]> {
     const params = {} as any;
     params.size = pageSize;
     params.page = page;
@@ -535,11 +565,180 @@ class MmpClient {
     if (!!filter.permission) {
       params.permission = filter.permission;
     }
+    if (!!filter.sortBy) {
+      const value = filter.sortBy + (undefined !== filter.sortDirection ? ',' + filter.sortDirection : '');
+      params.sort = value;
+    }
     return new Promise((resolve, reject) => {
       axios
-        .get(`${API_ENDPOINT}${API_GROUPS}/list`, { params })
+        .get(`${API_ENDPOINT}${API_GROUPS}/project/id/${projectId}/list`, { params })
         .then((res: any) => {
           resolve(res.data.content);
+        })
+        .catch((error: any) => {
+          reject(error);
+        });
+    });
+  }
+
+  static getAsociatedUserList(filter: IFilterUsersPermissions, pageSize: number, page: number, projectId: string): Promise<IUserPermission[]> {
+    const params = {} as any;
+    params.size = pageSize;
+    params.page = page;
+
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${API_ENDPOINT}${API_PERMISSIONS}/project/id/${projectId}/list`, { params })
+        .then((res: any) => {
+          let filteredItems = res.data.content.slice(0);
+
+          if (filter.search) {
+            filteredItems = ArrayUtils.filterByText(filteredItems, filter.search);
+          }
+          if (filter.permission) {
+            filteredItems = ArrayUtils.filterByText(filteredItems, filter.permission);
+          }
+
+          if (filter.sortBy) {
+            filteredItems = ArrayUtils.sortByProperty(filteredItems, filter.sortBy, filter.sortDirection?.toUpperCase() ?? 'ASC');
+          }
+
+          store.dispatch(permissionsAndUsersOperations.setExcludedUsers(filteredItems.map((x: IUserPermission) => x.userId)));
+
+          resolve(filteredItems);
+        })
+        .catch((error: any) => {
+          reject(error);
+        });
+    });
+  }
+
+  static getSpecificUserList(filter: IFilterUsersPermissions, pageSize: number, page: number, projectId: string): Promise<IUserPermission[]> {
+    const params = {} as any;
+    params.size = pageSize;
+    params.page = page;
+
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${API_ENDPOINT}${API_PERMISSIONS}/project/id/${projectId}/specificPermission/list`, { params })
+        .then((res: any) => {
+          let filteredItems = res.data.content.slice(0);
+
+          if (filter.search) {
+            filteredItems = ArrayUtils.filterByText(filteredItems, filter.search);
+          }
+
+          if (filter.sortBy) {
+            filteredItems = ArrayUtils.sortByProperty(filteredItems, filter.sortBy, filter.sortDirection?.toUpperCase() ?? 'ASC');
+          }
+
+          resolve(filteredItems);
+        })
+        .catch((error: any) => {
+          reject(error);
+        });
+    });
+  }
+
+  static async getIndividualsPage(filter: IIndividualsFilter, pageSize: number, page: number, projectId: string): Promise<IIndividual[]> {
+    const params = {} as any;
+    params.size = pageSize;
+    params.page = page;
+
+    if (!!filter.search) {
+      params.search = filter.search;
+    }
+    if (!!filter.sortBy) {
+      const value = filter.sortBy + (undefined !== filter.sortDirection ? ',' + filter.sortDirection : '');
+      params.sort = value;
+    }
+    if (!!filter.hpo) {
+      params.hpo = filter.hpo;
+    }
+    if (!!filter.icd10) {
+      params.icd10 = filter.icd10;
+    }
+    if (!!filter.sex) {
+      params.sex = filter.sex;
+    }
+    if (!!filter.karyotypicSex) {
+      params.karyotypicSex = filter.karyotypicSex;
+    }
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${API_ENDPOINT}${API_INDIVIDUALS}/project/id/${projectId}/individuals/list`, { params })
+        .then((res: any) => {
+          let filteredItems = res.data.content;
+          if (filter.sortBy) {
+            filteredItems = ArrayUtils.sortByProperty(filteredItems, filter.sortBy, filter.sortDirection?.toUpperCase() ?? 'ASC');
+          }
+          resolve(filteredItems);
+        })
+        .catch((error: any) => {
+          reject(error);
+        });
+    });
+  }
+
+  static async getIndividualsDetails(filter: IIndividualsFilter, pageSize: number, page: number, projectId: string): Promise<IIndividual[]> {
+    const params = {} as any;
+    params.size = pageSize;
+    params.page = page;
+
+    if (!!filter.search) {
+      params.search = filter.search;
+    }
+    if (!!filter.sortBy) {
+      const value = filter.sortBy + (undefined !== filter.sortDirection ? ',' + filter.sortDirection : '');
+      params.sort = value;
+    }
+    if (!!filter.hpo) {
+      params.hpo = filter.hpo;
+    }
+    if (!!filter.icd10) {
+      params.icd10 = filter.icd10;
+    }
+    if (!!filter.sex) {
+      params.sex = filter.sex;
+    }
+    if (!!filter.karyotypicSex) {
+      params.karyotypicSex = filter.karyotypicSex;
+    }
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${API_ENDPOINT}${API_INDIVIDUALS}`, { params })
+        .then((res: any) => {
+          resolve(res.data.content);
+        })
+        .catch((error: any) => {
+          reject(error);
+        });
+    });
+  }
+  static getHPOIndividuals(items: IHumanPhenotype[]): Promise<IHumanPhenotype[]> {
+    return new Promise((resolve, reject) => {
+      let filteredItems = items.slice(0);
+      resolve(filteredItems);
+    });
+  }
+
+  static getICD10Individuals(items: IHumanDisease[]): Promise<IHumanDisease[]> {
+    return new Promise((resolve, reject) => {
+      let filteredItems = items.slice(0);
+      resolve(filteredItems);
+    });
+  }
+  static getPermissionsIndividual(pageSize: number, page: number, individualId: string, projectId: string): Promise<IUserPermission[]> {
+    const params = {} as any;
+    params.size = pageSize;
+    params.page = page;
+
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${API_ENDPOINT}${API_INDIVIDUALS}/individual/id/${individualId}/project/id/${projectId}/permissions/list`, { params })
+        .then((res: any) => {
+          resolve(res.data.content);
+          store.dispatch(individualDetailsOperations.setExcludedUsers(res.data.content.map((p: IUserPermission) => p.userId)));
         })
         .catch((error: any) => {
           reject(error);

@@ -10,11 +10,10 @@ import GaiaContainer from '../commons/GaiaContainer';
 
 interface IProps {
   open?: boolean;
-  buttonType?: number | null;
-  onClose?: () => void;
   openPopupParent?: any;
-  setValueField?: (data: ITableSpeciesData) => void;
   titlePopup?: string;
+  onClose?: () => void;
+  setValueField?: (data: ITableSpeciesData) => void;
   handleClickRow: (data: ITableSpeciesData) => void;
 }
 
@@ -44,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ModalTableSpecies = ({ handleClickRow, open = false, buttonType = null, onClose, openPopupParent, setValueField, titlePopup = 'TITLE POPUP' }: IProps) => {
+const ModalTableSpecies = ({ handleClickRow, open = false, onClose, openPopupParent, titlePopup = 'TITLE POPUP' }: IProps) => {
   const classes = useStyles();
   const [openState, setOpen] = useState(open);
   const { t } = useTranslation();
@@ -70,21 +69,10 @@ const ModalTableSpecies = ({ handleClickRow, open = false, buttonType = null, on
 
   return (
     <Dialog open={openState} classes={{ paper: classes.dialogPaper }}>
-      <GaiaContainer icon="group_add" title={titlePopup} onBack={handleClose}>
+      <GaiaContainer title={titlePopup} onBack={handleClose}>
         <SpecieFilterButtons filter={filter} setFilter={setFilter} />
         <SpecieTable rowClick={handleClickRow} filter={filter} setFilter={setFilter} />
       </GaiaContainer>
-
-      <DialogActions>
-        {buttonType === 0 && <GaiaButton text={t('commons.buttons.accept')} onClick={handleClose} />}
-        {buttonType === 1 && <GaiaButton text={t('commons.buttons.ok')} onClick={handleClose} />}
-        {buttonType === 2 && (
-          <>
-            <GaiaButton text={t('commons.buttons.yes')} onClick={handleClose} />
-            <GaiaButton text={t('commons.buttons.no')} onClick={handleClose} />
-          </>
-        )}
-      </DialogActions>
     </Dialog>
   );
 };

@@ -30,7 +30,7 @@ const SpecieFilterButtons = (props: IProps) => {
   return (
     <>
       <Box display="flex" flexDirection="column">
-        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" justifyContent="flex-end" style={{ width: '100%' }}>
+        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" alignItems="center" justifyContent="flex-end" style={{ width: '100%' }}>
           <form
             onSubmit={(e) => {
               e.preventDefault();

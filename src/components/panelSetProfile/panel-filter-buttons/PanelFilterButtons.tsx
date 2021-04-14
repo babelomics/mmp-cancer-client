@@ -74,13 +74,10 @@ const PanelFilterButtons = (props: IProps) => {
     setFilter(obj);
   };
 
-  const tooltipFilter = t('commons.table.filters.filterTooltip');
-  const addTooltip = t('commons.table.addTooltip');
-
   return (
     <>
       <Box display="flex" flexDirection="column">
-        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" justifyContent="flex-end" style={{ width: '100%' }}>
+        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" alignItems="center" justifyContent="flex-end" style={{ width: '100%' }}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -88,18 +85,8 @@ const PanelFilterButtons = (props: IProps) => {
           >
             <Searchbar variant="outlined" margin="dense" value={searchText} onChange={handleSearchTextChange} />
           </form>
-          <Tooltip title={tooltipFilter}>
-            <IconButton onClick={handleExpandClick}>
-              <FilterList />
-            </IconButton>
-          </Tooltip>
-          {!props.panelSetData.deletionDate && (
-            <Tooltip title={addTooltip}>
-              <IconButton onClick={handlePanel}>
-                <Add />
-              </IconButton>
-            </Tooltip>
-          )}
+          <GaiaButton color="default" text={t('commons.buttons.filter')} icon={<FilterList />} onClick={handleExpandClick} style={{ marginLeft: 20 }} />
+          {!props.panelSetData.deletionDate && <GaiaButton variant="outlined" icon={<Add />} text={t('commons.buttons.new')} onClick={handlePanel} style={{ marginLeft: 20 }} />}
         </Box>
         <Popover
           id="simple-popover"

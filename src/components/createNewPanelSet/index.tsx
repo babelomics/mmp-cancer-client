@@ -32,7 +32,7 @@ class Wrapper extends React.Component<IProps, {}> {
 const mapStateToProps = (state: IRootState) => ({
   genomicReference: state.genomicRefPopup.genomicReference,
   formValues: state.createNewPanelSet.formValues,
-  loading:state.createNewPanelSet.loading
+  loading: state.createNewPanelSet.loading
 });
 
 const mapDispatchToProps = { ...operations };

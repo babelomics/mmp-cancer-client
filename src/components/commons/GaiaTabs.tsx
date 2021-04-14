@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from '@material-ui/core';
+import { Box, Button, Grid, useTheme } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 
 interface IProps {
@@ -16,9 +16,17 @@ interface ITabProps {
 }
 
 export const GaiaTab = (props: ITabProps) => {
+  const theme = useTheme();
   return (
-    <Button onClick={props.onClick} color={props.active ? 'primary' : 'default'}>
-      {props.title}
+    <Button
+      onClick={props.onClick}
+      color={props.active ? 'primary' : 'default'}
+      style={{
+        borderRadius: 0,
+        ...(props.active ? { borderBottom: `1px solid ${theme.palette.primary.main}` } : {})
+      }}
+    >
+      {props.title.toUpperCase()}
     </Button>
   );
 };
@@ -49,9 +57,9 @@ const GaiaTabsPanel = ({ value = 0, children, onChange }: IProps) => {
 
   return (
     <React.Fragment>
-      <Grid container direction="row" justify="space-around">
+      <Grid container direction="row" justify="space-around" style={{ boxShadow: 'rgb(0 0 0 / 10%) 0px 5px 8px -2px' }}>
         {React.Children.map(children, (child: any, index: number) => {
-          if (child?.type != GaiaTab) return;
+          if (child?.type !== GaiaTab) return;
           if (child.props.hidden) return;
 
           return (

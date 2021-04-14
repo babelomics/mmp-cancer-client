@@ -1,16 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { ThemeProvider } from '@material-ui/core';
 import MomentUtils from '@date-io/moment';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 // Roboto Font used by material ui
 import 'fontsource-roboto';
+import AppTheme from './theme';
+import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <MuiPickersUtilsProvider utils={MomentUtils} locale="es">
-      <App />
+      <ThemeProvider theme={AppTheme}>
+        <App />
+      </ThemeProvider>
     </MuiPickersUtilsProvider>
   </React.StrictMode>,
   document.getElementById('root')

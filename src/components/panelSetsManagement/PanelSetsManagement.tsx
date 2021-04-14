@@ -7,6 +7,7 @@ import PanelSetFilterButtons from './panel-set-filter-buttons/PanelSetFilterButt
 import PanelSetTable from './panel-set-table/PanelSetTable';
 import routes from '../router/routes';
 import { useHistory } from 'react-router-dom';
+import { Add } from '@material-ui/icons';
 
 const defaultPanelSetFilter = { isDeleted: false } as PanelSetFilter;
 
@@ -20,7 +21,14 @@ export const PanelSetsManagement = () => {
   };
 
   return (
-    <GaiaContainer icon="dynamic_feed" title={t('panelSetsManagement.title')} onBack={handleOnBack}>
+    <GaiaContainer
+      icon="dynamic_feed"
+      title={t('panelSetsManagement.title')}
+      onBack={handleOnBack}
+      acceptButtonText={t('commons.buttons.new')}
+      acceptButtonIcon={<Add />}
+      onAccept={() => history.push(routes.PATH_CREATE_PANEL_SET)}
+    >
       <PanelSetFilterButtons filter={filter} setFilter={setFilter} />
       <PanelSetTable filter={filter} setFilter={setFilter} />
     </GaiaContainer>

@@ -6,14 +6,14 @@ export default interface IState {
 }
 
 export interface IFormData {
-  accessType: number;
+  accessType: string;
   identifier: string;
   organization: string;
   firstName: string;
   lastName: string;
   email: string;
   accessRequestReason: string;
-  userType?: number;
+  userType?: string;
   accessRefusalReason?: string;
   attended?: 'approve' | 'reject' | null;
   isReviewing?: boolean;

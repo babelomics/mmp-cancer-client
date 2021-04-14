@@ -64,6 +64,10 @@ const uploadFile = (formData: FormData, t: any, showCustomConflictCodes: boolean
           dispatch(globalPopupOperations.showMessagePopup(t('panelSetCreate.messages.importError422_InvalidRef'), 'error'));
         }
 
+        if (customError === '400_EMPTY_MANDATORY_FIELDS') {
+          dispatch(globalPopupOperations.showMessagePopup(t('panelSetCreate.messages.importError400_EmptyMandatoryFields'), 'error'));
+        }
+
         if (customError === '400_INCORRECT_FILE_NAME') {
           dispatch(globalPopupOperations.showMessagePopup(t('panelSetCreate.messages.importError400_InvalidFileName'), 'error'));
         }
@@ -92,12 +96,20 @@ const uploadFile = (formData: FormData, t: any, showCustomConflictCodes: boolean
           dispatch(globalPopupOperations.showMessagePopup(t('panelSetCreate.messages.importError422_InvalidGenes'), 'error'));
         }
 
+        if (customError === '422_INVALID_DATES') {
+          dispatch(globalPopupOperations.showMessagePopup(t('panelSetCreate.messages.importError422_InvalidDates'), 'error'));
+        }
+
         if (customError === '422_PANELS_COEXIST') {
           dispatch(globalPopupOperations.showMessagePopup(t('panelSetCreate.messages.importError422_PanelsCoexist'), 'error'));
         }
 
         if (customError === '422_AUTHOR') {
           dispatch(globalPopupOperations.showMessagePopup(t('panelSetCreate.messages.importError422_Author'), 'error'));
+        }
+        if (customError === '409_INVALID_NUMBER_CURRENT_PANELS') {
+          dispatch(globalPopupOperations.showMessagePopup(t('panelSetCreate.messages.importError422_InvalidNumberOfPanels'), 'error'));
+          reject({ ...err, status: 500 });
         }
 
         if (showCustomConflictCodes) {
@@ -107,10 +119,6 @@ const uploadFile = (formData: FormData, t: any, showCustomConflictCodes: boolean
 
           if (customError === '409_NAME_ALREADY_EXITS') {
             dispatch(globalPopupOperations.showMessagePopup(t('panelSetCreate.messages.importError409_NameExists'), 'error'));
-          }
-
-          if (customError === '409_INVALID_NUMBER_CURRENT_PANELS') {
-            dispatch(globalPopupOperations.showMessagePopup(t('panelSetCreate.messages.importError422_InvalidNumberOfPanels'), 'error'));
           }
         }
 

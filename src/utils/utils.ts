@@ -30,3 +30,20 @@ export const decodeJwt = <T>(token: string): T => {
 
   return JSON.parse(jsonPayload);
 };
+
+export const getObjectDeepKeys = (obj: any): any[] => {
+  return Object.keys(obj)
+    .map((key) => getObjectDeepKeys(obj[key]).map((k: string) => `${key}.${k}`))
+    .reduce((x, y) => x.concat(y), Object.keys(obj));
+};
+
+declare global {
+  // to access the global type String
+  interface String {
+    capitalize: () => string;
+  }
+}
+
+String.prototype.capitalize = function () {
+  return `${this.charAt(0).toUpperCase()}${this.slice(1)}`;
+};

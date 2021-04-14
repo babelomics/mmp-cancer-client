@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
+import { Button, TableCell, TableHead, TableRow, Typography, withStyles } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { IHPOPopupFilter } from '../interfaces';
 import SortDirection from '../../../tableFilter/interfaces/SortDirection';
@@ -34,7 +34,7 @@ class ColumnHeader extends React.PureComponent<CHProps> {
       const selected = !!sortId && sortId === filter.sortBy;
       return (
         <TableCell style={hideColumn ? { display: 'none' } : { textAlign: 'center', whiteSpace: 'normal' }}>
-          <BootstrapButton color={selected ? 'primary' : 'default'} onClick={this.handleClick}>
+          <BootstrapButton color={'primary'} onClick={this.handleClick}>
             {label}
             {selected && SortDirection.ASC === filter.sortDirection && <ArrowDownwardIcon fontSize="small" />}
             {selected && SortDirection.DESC === filter.sortDirection && <ArrowUpwardIcon fontSize="small" />}
@@ -42,7 +42,13 @@ class ColumnHeader extends React.PureComponent<CHProps> {
         </TableCell>
       );
     } else {
-      return <TableCell style={{ textAlign: 'center', whiteSpace: 'normal' }}>{label}</TableCell>;
+      return (
+        <TableCell style={{ textAlign: 'center', whiteSpace: 'normal' }}>
+          <Typography variant="body2" color="primary">
+            {label}
+          </Typography>
+        </TableCell>
+      );
     }
   }
 
@@ -59,11 +65,13 @@ class ColumnHeader extends React.PureComponent<CHProps> {
 
 interface IProps {
   filter: IHPOPopupFilter;
+  hideParents?: boolean;
+  hideChildren?: boolean;
   setFilter: (newFilter: IHPOPopupFilter) => void;
 }
 
 function HPOPopupTableHeader(props: IProps) {
-  const { filter, setFilter } = props;
+  const { filter, setFilter, hideChildren, hideParents } = props;
   const { t } = useTranslation();
   return (
     <TableHead>
@@ -71,8 +79,8 @@ function HPOPopupTableHeader(props: IProps) {
         <ColumnHeader label={t('commons.fields.identifier')} filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.name')} filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.description')} filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.parents')} filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.children')} filter={filter} setFilter={setFilter} />
+        {!hideParents && <ColumnHeader label={t('commons.fields.parents')} filter={filter} setFilter={setFilter} />}
+        {!hideChildren && <ColumnHeader label={t('commons.fields.children')} filter={filter} setFilter={setFilter} />}
       </TableRow>
     </TableHead>
   );

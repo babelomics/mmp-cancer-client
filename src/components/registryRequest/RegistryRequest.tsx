@@ -12,8 +12,6 @@ import { useHistory } from 'react-router-dom';
 import routes from '../router/routes';
 import GaiaRadioButtonGroup from '../commons/GaiaRadioButtonGroup';
 import GaiaLoading from '../commons/GaiaLoading';
-import { getUserTypeByValue } from '../../utils/roles';
-import { getAccessTypeByValue } from '../../utils/accessType';
 import GaiaIcon from '../commons/GaiaIcon';
 import { initialState } from './duck';
 
@@ -53,11 +51,10 @@ export const RegistryRequest = (props: IProps) => {
     enableReinitialize: true,
     validationSchema: generateValidationSchema(t),
     onSubmit: (values) => {
-      const finalValues = { ...values, userType: getUserTypeByValue(values.userType ?? 0), accessType: getAccessTypeByValue(values.accessType) };
       if (isReviewing()) {
-        props.processRequest(finalValues, t);
+        props.processRequest(values, t);
       } else {
-        props.createRequest(finalValues, formik.setErrors, t);
+        props.createRequest(values, formik.setErrors, t);
       }
     }
   });
@@ -88,7 +85,30 @@ export const RegistryRequest = (props: IProps) => {
         <React.Fragment>
           <Grid container spacing={3}>
             <Grid item xs={4}>
-              <GaiaSelectField required name="accessType" label={t('commons.fields.typeOfAccess.title')} formik={formik} items={['Local', 'LDAP', 'ElixirAAI']} disabled={isReviewing()} fullWidth />
+              <GaiaSelectField
+                required
+                name="accessType"
+                label={t('commons.fields.typeOfAccess.title')}
+                formik={formik}
+                valueAccessor="key"
+                labelAccessor="value"
+                items={[
+                  {
+                    key: 'Local',
+                    value: 'Local'
+                  },
+                  {
+                    key: 'LDAP',
+                    value: 'LDAP'
+                  },
+                  {
+                    key: 'Elixir',
+                    value: 'ElixirAAI'
+                  }
+                ]}
+                disabled={isReviewing()}
+                fullWidth
+              />
             </Grid>
             <Grid item xs={4}>
               <GaiaTextField fullWidth required name="identifier" label={t('commons.fields.identifier')} formik={formik} disabled={isReviewing()} />
@@ -123,7 +143,18 @@ export const RegistryRequest = (props: IProps) => {
                     name="userType"
                     label={t('commons.fields.userType')}
                     formik={formik}
-                    items={[t('commons.fields.userTypeOptions.user'), t('commons.fields.userTypeOptions.admin')]}
+                    valueAccessor="key"
+                    labelAccessor="value"
+                    items={[
+                      {
+                        key: 'User',
+                        value: t('commons.fields.userTypeOptions.user')
+                      },
+                      {
+                        key: 'Admin',
+                        value: t('commons.fields.userTypeOptions.admin')
+                      }
+                    ]}
                     disabled={props.data.attended !== null}
                     fullWidth
                   />

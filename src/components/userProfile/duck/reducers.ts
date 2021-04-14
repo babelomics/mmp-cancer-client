@@ -2,7 +2,6 @@ import types from './types';
 import { AnyAction } from 'redux';
 import IState from '../interfaces';
 import { doDateFormat } from '../../../utils/utils';
-import { getUserTypeByStr } from '../../../utils/roles';
 
 export const initialState: IState = {
   loading: false,
@@ -17,7 +16,7 @@ export const initialState: IState = {
     organization: '',
     dateCreated: new Date(),
     dateLastAccess: new Date(),
-    userType: 0,
+    userType: '',
     canCreateProject: false
   },
   showUserSelectionPopup: false
@@ -50,8 +49,7 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
         data: {
           ...payload,
           dateCreated: doDateFormat(payload.dateCreated),
-          dateLastAccess: doDateFormat(payload.dateLastAccess),
-          userType: getUserTypeByStr(payload.userType)
+          dateLastAccess: doDateFormat(payload.dateLastAccess)
         }
       };
     case types.AC_END_UPDATE_USER:

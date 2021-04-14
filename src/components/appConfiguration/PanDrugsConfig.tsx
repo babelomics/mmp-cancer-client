@@ -4,8 +4,9 @@ import { generateValidationSchemaPanDrugs } from './validationSchema';
 import { IPandrugsConfig } from './interfaces';
 import { Grid, Typography } from '@material-ui/core';
 import GaiaTextField from '../commons/GaiaTextField';
-import GaiaButton from '../commons/GaiaButton';
 import { FormikErrors, useFormik } from 'formik';
+import GaiaFabButton from '../commons/GaiaFabButton';
+import { Done, Edit } from '@material-ui/icons';
 
 interface IProps {
   pandrugUrl: string | undefined;
@@ -41,33 +42,32 @@ export const PanDrugsConfig = (props: IProps) => {
 
   return (
     <React.Fragment>
-      <Typography variant="subtitle2" style={{ marginBottom: 20 }}>
+      <Typography color="primary" variant="subtitle2" style={{ marginBottom: 20, fontWeight: 'bold' }}>
         {t('panDrugsConfig.title')}
       </Typography>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} alignItems="center">
         <Grid item xs={3}>
-          <GaiaTextField fullWidth variant={props.validationState ? 'filled' : 'standard'} required name="url" label={t('commons.fields.url')} formik={formik} disabled={!props.validationState} />
+          <Typography variant="body2">{t('commons.fields.url')}</Typography>
+          <GaiaTextField fullWidth required name="url" formik={formik} disabled={!props.validationState} />
         </Grid>
         <Grid item xs={3}>
-          <GaiaTextField fullWidth variant={props.validationState ? 'filled' : 'standard'} required name="email" label={t('commons.fields.email')} formik={formik} disabled={!props.validationState} />
+          <Typography variant="body2">{t('commons.fields.email')}</Typography>
+          <GaiaTextField fullWidth required name="email" formik={formik} disabled={!props.validationState} />
         </Grid>
         <Grid item xs={2}>
-          <GaiaTextField fullWidth variant={props.validationState ? 'filled' : 'standard'} required name="user" label={t('commons.fields.user')} formik={formik} disabled={!props.validationState} />
+          <Typography variant="body2">{t('commons.fields.user')}</Typography>
+          <GaiaTextField fullWidth required name="user" formik={formik} disabled={!props.validationState} />
         </Grid>
-        <Grid item xs={2}>
-          <GaiaTextField
-            fullWidth
-            variant={props.validationState ? 'filled' : 'standard'}
-            type="password"
-            required
-            name="password"
-            label={t('commons.fields.password')}
-            formik={formik}
-            disabled={!props.validationState}
-          />
+        <Grid item xs={3}>
+          <Typography variant="body2">{t('commons.fields.password')}</Typography>
+          <GaiaTextField fullWidth type="password" required name="password" formik={formik} disabled={!props.validationState} />
         </Grid>
-        <Grid item xs={2}>
-          {props.validationState ? <GaiaButton text={t('commons.buttons.validation')} onClick={formik.handleSubmit} /> : <GaiaButton text={t('commons.buttons.modify')} onClick={clickModify} />}
+        <Grid item xs={1} style={{ marginTop: 15 }}>
+          {props.validationState ? (
+            <GaiaFabButton color="default" icon={<Done />} size="medium" onClick={formik.handleSubmit} />
+          ) : (
+            <GaiaFabButton color="default" icon={<Edit />} size="medium" onClick={clickModify} />
+          )}
         </Grid>
       </Grid>
     </React.Fragment>

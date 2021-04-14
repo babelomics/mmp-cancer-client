@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
 import { makeStyles, TableCell, TableRow } from '@material-ui/core';
 import { ITranscriptPopup } from '../interfaces';
 
@@ -25,7 +24,6 @@ function TranscriptPopupRow(props: IProps) {
   const { item: transcript, rowClick } = props;
   const classes = useStyles();
 
-  const history = useHistory();
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => {
       if (rowClick) {

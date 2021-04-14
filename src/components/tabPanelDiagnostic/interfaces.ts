@@ -68,6 +68,7 @@ export interface IDiagnosticPanelGlobal {
   variantList: IVariantList[];
   guid: string;
   isNewVersion?: boolean;
+  ensmblRelease: string;
 }
 
 export interface IDiagnosticPanelGlobalUpdate {

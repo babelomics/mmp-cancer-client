@@ -9,8 +9,10 @@ import HPOPopupRow from './HPOPopupRow';
 
 interface IProps {
   filter: IHPOPopupFilter;
-  assembly: string;
+  abnormality: boolean;
   exclude: string[];
+  hideParents?: boolean;
+  hideChildren?: boolean;
   setFilter: (newFilter: IHPOPopupFilter) => void;
   addHPO: (hpo: any) => void;
 }
@@ -20,11 +22,11 @@ function getHPOId(hpo: IHPOPopup) {
 }
 
 function HPOPopupTable(props: IProps) {
-  const { filter, assembly, addHPO, exclude } = props;
+  const { filter, abnormality, addHPO, exclude } = props;
 
   const fetchHPOList = useCallback(
     (pageSize: number, page: number) => {
-      return MmpClient.getHPOModalList(filter, pageSize, page, assembly);
+      return MmpClient.getHPOModalList(filter, pageSize, page, abnormality);
     },
     [filter]
   );
@@ -46,8 +48,12 @@ function HPOPopupTable(props: IProps) {
             ChildWrapper={HPOPopupRowWrapper}
             getElemId={getHPOId}
             setFilter={props.setFilter}
-            scrollModal={'HPOModal'}
+            scrollAncestor={'HPOModal'}
             exclude={{ exclude: exclude, field: 'hpoId' }}
+            rowProps={{
+              hideParents: props.hideParents,
+              hideChildren: props.hideChildren
+            }}
           />
         </TableBody>
       </Table>

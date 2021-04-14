@@ -1,21 +1,30 @@
-import { AxiosResponse } from 'axios';
+import { push } from 'connected-react-router';
+
 import actions from './actions';
 import api from './api';
 import { operations as globalPopupOperations } from '../../globalPopups/duck';
 import { IProject } from '../../projectsManagement/interfaces';
-import { push } from 'connected-react-router';
 import routes from '../../router/routes';
+import { ITokenData } from '../../login/interfaces';
 
-const fetchProjectData = (identifier: string, t: any) => (dispatch: any) => {
+const showMessagePopup = globalPopupOperations.showMessagePopup;
+
+const fetchProjectData = (identifier: string, user: ITokenData, t: any) => (dispatch: any) => {
   dispatch(actions.initOperation());
+
   api
     .fetchProjectData(identifier)
-    .then((res: AxiosResponse) => dispatch(actions.endFetchData(res.data)))
-    .catch(() => {
+    .then((res) => {
+      dispatch(actions.endFetchData(res.data));
+    })
+    .catch((err: any) => {
       dispatch(actions.endOperation());
-      dispatch(globalPopupOperations.showMessagePopup(t('projectProfile.connectionError'), 'error'));
+      if (err.showCustomError) {
+        dispatch(globalPopupOperations.showMessagePopup(t('projectProfile.connectionError'), 'error'));
+      }
     });
 };
+
 const updateProjectData = (identifier: string, values: IProject, t: any) => (dispatch: any) => {
   dispatch(actions.initOperation());
   api
@@ -26,13 +35,12 @@ const updateProjectData = (identifier: string, values: IProject, t: any) => (dis
     })
     .catch((error: any) => {
       dispatch(actions.endOperation());
-      if (error.status === 403) {
-        dispatch(globalPopupOperations.showMessagePopup(t('projectProfile.errorModifyDeletedProject'), 'error', () => dispatch(push(routes.PATH_PROJECTS_MANAGEMENT))));
-      } else {
+      if (error.showCustomError) {
         dispatch(globalPopupOperations.showMessagePopup(t('projectProfile.errorModifyProject'), 'error'));
       }
     });
 };
+
 const deleteProjectData = (identifier: string, t: any) => (dispatch: any) => {
   dispatch(actions.initOperation());
   api
@@ -46,6 +54,7 @@ const deleteProjectData = (identifier: string, t: any) => (dispatch: any) => {
       dispatch(globalPopupOperations.showMessagePopup(t('projectProfile.deleteError'), 'error'));
     });
 };
+
 const createProject = (values: IProject, t: any) => (dispatch: any) => {
   dispatch(actions.initOperation());
   api
@@ -68,4 +77,4 @@ const createProject = (values: IProject, t: any) => (dispatch: any) => {
 const resetReduxProject = actions.resetReduxProject;
 const setMode = actions.setMode;
 
-export default { fetchProjectData, updateProjectData, resetReduxProject, deleteProjectData, setMode, createProject };
+export default { fetchProjectData, updateProjectData, resetReduxProject, deleteProjectData, setMode, createProject, showMessagePopup };

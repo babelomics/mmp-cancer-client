@@ -1,4 +1,3 @@
-import { IProject, IProjectsFilter } from '../../projectsManagement/interfaces';
 import types from './types';
 
 const initOperation = () => ({ type: types.AC_INIT_OPERATION });

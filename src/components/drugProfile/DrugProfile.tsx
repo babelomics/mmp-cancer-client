@@ -68,7 +68,6 @@ export const DrugProfile = (props: IProps) => {
     enableReinitialize: true,
     validationSchema: generateValidationSchema(t),
     onSubmit: (values) => {
-      console.log(formik.errors);
       let cost = values.cost;
       if (values.cost) {
         cost = parseFloat(values.cost.replace(',', '.', 'g'));

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Table, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
+import { Button, TableCell, TableHead, TableRow, Typography, withStyles } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { PanelSetFilter } from '../interfaces';
 import SortDirection from '../../commons/tableFilter/interfaces/SortDirection';
@@ -33,15 +33,21 @@ class ColumnHeader extends React.PureComponent<CHProps> {
       const selected = !!sortId && sortId === filter.sortBy;
       return (
         <TableCell style={{ textAlign: 'center' }}>
-          <BootstrapButton color={selected ? 'primary' : 'default'} onClick={this.handleClick}>
+          <BootstrapButton color={'primary'} onClick={this.handleClick}>
             {label}
-            {selected && SortDirection.ASC === filter.sortDirection && <ArrowDownwardIcon fontSize="small" />}
-            {selected && SortDirection.DESC === filter.sortDirection && <ArrowUpwardIcon fontSize="small" />}
+            {selected && SortDirection.ASC === filter.sortDirection && <ArrowUpwardIcon fontSize="small" />}
+            {selected && SortDirection.DESC === filter.sortDirection && <ArrowDownwardIcon fontSize="small" />}
           </BootstrapButton>
         </TableCell>
       );
     } else {
-      return <TableCell style={{ textAlign: 'center' }}>{label}</TableCell>;
+      return (
+        <TableCell style={{ textAlign: 'center' }}>
+          <Typography variant="body2" color="primary">
+            {label}
+          </Typography>
+        </TableCell>
+      );
     }
   }
 

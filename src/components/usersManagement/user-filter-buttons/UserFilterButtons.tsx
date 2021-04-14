@@ -1,9 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
-import routes from '../../router/routes';
 import { Box, Chip, Grid, IconButton, makeStyles, Popover, Tooltip } from '@material-ui/core';
-import { FilterList, Add } from '@material-ui/icons';
+import { FilterList } from '@material-ui/icons';
 import GaiaButton from '../../commons/GaiaButton';
 
 import { UserFilter } from '../interfaces';
@@ -28,7 +26,6 @@ const UserFilterButtons = (props: IProps) => {
   const { filter, setFilter } = props;
   const classes = useStyles();
   const { t } = useTranslation();
-  const history = useHistory();
   const [expanded, setExpanded] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -60,10 +57,6 @@ const UserFilterButtons = (props: IProps) => {
     handleClose();
   };
 
-  const handleNewUser = useCallback(() => {
-    history.push(routes.PATH_ADMIN_CREATE_USER);
-  }, [history]);
-
   const deleteFilter = (key: string) => {
     const obj = { ...filter } as any;
     if (obj[key] || obj[key] === false) {
@@ -78,7 +71,7 @@ const UserFilterButtons = (props: IProps) => {
   return (
     <>
       <Box display="flex" flexDirection="column">
-        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" justifyContent="flex-end" style={{ width: '100%' }}>
+        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" alignItems="center" justifyContent="flex-end" style={{ width: '100%' }}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -86,16 +79,7 @@ const UserFilterButtons = (props: IProps) => {
           >
             <Searchbar variant="outlined" margin="dense" value={searchText} onChange={handleSearchTextChange} />
           </form>
-          <Tooltip title={tooltipFilter}>
-            <IconButton onClick={handleExpandClick}>
-              <FilterList />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={addTooltip}>
-            <IconButton onClick={handleNewUser}>
-              <Add />
-            </IconButton>
-          </Tooltip>
+          <GaiaButton color="default" text={t('commons.buttons.filter')} icon={<FilterList />} onClick={handleExpandClick} style={{ marginLeft: 20 }} />
         </Box>
         <Popover
           id="simple-popover"

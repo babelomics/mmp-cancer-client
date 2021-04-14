@@ -6,13 +6,13 @@ import * as Yup from 'yup';
 export const generateValidationSchema = (t: TFunction) =>
   Yup.object().shape({
     diagnosticPanelSetIdentifier: Yup.string().nullable().required(t('commons.error.required')),
-    name: Yup.string().nullable().required(t('commons.error.required')),
-    description: Yup.string().nullable().required(t('commons.error.required')),
+    name: Yup.string().nullable().required(t('commons.error.required')).max(50, t('commons.error.maxName')),
+    description: Yup.string().nullable().required(t('commons.error.required')).max(500, t('commons.error.maxDescription')),
     assembly: Yup.string().nullable().required(t('commons.error.required')),
     ensemblRelease: Yup.string().nullable().required(t('commons.error.required'))
   });
 
-  export const deleteSchema = (t: TFunction) =>
+export const deleteSchema = (t: TFunction) =>
   Yup.object().shape({
     confirmation: Yup.string()
       .required(t('commons.error.password.required'))

@@ -29,7 +29,7 @@ import { IGene, ITranscript, IIcd10, IHPO } from './tabs/interfaces';
 import Icd10 from './tabs/ICD-10';
 import { doDateFormat } from '../../utils/utils';
 import { IPanelSetData } from '../panelSetProfile/interfaces';
-import { Save } from '@material-ui/icons';
+import { ArrowBack, ChevronLeft, ChevronRight, Delete, Save } from '@material-ui/icons';
 import _ from 'lodash';
 import GaiaLoading from '../commons/GaiaLoading';
 import routes from '../router/routes';
@@ -56,6 +56,7 @@ interface IProps {
   mode: 'new' | 'edit';
   panelSetData: IPanelSetData;
   author: string;
+  ensmblRelease: string;
 
   updatePanelGeneral: (newData: IDiagnosticPanelGlobalUpdate) => void;
   updatePanelGlobal: (identifier: string, dataPanelProfile: IDiagnosticPanelGlobal, t: any) => Promise<any>;
@@ -264,8 +265,56 @@ export const TabPanelDiagnostic = (props: IProps) => {
       history.push(routes.PATH_PANEL_SETS_MANAGEMENT);
     }
   };
+
+  const handleSubmit = () => {
+    const hasErrors = Object.values(generalFormik.errors).filter((x) => x !== '');
+
+    if (hasErrors.length) {
+      setValue(0);
+    }
+
+    generalFormik.handleSubmit();
+  };
+
+  const getActions = () => {
+    const actions = [
+      {
+        icon: <ChevronLeft />,
+        onClick: clickLeftArrow,
+        disabled: props.panelPreviousVersion ? false : true,
+        tooltip: t('tabPanelDiagnostic.tooltip.leftArrow')
+      },
+      {
+        icon: <ChevronRight />,
+        onClick: clickRightArrow,
+        disabled: props.panelNextVersion ? false : true,
+        tooltip: t('tabPanelDiagnostic.tooltip.rightArrow')
+      }
+    ] as any[];
+
+    if (props.mode === 'edit') {
+      actions.push({
+        icon: <Delete />,
+        onClick: clickDelete,
+        tooltip: t('tabPanelDiagnostic.tooltip.delete')
+      });
+    }
+
+    return actions;
+  };
+
   return (
-    <GaiaContainer icon="folder_open" title={t('tabPanelDiagnostic.title')} onBack={backScreenBefore}>
+    <GaiaContainer
+      icon="dynamic_feed"
+      title={t('tabPanelDiagnostic.title')}
+      breadcrumbs={[t('panelSetsManagement.title'), t('panelSetCreate.title'), t('tabPanelDiagnostic.title')]}
+      acceptButtonText={t('commons.buttons.save')}
+      acceptButtonIcon={<Save />}
+      onAccept={props.diagnosticPanelGeneral.deletionDate ? undefined : handleSubmit}
+      onCancel={backScreenBefore}
+      onBack={backScreenBefore}
+      actions={getActions()}
+    >
       {props.loading ? (
         <GaiaLoading />
       ) : (
@@ -292,50 +341,9 @@ export const TabPanelDiagnostic = (props: IProps) => {
             onFirstAction={deletePanel}
             onSecondAction={deletePanelChildren}
             onClose={closeChooseDeletePopup}
+            textFirst={t('commons.buttons.leaveRoot')}
+            textSecond={t('commons.buttons.deleteDescendant')}
           />
-
-          <Grid style={{ paddingBottom: '20px', display: 'flex', justifyContent: 'flex-end' }}>
-            <Grid item xs={1}>
-              <Tooltip title={t('tabPanelDiagnostic.tooltip.leftArrow') ?? ''} placement="top-start">
-                <Fab color="primary" size="small" component="span" aria-label="add" variant="extended" onClick={clickLeftArrow} disabled={props.panelPreviousVersion ? false : true}>
-                  <ArrowBackIosIcon />
-                </Fab>
-              </Tooltip>
-            </Grid>
-            <Grid item xs={1}>
-              <Tooltip title={t('tabPanelDiagnostic.tooltip.rightArrow') ?? ''} placement="top-start">
-                <Fab color="primary" size="small" component="span" aria-label="add" variant="extended" onClick={clickRightArrow} disabled={props.panelNextVersion ? false : true}>
-                  <ArrowForwardIosIcon />
-                </Fab>
-              </Tooltip>
-            </Grid>
-            {props.mode === 'edit' && (
-              <React.Fragment>
-                <Grid item xs={1}>
-                  <Tooltip title={t('tabPanelDiagnostic.tooltip.delete') ?? ''} placement="top-start">
-                    <Fab color="primary" size="small" component="span" aria-label="add" variant="extended" onClick={clickDelete} disabled={props.diagnosticPanelGeneral.deletionDate ? true : false}>
-                      <DeleteIcon />
-                    </Fab>
-                  </Tooltip>
-                </Grid>
-              </React.Fragment>
-            )}
-            <Grid item xs={1}>
-              <Tooltip title={t('tabPanelDiagnostic.tooltip.save') ?? ''} placement="top-start">
-                <Fab
-                  color="primary"
-                  size="small"
-                  component="span"
-                  aria-label="add"
-                  variant="extended"
-                  onClick={() => generalFormik.handleSubmit()}
-                  disabled={props.diagnosticPanelGeneral.deletionDate ? true : false}
-                >
-                  <Save />
-                </Fab>
-              </Tooltip>
-            </Grid>
-          </Grid>
 
           <GaiaTabsPanel value={value} onChange={handleChange}>
             <GaiaTab
@@ -449,6 +457,7 @@ export const TabPanelDiagnostic = (props: IProps) => {
               assembly={props.assembly}
               addGene={props.addGene}
               exclude={props.geneList.map((g: IGene) => g.geneId)}
+              ensmblRelease={props.ensmblRelease}
             />
           )}
           {openPopupSearchTranscript && (
@@ -459,6 +468,7 @@ export const TabPanelDiagnostic = (props: IProps) => {
               assembly={props.assembly}
               addTranscript={props.addTranscript}
               exclude={props.transcriptList.map((t: ITranscript) => t.transcriptId)}
+              ensmblRelease={props.ensmblRelease}
             />
           )}
           {openPopupSearchHPO && (
@@ -466,7 +476,7 @@ export const TabPanelDiagnostic = (props: IProps) => {
               titlePopup={t('commons.fields.fenotypesHPO')}
               open={true}
               openPopupParent={() => setOpenPopupSearchHPO(false)}
-              assembly={props.assembly}
+              abnormality={false}
               addHPO={props.addHPO}
               exclude={props.hpoList.map((h: IHPO) => h.hpoId)}
             />

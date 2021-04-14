@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
+import { Button, TableCell, TableHead, TableRow, Typography, withStyles } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { IProjectsFilter } from '../interfaces';
 import SortDirection from '../../commons/tableFilter/interfaces/SortDirection';
@@ -34,15 +34,21 @@ class ColumnHeader extends React.PureComponent<CHProps> {
       const selected = !!sortId && sortId === filter.sortBy;
       return (
         <TableCell style={hideColumn ? { display: 'none' } : { textAlign: 'center' }}>
-          <BootstrapButton color={selected ? 'primary' : 'default'} onClick={this.handleClick}>
+          <BootstrapButton color={'primary'} onClick={this.handleClick}>
             {label}
-            {selected && SortDirection.ASC === filter.sortDirection && <ArrowDownwardIcon fontSize="small" />}
-            {selected && SortDirection.DESC === filter.sortDirection && <ArrowUpwardIcon fontSize="small" />}
+            {selected && SortDirection.ASC === filter.sortDirection && <ArrowUpwardIcon fontSize="small" />}
+            {selected && SortDirection.DESC === filter.sortDirection && <ArrowDownwardIcon fontSize="small" />}
           </BootstrapButton>
         </TableCell>
       );
     } else {
-      return <TableCell style={{ textAlign: 'center' }}>{label}</TableCell>;
+      return (
+        <TableCell style={{ textAlign: 'center' }}>
+          <Typography variant="body2" color="primary">
+            {label}
+          </Typography>
+        </TableCell>
+      );
     }
   }
 
@@ -74,12 +80,12 @@ function ProjectsTableHeader(props: IProps) {
         <ColumnHeader label={t('commons.fields.organism')} sortId="organism" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.assembly')} sortId="assembly" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.ensemblRelease')} sortId="ensemblRelease" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.typeOfAccess.title')} sortId="typeOfAccess" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.typeOfAccess.title')} filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.createDate')} sortId="creationDate" filter={filter} setFilter={setFilter} />
         <ColumnHeader label={t('commons.fields.updateDate')} sortId="modificationDate" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.individuals')} sortId="individuals" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.samples')} sortId="samples" filter={filter} setFilter={setFilter} />
-        <ColumnHeader label={t('commons.fields.analyses')} sortId="analyses" filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.individuals')} filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.samples')} filter={filter} setFilter={setFilter} />
+        <ColumnHeader label={t('commons.fields.analyses')} filter={filter} setFilter={setFilter} />
       </TableRow>
     </TableHead>
   );

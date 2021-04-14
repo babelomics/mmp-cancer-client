@@ -1,23 +1,33 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
+import { useHistory } from 'react-router-dom';
+import { Grid, GridList, GridListTile, isWidthUp, makeStyles } from '@material-ui/core';
+import { Delete, Description, FindInPage, GridOn, LocalPharmacy, PersonPin, VpnKey, WebAsset } from '@material-ui/icons';
+import withWidth from '@material-ui/core/withWidth';
+
 import { generateValidationSchema } from './validationSchema';
 import GaiaContainer from '../commons/GaiaContainer';
-import { Grid, GridList, GridListTile, isWidthUp, makeStyles } from '@material-ui/core';
 import GaiaIconButtonWithText from '../commons/GaiaIconButtonWithText';
 import GaiaTextField from '../commons/GaiaTextField';
-import { Delete, Description, FindInPage, GridOn, LocalPharmacy, PersonPin, Save, VpnKey, WebAsset } from '@material-ui/icons';
-import withWidth from '@material-ui/core/withWidth';
 import GaiaDeleteConfirmPopup from '../commons/GaiaDeleteConfirmPopup';
 import { doDateFormat } from '../../utils/utils';
 import GaiaLoading from '../commons/GaiaLoading';
 import routes from '../router/routes';
-import { useHistory } from 'react-router-dom';
-import { IProject, IProjectsFilter } from '../projectsManagement/interfaces';
-import { Identifier } from 'typescript';
+import { IProject } from '../projectsManagement/interfaces';
 import GaiaButton from '../commons/GaiaButton';
 import GenomicRefPopup from '../genomicRefPopup/GenomicRefPopup';
-import { Console } from 'console';
+import { userCanCreate, userCanDelete, userCanRead, userCanUpdate } from '../../utils/permissionsUtils';
+import {
+  P_ANALYSES_KEYWORD,
+  P_DIAGNOSTIC_PANELS_KEYWORD,
+  P_DRUGS_KEYWORD,
+  P_INDIRECT_PROJECT,
+  P_INDIVIDUALS_KEYWORD,
+  P_PERMISSIONS_KEYWORD,
+  P_PROJECT_KEYWORD,
+  P_SAMPLES_KEYWORD
+} from '../permissionsAndUsers/permissions';
 
 interface IProps {
   login: any;
@@ -25,6 +35,7 @@ interface IProps {
   projectData: IProject;
   loading: boolean;
   mode: 'new' | 'edit';
+
   updateProjectData: (identifier: string, values: IProject, t: any) => void;
   resetReduxProject: () => void;
   deleteProjectData: (identifier: string, t: any) => void;
@@ -100,7 +111,7 @@ export const ProjectProfile = (props: IProps) => {
   };
 
   const getActions = () => {
-    if (props.mode === 'edit' && !props.projectData.deletionDate) {
+    if (props.mode === 'edit' && !props.projectData.deletionDate && userCanDelete(props.login.user, P_PROJECT_KEYWORD, props.projectData.projectId)) {
       return [
         {
           icon: <Delete />,
@@ -129,9 +140,15 @@ export const ProjectProfile = (props: IProps) => {
   };
 
   return (
-    <GaiaContainer icon="assignment_24px" title={t('projectProfile.title')} actions={getActions()} onAccept={formik.handleSubmit} onBack={backScreenBefore}>
+    <GaiaContainer
+      icon="assignment_24px"
+      title={t('projectProfile.title')}
+      actions={getActions()}
+      onAccept={userCanUpdate(props.login.user, P_PROJECT_KEYWORD, props.projectData.projectId) || userCanCreate(props.login.user, P_INDIRECT_PROJECT, 'undefined') ? formik.handleSubmit : undefined}
+      onBack={backScreenBefore}
+      onCancel={backScreenBefore}
+    >
       {/* Delete Popup */}
-
       <GaiaDeleteConfirmPopup open={openDeletePopup} actionText={t('projectProfile.deleteActionText')} title={t('projectProfile.deleteTitle')} onClose={closeDeletePopup} onAccept={deleteProject} />
 
       {props.loading ? (
@@ -146,9 +163,16 @@ export const ProjectProfile = (props: IProps) => {
                     <GaiaTextField name="projectId" label={t('commons.fields.identifier')} formik={formik} fullWidth disabled={props.mode === 'edit'} required />
                   </Grid>
                   <Grid item>
-                    <GaiaTextField name="name" label={t('commons.fields.name')} formik={formik} fullWidth required />
+                    <GaiaTextField
+                      name="name"
+                      label={t('commons.fields.name')}
+                      formik={formik}
+                      fullWidth
+                      required
+                      disabled={!(userCanUpdate(props.login.user, P_PROJECT_KEYWORD, props.projectData.projectId) || userCanCreate(props.login.user, P_INDIRECT_PROJECT, 'undefined'))}
+                    />
                   </Grid>
-                  {props.mode === 'edit' && (
+                  {props.mode === 'edit' && userCanRead(props.login.user, P_PROJECT_KEYWORD, props.projectData.projectId) && (
                     <React.Fragment>
                       <Grid item>
                         <GaiaTextField name="creationDate" formik={formik} label={t('commons.fields.dateCreated')} fullWidth disabled />
@@ -164,31 +188,56 @@ export const ProjectProfile = (props: IProps) => {
                 </Grid>
               </Grid>
               <Grid item xs={8}>
-                <GaiaTextField name="description" formik={formik} label={t('commons.fields.description')} fullWidth multiline />
+                <GaiaTextField
+                  name="description"
+                  formik={formik}
+                  label={t('commons.fields.description')}
+                  fullWidth
+                  multiline
+                  disabled={!(userCanUpdate(props.login.user, P_PROJECT_KEYWORD, props.projectData.projectId) || userCanCreate(props.login.user, P_INDIRECT_PROJECT, 'undefined'))}
+                  rows={4}
+                />
               </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12} spacing={6} className={classes.gridContainPosition} style={{ paddingTop: '20px' }}>
             {props.mode === 'edit' && (
               <React.Fragment>
-                <Grid xs={1} item className={classes.gridInput}>
-                  <GaiaTextField name="samplesNumber" formik={formik} label={t('projectProfile.nSamples')} fullWidth disabled />
-                </Grid>
-                <Grid xs={1} item className={classes.gridInput}>
-                  <GaiaTextField name="individualsNumber" formik={formik} label={t('projectProfile.nIndividuals')} fullWidth disabled />
-                </Grid>
-                <Grid xs={1} item className={classes.gridInput}>
-                  <GaiaTextField name="filesNumber" formik={formik} label={t('projectProfile.nVCF')} fullWidth disabled />
-                </Grid>
-                <Grid xs={1} item className={classes.gridInput}>
-                  <GaiaTextField name="diagnosticPanelsNumber" formik={formik} label={t('projectProfile.nDiagnosticsPanels')} fullWidth disabled />
-                </Grid>
-                <Grid xs={1} item className={classes.gridInput}>
-                  <GaiaTextField name="analysesNumber" formik={formik} label={t('projectProfile.nAnalyses')} fullWidth disabled />
-                </Grid>
-                <Grid xs={1} item className={classes.gridInput}>
-                  <GaiaTextField name="drugsNumber" formik={formik} label={t('projectProfile.nDrugs')} fullWidth disabled />
-                </Grid>
+                {userCanRead(props.login.user, P_SAMPLES_KEYWORD, props.projectData.projectId) && (
+                  <Grid xs={1} item className={classes.gridInput}>
+                    <GaiaTextField name="samplesNumber" formik={formik} label={t('projectProfile.nSamples')} fullWidth disabled />
+                  </Grid>
+                )}
+
+                {userCanRead(props.login.user, P_INDIVIDUALS_KEYWORD, props.projectData.projectId) && (
+                  <Grid xs={1} item className={classes.gridInput}>
+                    <GaiaTextField name="individualsNumber" formik={formik} label={t('projectProfile.nIndividuals')} fullWidth disabled />
+                  </Grid>
+                )}
+
+                {userCanRead(props.login.user, P_SAMPLES_KEYWORD, props.projectData.projectId) && (
+                  <Grid xs={1} item className={classes.gridInput}>
+                    <GaiaTextField name="filesNumber" formik={formik} label={t('projectProfile.nVCF')} fullWidth disabled />
+                  </Grid>
+                )}
+
+                {userCanRead(props.login.user, P_DIAGNOSTIC_PANELS_KEYWORD, props.projectData.projectId) && (
+                  <Grid xs={1} item className={classes.gridInput}>
+                    <GaiaTextField name="diagnosticPanelsNumber" formik={formik} label={t('projectProfile.nDiagnosticsPanels')} fullWidth disabled />
+                  </Grid>
+                )}
+
+                {userCanRead(props.login.user, P_ANALYSES_KEYWORD, props.projectData.projectId) && (
+                  <Grid xs={1} item className={classes.gridInput}>
+                    <GaiaTextField name="analysesNumber" formik={formik} label={t('projectProfile.nAnalyses')} fullWidth disabled />
+                  </Grid>
+                )}
+
+                {userCanRead(props.login.user, P_DRUGS_KEYWORD, props.projectData.projectId) && (
+                  <Grid xs={1} item className={classes.gridInput}>
+                    <GaiaTextField name="drugsNumber" formik={formik} label={t('projectProfile.nDrugs')} fullWidth disabled />
+                  </Grid>
+                )}
               </React.Fragment>
             )}
             <Grid xs={1} item className={classes.gridInput}>
@@ -200,16 +249,17 @@ export const ProjectProfile = (props: IProps) => {
             <Grid item className={classes.gridInput}>
               <GaiaTextField name="ensemblRelease" formik={formik} label={t('commons.fields.ensemblRelease')} fullWidth disabled required />
             </Grid>
-
-            <Grid item xs={3}>
-              <GaiaButton
-                text={t('commons.buttons.modifyGenomicRef')}
-                onClick={() => clickModify()}
-                disabled={
-                  !(props.projectData.samplesNumber === 0 && props.projectData.individualsNumber === 0 && props.projectData.filesNumber === 0 && props.projectData.diagnosticPanelsNumber === 0)
-                }
-              />
-            </Grid>
+            {(userCanUpdate(props.login.user, P_PROJECT_KEYWORD, props.projectData.projectId) || userCanCreate(props.login.user, P_INDIRECT_PROJECT, 'undefined')) && (
+              <Grid item xs={3}>
+                <GaiaButton
+                  text={t('commons.buttons.modifyGenomicRef')}
+                  onClick={() => clickModify()}
+                  disabled={
+                    !(props.projectData.samplesNumber === 0 && props.projectData.individualsNumber === 0 && props.projectData.filesNumber === 0 && props.projectData.diagnosticPanelsNumber === 0)
+                  }
+                />
+              </Grid>
+            )}
           </Grid>
           {props.mode === 'edit' && (
             <React.Fragment>
@@ -217,61 +267,88 @@ export const ProjectProfile = (props: IProps) => {
               <Grid item container style={{ marginTop: '50px' }}>
                 <Grid item xs={7}>
                   <GridList cols={3} cellHeight={80} spacing={0}>
-                    <GridListTile
-                      classes={{
-                        tile: classes.tile
-                      }}
-                    >
-                      <GaiaIconButtonWithText icon={<PersonPin />} iconSize={20} text={t('commons.fields.individuals')} textAlign={'left'} buttonSizeWidth={250} buttonSizeHeight={40} />
-                    </GridListTile>
-                    <GridListTile
-                      classes={{
-                        tile: classes.tile
-                      }}
-                    >
-                      <GaiaIconButtonWithText icon={<GridOn />} iconSize={20} text={t('commons.fields.samples')} textAlign={'left'} buttonSizeWidth={250} buttonSizeHeight={40} />
-                    </GridListTile>
-                    <GridListTile
-                      classes={{
-                        tile: classes.tile
-                      }}
-                    >
-                      <GaiaIconButtonWithText icon={<FindInPage />} iconSize={20} text={t('commons.fields.analyses')} textAlign={'left'} buttonSizeWidth={250} buttonSizeHeight={40} />
-                    </GridListTile>
-                    <GridListTile
-                      classes={{
-                        tile: classes.tile
-                      }}
-                    >
-                      <GaiaIconButtonWithText icon={<LocalPharmacy />} iconSize={20} text={t('commons.fields.drugs')} textAlign={'left'} buttonSizeWidth={250} buttonSizeHeight={40} />
-                    </GridListTile>
-                    <GridListTile
-                      classes={{
-                        tile: classes.tile
-                      }}
-                    >
-                      <GaiaIconButtonWithText icon={<WebAsset />} iconSize={20} text={t('commons.fields.diagnosticPanels')} textAlign={'left'} buttonSizeWidth={250} buttonSizeHeight={40} />
-                    </GridListTile>
-                    <GridListTile
-                      classes={{
-                        tile: classes.tile
-                      }}
-                    >
-                      <GaiaIconButtonWithText icon={<Description />} iconSize={20} text={t('commons.fields.vfcFiles')} textAlign={'left'} buttonSizeWidth={250} buttonSizeHeight={40} />
-                    </GridListTile>
+                    {userCanRead(props.login.user, P_INDIVIDUALS_KEYWORD, props.projectData.projectId) && (
+                      <GridListTile
+                        classes={{
+                          tile: classes.tile
+                        }}
+                      >
+                        <GaiaIconButtonWithText
+                          icon={<PersonPin />}
+                          iconSize={20}
+                          text={t('commons.fields.individuals')}
+                          textAlign={'left'}
+                          buttonSizeWidth={250}
+                          buttonSizeHeight={40}
+                          onClick={() => history.push(`${routes.PATH_INDIVIDUALS_MANAGEMENT}/${props.projectData.projectId}`)}
+                        />
+                      </GridListTile>
+                    )}
+
+                    {userCanRead(props.login.user, P_SAMPLES_KEYWORD, props.projectData.projectId) && (
+                      <GridListTile
+                        classes={{
+                          tile: classes.tile
+                        }}
+                      >
+                        <GaiaIconButtonWithText icon={<GridOn />} iconSize={20} text={t('commons.fields.samples')} textAlign={'left'} buttonSizeWidth={250} buttonSizeHeight={40} />
+                      </GridListTile>
+                    )}
+
+                    {userCanRead(props.login.user, P_ANALYSES_KEYWORD, props.projectData.projectId) && (
+                      <GridListTile
+                        classes={{
+                          tile: classes.tile
+                        }}
+                      >
+                        <GaiaIconButtonWithText icon={<FindInPage />} iconSize={20} text={t('commons.fields.analyses')} textAlign={'left'} buttonSizeWidth={250} buttonSizeHeight={40} />
+                      </GridListTile>
+                    )}
+
+                    {userCanRead(props.login.user, P_DRUGS_KEYWORD, props.projectData.projectId) && (
+                      <GridListTile
+                        classes={{
+                          tile: classes.tile
+                        }}
+                      >
+                        <GaiaIconButtonWithText icon={<LocalPharmacy />} iconSize={20} text={t('commons.fields.drugs')} textAlign={'left'} buttonSizeWidth={250} buttonSizeHeight={40} />
+                      </GridListTile>
+                    )}
+
+                    {userCanRead(props.login.user, P_DIAGNOSTIC_PANELS_KEYWORD, props.projectData.projectId) && (
+                      <GridListTile
+                        classes={{
+                          tile: classes.tile
+                        }}
+                      >
+                        <GaiaIconButtonWithText icon={<WebAsset />} iconSize={20} text={t('commons.fields.diagnosticPanels')} textAlign={'left'} buttonSizeWidth={250} buttonSizeHeight={40} />
+                      </GridListTile>
+                    )}
+
+                    {userCanRead(props.login.user, P_SAMPLES_KEYWORD, props.projectData.projectId) && (
+                      <GridListTile
+                        classes={{
+                          tile: classes.tile
+                        }}
+                      >
+                        <GaiaIconButtonWithText icon={<Description />} iconSize={20} text={t('commons.fields.vfcFiles')} textAlign={'left'} buttonSizeWidth={250} buttonSizeHeight={40} />
+                      </GridListTile>
+                    )}
                   </GridList>
                 </Grid>
-                <Grid item xs={5} style={{ justifyContent: 'flex-end', display: 'flex', marginTop: 20 }}>
-                  <GaiaIconButtonWithText
-                    icon={<VpnKey />}
-                    iconSize={20}
-                    text={t('projectProfile.usersAndPermissions')}
-                    textAlign={'left'}
-                    buttonSizeWidth={250}
-                    buttonSizeHeight={40}
-                    onClick={() => history.push(routes.PATH_PERMISSIONS_AND_USERS)}
-                  />
-                </Grid>
+                {userCanUpdate(props.login.user, P_PERMISSIONS_KEYWORD, props.projectData.projectId) && (
+                  <Grid item xs={5} style={{ justifyContent: 'flex-end', display: 'flex', marginTop: 20 }}>
+                    <GaiaIconButtonWithText
+                      icon={<VpnKey />}
+                      iconSize={20}
+                      text={t('projectProfile.usersAndPermissions')}
+                      textAlign={'left'}
+                      buttonSizeWidth={250}
+                      buttonSizeHeight={40}
+                      onClick={() => history.push(`${routes.PATH_PERMISSIONS_AND_USERS}/${props.projectData.projectId}`)}
+                    />
+                  </Grid>
+                )}
               </Grid>
             </React.Fragment>
           )}
@@ -286,6 +363,7 @@ export const ProjectProfile = (props: IProps) => {
               formik.setFieldValue('assembly', data.accession);
               formik.setFieldValue('ensemblRelease', data.ensemblRelease);
               setOpenModifyPopup(false);
+              formik.validateForm({ ...formik.values, organism: data.species?.taxonomyId, assembly: data.accession, ensemblRelease: data.ensemblRelease });
             }}
           />
         </React.Fragment>

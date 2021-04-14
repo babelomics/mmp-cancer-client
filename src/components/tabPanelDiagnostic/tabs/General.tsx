@@ -56,7 +56,7 @@ const General = (props: IProps) => {
             </Grid>
             <Grid container spacing={3}>
               <Grid item xs={11}>
-                <GaiaTextField formik={props.formik} name="description" label={`${t('commons.fields.description')} *`} fullWidth disabled={props.isDeleted} />
+                <GaiaTextField formik={props.formik} name="description" label={`${t('commons.fields.description')} *`} fullWidth disabled={props.isDeleted} multiline />
               </Grid>
             </Grid>
           </React.Fragment>

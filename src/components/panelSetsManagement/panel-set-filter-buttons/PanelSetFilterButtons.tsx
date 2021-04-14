@@ -61,10 +61,6 @@ const PanelSetFilterButtons = (props: IProps) => {
     handleClose();
   };
 
-  const handlePanelSet = useCallback(() => {
-    history.push(routes.PATH_CREATE_PANEL_SET);
-  }, [history]);
-
   const deleteFilter = (key: string) => {
     const obj = { ...filter } as any;
     if (obj[key] || obj[key] === false) {
@@ -73,13 +69,10 @@ const PanelSetFilterButtons = (props: IProps) => {
     setFilter(obj);
   };
 
-  const tooltipFilter = t('commons.table.filters.filterTooltip');
-  const addTooltip = t('commons.table.addTooltip');
-
   return (
     <>
       <Box display="flex" flexDirection="column">
-        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" justifyContent="flex-end" style={{ width: '100%' }}>
+        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" alignItems="center" justifyContent="flex-end" style={{ width: '100%' }}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -87,16 +80,7 @@ const PanelSetFilterButtons = (props: IProps) => {
           >
             <Searchbar variant="outlined" margin="dense" value={searchText} onChange={handleSearchTextChange} />
           </form>
-          <Tooltip title={tooltipFilter}>
-            <IconButton onClick={handleExpandClick}>
-              <FilterList />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={addTooltip}>
-            <IconButton onClick={handlePanelSet}>
-              <Add />
-            </IconButton>
-          </Tooltip>
+          <GaiaButton color="default" text={t('commons.buttons.filter')} icon={<FilterList />} onClick={handleExpandClick} style={{ marginLeft: 20 }} />
         </Box>
         <Popover
           id="simple-popover"

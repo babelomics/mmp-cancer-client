@@ -1,56 +1,29 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { generateValidationSchema } from './validationSchema';
-import { Grid, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { useFormik } from 'formik';
-import { Alert } from '@material-ui/lab';
+import { Collapse, Drawer, Grid, Typography } from '@material-ui/core';
+import { useFormik, FormikErrors } from 'formik';
 import { useHistory } from 'react-router-dom';
+import { KeyboardArrowDown, KeyboardArrowRight } from '@material-ui/icons';
+import parse from 'html-react-parser';
 
-import ILoginState, { ILoginForm } from './interfaces';
+import { loginValidationSchema } from './validationSchema';
+import ILoginState, { ILoginForm, ISignUpForm } from './interfaces';
 import GaiaTextField from '../commons/GaiaTextField';
 import GaiaSelectField from '../commons/GaiaSelectField';
 import GaiaLink from '../commons/GaiaLink';
 import GaiaButton from '../commons/GaiaButton';
-import GaiaLoadingModal from '../commons/GaiaLoadingModal';
 import routes from '../router/routes';
+import GaiaLoading from '../commons/GaiaLoading';
+import { useStyles } from './styles';
+import SignUp from './SignUp';
 
 interface IProps {
   login: ILoginState;
   doLogin: (data: ILoginForm) => void;
   errLogin: (textMessage: null | string) => void;
+  // SignUp
+  createRequest: (data: any, setFormikErrors: (errors: FormikErrors<ISignUpForm>) => void, t?: any, onSuccess?: () => void) => void;
 }
-
-const useStyles = makeStyles((theme) => ({
-  loginWrapper: {
-    backgroundColor: '#F3F3F3',
-    width: '35%',
-    margin: '0 auto',
-    display: 'block',
-    padding: theme.spacing(4),
-    paddingTop: theme.spacing(10),
-    paddingBottom: theme.spacing(10)
-  },
-  titleWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: theme.spacing(4)
-  },
-  title: {
-    marginLeft: theme.spacing(4)
-  },
-  form: {
-    paddingLeft: theme.spacing(5),
-    paddingRight: theme.spacing(5)
-  },
-  formItem: {
-    marginTop: theme.spacing(6)
-  },
-  alert: {
-    marginBottom: theme.spacing(4)
-  }
-}));
 
 export const Login = (props: IProps) => {
   const { doLogin, login } = props;
@@ -58,56 +31,159 @@ export const Login = (props: IProps) => {
   const { t } = useTranslation();
   const history = useHistory();
 
+  const [openAboutInfo, setOpenAboutInfo] = useState<boolean>(false);
+  const [openInstallInfo, setOpenInstallInfo] = useState<boolean>(false);
+  const [openSignup, setOpenSignup] = useState<boolean>(false);
+
   const formik = useFormik({
-    initialValues: { type: 0, username: '', password: '' },
+    initialValues: { type: '', username: '', password: '' },
     enableReinitialize: true,
-    validationSchema: generateValidationSchema(t),
+    validationSchema: loginValidationSchema(t),
     onSubmit: (values) => {
       doLogin(values);
     }
   });
 
   return (
-    <div className={classes.loginWrapper}>
-      <GaiaLoadingModal open={login.loading} title={t('commons.loading.signIn')} />
-      <div className={classes.titleWrapper}>
-        Logo
-        <Typography variant="h5" className={classes.title}>
-          {t('login.title')}
-        </Typography>
-      </div>
-      <form className={classes.form} onSubmit={formik.handleSubmit}>
-        <Grid container justify="center" alignItems="center">
-          {login.error && (
-            <Grid item xs={12}>
-              <Alert variant="filled" severity="error" className={classes.alert}>
-                {t('login.messages.loginError')}
-              </Alert>
+    <div className={classes.bg}>
+      {/* Signup */}
+      <Drawer
+        variant="persistent"
+        anchor="right"
+        open={openSignup}
+        onClose={() => setOpenSignup(false)}
+        classes={{
+          paper: classes.drawerPaper
+        }}
+        hideBackdrop
+      >
+        <SignUp loading={props.login.loading} createRequest={props.createRequest} handleOpen={setOpenSignup} />
+      </Drawer>
+
+      {/* Login */}
+      <div className={classes.loginBox}>
+        <div className={classes.loginContent}>
+          <Grid container spacing={3}>
+            {/*  Title */}
+            <Grid container>
+              <Grid item xs={12}>
+                <Typography color="primary" className={classes.title}>
+                  {t('login.title')}
+                </Typography>
+              </Grid>
+              {!login.loading && (
+                <Grid item xs={12}>
+                  <div className="d-flex">
+                    <Typography className={classes.subTitle}>{t('login.noAccount')}</Typography>
+                    <GaiaLink className={classes.subTitle} text={t('login.signUp')} onClick={() => setOpenSignup(true)} style={{ marginLeft: 10 }} bold />
+                  </div>
+                </Grid>
+              )}
             </Grid>
-          )}
-          <Grid className={classes.formItem} item xs={12}>
-            <GaiaSelectField required name="type" label={t('commons.fields.typeOfAccess.title')} formik={formik} items={['Local', 'LDAP', 'ElixirAAI']} fullWidth />
+
+            <form onSubmit={login.loading ? undefined : formik.handleSubmit} style={{ width: '100%' }}>
+              {login.loading ? (
+                <div className={classes.loading}>
+                  <GaiaLoading />
+                </div>
+              ) : (
+                <React.Fragment>
+                  {/* Form */}
+                  <Grid container className={classes.formItem}>
+                    <Grid item xs={12}>
+                      <GaiaSelectField
+                        required
+                        name="type"
+                        label={t('commons.fields.typeOfAccess.title')}
+                        valueAccessor="key"
+                        labelAccessor="value"
+                        items={[
+                          {
+                            key: 'Local',
+                            value: 'Local'
+                          },
+                          {
+                            key: 'LDAP',
+                            value: 'LDAP'
+                          },
+                          {
+                            key: 'Elixir',
+                            value: 'ElixirAAI'
+                          }
+                        ]}
+                        formik={formik}
+                        fullWidth
+                      />
+                    </Grid>
+                  </Grid>
+
+                  {/* Identifier */}
+                  <Grid container className={classes.formItem}>
+                    <Typography style={{ fontWeight: 'bold', marginBottom: 5 }}>{t('commons.fields.user')} *</Typography>
+                    <Grid item xs={12}>
+                      <GaiaTextField required name="username" formik={formik} />
+                    </Grid>
+                  </Grid>
+
+                  {/* Password */}
+                  <Grid container className={classes.formItem}>
+                    <Grid container style={{ marginBottom: 5 }}>
+                      <Grid item xs={6}>
+                        <Typography style={{ fontWeight: 'bold' }}>{t('commons.fields.password')} *</Typography>
+                      </Grid>
+                      <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <GaiaLink text={t('login.forgotPassword')} onClick={() => history.push(routes.PATH_FORGOT_PASSWORD)} bold style={{ fontSize: 14 }} />
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <GaiaTextField required type="password" name="password" formik={formik} />
+                    </Grid>
+                  </Grid>
+                </React.Fragment>
+              )}
+
+              {/* Sign in / Cancel button */}
+              <Grid container style={{ marginTop: 45 }}>
+                <Grid item xs={12}>
+                  <GaiaButton
+                    type="submit"
+                    color={login.loading ? 'secondary' : 'primary'}
+                    text={login.loading ? t('commons.buttons.cancel') : t('commons.buttons.signIn')}
+                    disabled={formik.values.type !== 'Local'}
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+            </form>
           </Grid>
-          <Grid className={classes.formItem} item xs={12}>
-            <GaiaTextField required name="username" label={t('commons.fields.identifier')} formik={formik} />
-          </Grid>
-          <Grid className={classes.formItem} item xs={12}>
-            <GaiaTextField required type="password" name="password" label={t('commons.fields.password')} formik={formik} />
-          </Grid>
-          <Grid className={classes.formItem} item xs={12}>
-            <GaiaButton text={t('commons.buttons.signIn')} type="submit" disabled={formik.values.type !== 0} uppercase fullWidth />
-          </Grid>
-          <Grid style={{ marginTop: 15 }} item xs={12}>
-            <GaiaButton text={t('commons.buttons.goBack')} type="button" uppercase fullWidth onClick={() => history.goBack()} />
-          </Grid>
-          <Grid className={classes.formItem} item xs={6}>
-            <GaiaLink text={t('login.forgotPassword')} onClick={() => history.push(routes.PATH_FORGOT_PASSWORD)} />
-          </Grid>
-          <Grid className={classes.formItem} item xs={6}>
-            <GaiaLink text={t('login.signup')} onClick={() => history.push(routes.PATH_SIGNUP)} />
-          </Grid>
-        </Grid>
-      </form>
+        </div>
+        <div className={classes.alert}>{login.error && !login.loading && t('login.messages.loginError')}</div>
+      </div>
+
+      {/* Info */}
+      <div className={classes.infoWrapper}>
+        <div className={classes.infoTitle} onClick={() => setOpenAboutInfo(!openAboutInfo)}>
+          {openAboutInfo ? <KeyboardArrowDown /> : <KeyboardArrowRight />}
+          <Typography>{t('launch.administrationInfoTitle')}</Typography>
+        </div>
+        <Collapse in={openAboutInfo}>
+          <Typography className={classes.infoDescription} variant="body2">
+            {parse(props.login.configData.text?.replace(/style="(.*?)"/g, '') || '')}
+          </Typography>
+          <Typography className={classes.infoDescription} variant="body2">
+            {`${t('launch.contactEmail')} ${props.login.configData.email}`}
+          </Typography>
+        </Collapse>
+        <div className={classes.infoTitle} onClick={() => setOpenInstallInfo(!openInstallInfo)}>
+          {openInstallInfo ? <KeyboardArrowDown /> : <KeyboardArrowRight />}
+          <Typography>{t('launch.installationInfoTitle')}</Typography>
+        </div>
+        <Collapse in={openInstallInfo}>
+          <Typography className={classes.infoDescription} variant="body2">
+            {t('launch.administrationInfoText')}
+          </Typography>
+        </Collapse>
+      </div>
     </div>
   );
 };

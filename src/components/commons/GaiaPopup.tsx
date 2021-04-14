@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogActions, makeStyles, Typography, Grid } from '@material-ui/core';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { Close } from '@material-ui/icons';
-import GaiaIconButton from './GaiaIconButton';
+import { Cancel, CheckCircle, Close } from '@material-ui/icons';
 import GaiaButton from './GaiaButton';
 import { useTranslation } from 'react-i18next';
 import GaiaIcon from './GaiaIcon';
+import GaiaFabButton from './GaiaFabButton';
 
 interface IProps {
   message: string;
@@ -13,10 +13,16 @@ interface IProps {
   open?: boolean;
   type?: 'info' | 'error' | 'success' | 'warning' | 'warningConfirm' | 'warningTwoOptions';
   buttonType?: number | null;
+  textFirst?: string;
+  textSecond?: string;
+  textThird?: string;
+  preFormatText?: boolean;
+
   onClose?: () => void;
   onAccept?: () => void;
   onFirstAction?: () => void;
   onSecondAction?: () => void;
+  onThirdAction?: () => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -43,12 +49,27 @@ const DialogTitle = (props: any) => {
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
       <Typography variant="h6">{children}</Typography>
-      {onClose ? <GaiaIconButton icon={<Close />} onClick={onClose} /> : null}
+      {onClose ? <GaiaFabButton color="default" icon={<Close />} onClick={onClose} /> : null}
     </MuiDialogTitle>
   );
 };
 
-export const GaiaPopup = ({ message, title, open = false, type = 'info', buttonType = null, onClose, onAccept, onFirstAction, onSecondAction }: IProps) => {
+export const GaiaPopup = ({
+  message,
+  title,
+  open = false,
+  type = 'info',
+  buttonType = null,
+  textFirst,
+  textSecond,
+  textThird,
+  preFormatText,
+  onClose,
+  onAccept,
+  onFirstAction,
+  onSecondAction,
+  onThirdAction
+}: IProps) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [openState, setOpen] = useState(open);
@@ -82,6 +103,13 @@ export const GaiaPopup = ({ message, title, open = false, type = 'info', buttonT
     setOpen(false);
     if (onSecondAction) {
       onSecondAction();
+    }
+  };
+
+  const handleThird = () => {
+    setOpen(false);
+    if (onThirdAction) {
+      onThirdAction();
     }
   };
 
@@ -130,27 +158,28 @@ export const GaiaPopup = ({ message, title, open = false, type = 'info', buttonT
       <DialogTitle className={classes.title} onClose={handleClose}>
         {renderTitle()}
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent style={{ padding: '20px 24px' }}>
         <Grid container spacing={3}>
           <Grid item xs={message.length < 20 ? 4 : 3} container justify="flex-end" alignItems="center">
             {renderIcon()}
           </Grid>
           <Grid item xs={8} container alignItems="center">
-            <Typography variant="h6">{message}</Typography>
+            <Typography variant="h6"> {preFormatText ? <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-line' }}>{message}</pre> : message}</Typography>
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
         {type !== 'warningTwoOptions' ? (
           <>
-            {type === 'warningConfirm' && <GaiaButton text={t('commons.buttons.cancel')} onClick={handleClose} />}
-            <GaiaButton text={t('commons.buttons.accept')} onClick={handleAccept} />
+            <GaiaButton variant="outlined" icon={<CheckCircle />} text={t('commons.buttons.accept')} onClick={handleAccept} />
+            {type === 'warningConfirm' && <GaiaButton color="default" icon={<Cancel />} text={t('commons.buttons.cancel')} onClick={handleClose} />}
           </>
         ) : (
           <>
-            <GaiaButton text={t('commons.buttons.cancel')} onClick={handleClose} />
-            <GaiaButton text={t('commons.buttons.leaveRoot')} onClick={handleFirst} />
-            <GaiaButton text={t('commons.buttons.deleteDescendant')} onClick={handleSecond} />
+            {onFirstAction && textFirst && <GaiaButton variant="outlined" text={textFirst} onClick={handleFirst} />}
+            {onSecondAction && textSecond && <GaiaButton variant="outlined" text={textSecond} onClick={handleSecond} />}
+            {onThirdAction && textThird && <GaiaButton variant="outlined" text={textThird} onClick={handleThird} />}
+            <GaiaButton color="default" icon={<Cancel />} text={t('commons.buttons.cancel')} onClick={handleClose} />
           </>
         )}
       </DialogActions>

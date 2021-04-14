@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GaiaContainer from '../../GaiaContainer';
-import { Dialog, Grid, TextField } from '@material-ui/core';
+import { Dialog, Grid } from '@material-ui/core';
 import { useStyles } from '../popupStyle';
 import { useFormik } from 'formik';
 import { checkValidationSchema } from './validationSchema';
 import GaiaTextField from '../../GaiaTextField';
+import GaiaModalFormik from '../../GaiaModalFormik';
 
 interface IProps {
   open?: boolean;
@@ -20,9 +21,6 @@ interface IProps {
 export const PopupUsersSelection = ({ open = false, onClose, openPopupParent, setValueField, titlePopup, checkRegion, assembly }: IProps) => {
   const classes = useStyles();
   const [openState, setOpen] = useState(open);
-  const [chromosome, setChromosome] = useState('');
-  const [initPosition, setInitPosition] = useState('');
-  const [endPosition, setEndPosition] = useState('');
   const [error, setError] = useState(false);
   const { t } = useTranslation();
 
@@ -80,29 +78,27 @@ export const PopupUsersSelection = ({ open = false, onClose, openPopupParent, se
   });
 
   return (
-    <Dialog open={openState} classes={{ paper: classes.dialogPaper }}>
-      <GaiaContainer title={titlePopup} onBack={handleClose} onAccept={checkFormik.handleSubmit}>
-        <Grid item xs={12}>
-          {t('tabPanelDiagnostic.fields.chromosomeSequence')} : {t('tabPanelDiagnostic.fields.initPosition')} - {t('tabPanelDiagnostic.fields.endPosition')}
+    <GaiaModalFormik open={openState} title={titlePopup} formik={checkFormik} onClose={handleClose} maxWidth="sm" hideCloseButton fullWidth>
+      <Grid item xs={12}>
+        {t('tabPanelDiagnostic.fields.chromosomeSequence')} : {t('tabPanelDiagnostic.fields.initPosition')} - {t('tabPanelDiagnostic.fields.endPosition')}
+      </Grid>
+      <Grid container style={{ marginTop: 10 }}>
+        <Grid item xs={4} alignItems="center" style={{ display: 'flex' }}>
+          <GaiaTextField required name="chromosome" style={{ marginRight: '10px' }} label={''} formik={checkFormik} fullWidth /> :
         </Grid>
-        <Grid container>
-          <Grid item xs={4} alignItems="center" style={{ display: 'flex' }}>
-            <GaiaTextField required name="chromosome" style={{ marginRight: '10px' }} label={''} formik={checkFormik} fullWidth onChange={(e) => setChromosome(e.target.value)} /> :
-          </Grid>
-          <Grid item xs={4} alignItems="center" style={{ display: 'flex' }}>
-            <GaiaTextField name="initPosition" style={{ marginLeft: '10px', marginRight: '10px' }} label={''} formik={checkFormik} fullWidth onChange={(e) => setInitPosition(e.target.value)} /> -
-          </Grid>
-          <Grid item xs={4}>
-            <GaiaTextField name="endPosition" style={{ marginLeft: '10px' }} label={''} formik={checkFormik} fullWidth onChange={(e) => setEndPosition(e.target.value)} />
-          </Grid>
+        <Grid item xs={4} alignItems="center" style={{ display: 'flex' }}>
+          <GaiaTextField name="initPosition" style={{ marginLeft: '10px', marginRight: '10px' }} label={''} formik={checkFormik} fullWidth /> -
         </Grid>
-        {error && (
-          <Grid item xs={12} style={{ color: 'red', marginTop: 10 }}>
-            {t('tabPanelDiagnostic.error.notValirRegion')}
-          </Grid>
-        )}
-      </GaiaContainer>
-    </Dialog>
+        <Grid item xs={4}>
+          <GaiaTextField name="endPosition" style={{ marginLeft: '10px', whiteSpace: 'normal' }} label={''} formik={checkFormik} fullWidth />
+        </Grid>
+      </Grid>
+      {error && (
+        <Grid item xs={12} style={{ color: 'red', marginTop: 10 }}>
+          {t('tabPanelDiagnostic.error.notValirRegion')}
+        </Grid>
+      )}
+    </GaiaModalFormik>
   );
 };
 

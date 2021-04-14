@@ -6,6 +6,7 @@ import UserFilterButtons from './user-filter-buttons/UserFilterButtons';
 import UserTable from './user-table/UserTable';
 import { useHistory } from 'react-router-dom';
 import routes from '../router/routes';
+import { PersonAdd } from '@material-ui/icons';
 
 const defaultUserFilter = {} as UserFilter;
 
@@ -18,8 +19,12 @@ const UsersManagement = () => {
     history.push(routes.PATH_HOME);
   };
 
+  const goNewUser = () => {
+    history.push(routes.PATH_ADMIN_CREATE_USER);
+  };
+
   return (
-    <GaiaContainer icon="group_add" title={t('usersManagement.title')} onBack={goHome}>
+    <GaiaContainer icon="group_add" title={t('usersManagement.title')} onBack={goHome} acceptButtonText={t('usersManagement.newUserButton')} acceptButtonIcon={<PersonAdd />} onAccept={goNewUser}>
       <div style={{ overflow: 'auto' }}>
         <UserFilterButtons filter={filter} setFilter={setFilter} />
         <UserTable filter={filter} setFilter={setFilter} />

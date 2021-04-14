@@ -1,11 +1,10 @@
-import { Dispatch } from 'redux';
 import { IConfiguration } from '../interfaces';
 import actions from './actions';
-import { default as launchActions } from '../../launch/duck/actions';
 import api from './api';
 import { IGenomicDictConfig, IPandrugsConfig } from '../interfaces';
 import { FormikErrors } from 'formik/dist/types';
 import { operations as globalPopupOperations } from '../../globalPopups/duck';
+import { operations as loginOperations } from '../../login/duck';
 
 const updateConfigData = actions.updateConfigData;
 
@@ -35,7 +34,7 @@ const setNewConfig = (newConfing: IConfiguration, t: any) => (dispatch: any) => 
     api
       .setNewConfig(newConfing)
       .then((result) => {
-        dispatch(launchActions.updateConfigStatus(result.data));
+        dispatch(loginOperations.updateConfigData(result.data));
         resolve({ done: true });
         dispatch(actions.endFetch());
         dispatch(globalPopupOperations.showMessagePopup(t('appConfiguration.success'), 'success'));

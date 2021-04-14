@@ -42,7 +42,7 @@ function PopupPanelTable(props: IProps) {
             getElemId={getPanelId}
             rowClick={rowClick}
             exclude={{ exclude: exclude, field: 'diagnosticPanelIdentifier' }}
-            scrollModal={'selectPanelModal'}
+            scrollAncestor={'selectPanelModal'}
           />
         </TableBody>
       </Table>

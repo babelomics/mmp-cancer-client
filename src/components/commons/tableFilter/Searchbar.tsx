@@ -13,7 +13,12 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: '2px 4px',
       display: 'flex',
       alignItems: 'center',
-      width: '500px'
+      width: '500px',
+      borderRadius: 40,
+      maxHeight: 36,
+      backgroundColor: theme.textfield.background,
+      boxShadow: 'none',
+      border: '1px solid lightgray'
     },
     input: {
       marginLeft: theme.spacing(1),
@@ -42,13 +47,13 @@ function Searchbar(props: IProps) {
 
   return (
     <Paper component="form" className={classes.root}>
-      <IconButton className={classes.iconButton} aria-label="menu">
+      <IconButton className={classes.iconButton} aria-label="menu" style={{ color: '#696969' }}>
         <SearchIcon />
       </IconButton>
       <DelayedTextField className={classes.input} {...rest} value={value} onChange={onChange} />
-      <IconButton className={classes.iconButton} onClick={handleReset}>
+      {/* <IconButton className={classes.iconButton} onClick={handleReset}>
         <CancelIcon />
-      </IconButton>
+      </IconButton> */}
     </Paper>
   );
 }

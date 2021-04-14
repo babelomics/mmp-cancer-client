@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generateValidationSchema, modifyPasswordSchema, unsubscribeSchema } from './validationSchema';
 import { useFormik } from 'formik';
+import { useHistory } from 'react-router-dom';
 
 import IUserProfile, { IContactAdminUpdate, IData, IPasswordModify, IUnsubscribeForm } from './interfaces';
 // import GaiaUserProfile from '../commons/GaiaUserProfile';
@@ -15,15 +16,12 @@ import GaiaLink from '../commons/GaiaLink';
 import GaiaCheckBox from '../commons/GaiaCheckBox';
 import GaiaButton from '../commons/GaiaButton';
 import GaiaLoading from '../commons/GaiaLoading';
-import { getUserTypeByValue } from '../../utils/roles';
-import PopupUsersSelection from '../commons/popupsComponents/selectContactAdmin/PopupUsersSelection';
-import routes from '../router/routes';
-import { useHistory } from 'react-router-dom';
+import PopupUsersSelection from '../commons/popupsComponents/selectUserPopup/PopupUsersSelection';
 
 interface IProps {
   login: any;
   userProfile: IUserProfile;
-  updateUser: (identifier: string, data: any, t: any) => Promise<any>;
+  updateUser: (identifier: string, data: any, t: any, currentUser?: any) => Promise<any>;
   changePassword: (identifier: string, password: string, t: any) => void;
   unsubscribeUser: (identifier: string, t: any) => void;
   setUserSelectionPopupOpen: (open: boolean) => void;
@@ -41,10 +39,10 @@ export const UserProfile = (props: IProps) => {
   const [isUnsubscribing, setIsUnsubscribing] = useState<boolean>(false);
 
   const { data } = props.userProfile;
-  const [showCheck, setShowCheck] = useState(data.userType === 0);
+  const [showCheck, setShowCheck] = useState(data.userType === 'User');
 
   useEffect(() => {
-    setShowCheck(data.userType === 0);
+    setShowCheck(data.userType === 'User');
   }, [data]);
   //  useEffect(() => {​​
   //    setShowCheck(data.userType === 0);
@@ -55,12 +53,12 @@ export const UserProfile = (props: IProps) => {
     enableReinitialize: true,
     validationSchema: generateValidationSchema(t),
     onSubmit: (values) => {
-      const finalValues = { ...data, ...values, userType: getUserTypeByValue(values.userType) };
+      const finalValues = { ...data, ...values };
 
       if (isUnsubscribing) {
         setIsUnsubscribing(false);
       }
-      props.updateUser(values.identifier, finalValues, t).then((result) => {
+      props.updateUser(values.identifier, finalValues, t, props.login.user).then((result) => {
         if (result.done) {
           props.fetchUserData(values.identifier, t);
         }
@@ -102,7 +100,7 @@ export const UserProfile = (props: IProps) => {
 
   const handleCheck = (event: any, child: any) => {
     formik.setFieldValue('canCreateProject', false);
-    if (event.target.value === 0) {
+    if (event.target.value === 'User') {
       setShowCheck(true);
     } else {
       setShowCheck(false);
@@ -110,7 +108,7 @@ export const UserProfile = (props: IProps) => {
   };
 
   const backScreenBefore = () => {
-    history.push(routes.PATH_USERS_MANAGEMENT);
+    history.goBack();
   };
 
   return (
@@ -144,7 +142,7 @@ export const UserProfile = (props: IProps) => {
           if (isUnsubscribing) {
             props.updateContactAdmin(updatedContactData, t, data, true);
           } else {
-            const finalValues = { ...data, ...formik.values, userType: getUserTypeByValue(formik.values.userType) };
+            const finalValues = { ...data, ...formik.values };
             props.updateContactAdmin(updatedContactData, t, finalValues, false);
           }
         }}
@@ -193,7 +191,18 @@ export const UserProfile = (props: IProps) => {
                   name="userType"
                   label={t('commons.fields.userType')}
                   formik={formik}
-                  items={[t('userProfile.userType.user'), t('userProfile.userType.admin')]}
+                  valueAccessor="key"
+                  labelAccessor="value"
+                  items={[
+                    {
+                      key: 'User',
+                      value: t('userProfile.userType.user')
+                    },
+                    {
+                      key: 'Admin',
+                      value: t('userProfile.userType.admin')
+                    }
+                  ]}
                   fullWidth
                   onChange={handleCheck}
                 />

@@ -151,7 +151,7 @@ export const AscendantsDescendants = (props: IProps) => {
               </ListItem>
               {props.descendants.map((i: any) => (
                 <>
-                  {i.toDelete !== true && (
+                  {(i.toDelete === null || i.toDelete === undefined) && (
                     <ListItem className={classes.itemList} onClick={() => props.navegateTo(i.guid, true)}>
                       <Grid item xs={6}>
                         <ListItemText classes={{ root: classes.idList }}>
@@ -176,9 +176,34 @@ export const AscendantsDescendants = (props: IProps) => {
           </div>
         </Grid>
       </Grid>
-      <GaiaPopup open={openDelAsc} type="warningConfirm" message={messageDel} onAccept={continueDelAsc} onClose={closeDel} />
-      <GaiaPopup open={openDelDesc} type="warningConfirm" message={messageDel} onAccept={continueDelDescRoot} onClose={closeDel} />
-      <GaiaPopup open={openDelDescRemoveChild} type="warningTwoOptions" message={messageDel} onFirstAction={continueDelDescRoot} onSecondAction={continueDelDesc} onClose={closeDel} />
+      <GaiaPopup
+        open={openDelAsc}
+        type="warningConfirm"
+        message={messageDel}
+        onAccept={continueDelAsc}
+        onClose={closeDel}
+        textFirst={t('commons.buttons.leaveRoot')}
+        textSecond={t('commons.buttons.deleteDescendant')}
+      />
+      <GaiaPopup
+        open={openDelDesc}
+        type="warningConfirm"
+        message={messageDel}
+        onAccept={continueDelDescRoot}
+        onClose={closeDel}
+        textFirst={t('commons.buttons.leaveRoot')}
+        textSecond={t('commons.buttons.deleteDescendant')}
+      />
+      <GaiaPopup
+        open={openDelDescRemoveChild}
+        type="warningTwoOptions"
+        message={messageDel}
+        onFirstAction={continueDelDescRoot}
+        onSecondAction={continueDelDesc}
+        onClose={closeDel}
+        textFirst={t('commons.buttons.leaveRoot')}
+        textSecond={t('commons.buttons.deleteDescendant')}
+      />
     </>
   );
 };

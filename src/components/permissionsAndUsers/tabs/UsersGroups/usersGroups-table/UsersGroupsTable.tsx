@@ -10,7 +10,12 @@ import UsersGroupsRow from './UsersGroupsRow';
 interface IProps {
   filter: IFilterUsersGroups;
   isDeleted?: boolean;
+  excludeGroups: string[];
+  projectId: string;
+  projectDeleted: boolean;
+
   setFilter: (newFilter: IFilterUsersGroups) => void;
+  handleRowClick: (group: IGroup) => void;
   onDelete: (groups: IGroup) => void;
 }
 
@@ -19,13 +24,13 @@ function getGroupId(groups: IGroup) {
 }
 
 function UsersGroupsTable(props: IProps) {
-  const { filter, onDelete } = props;
+  const { filter, onDelete, projectId } = props;
 
-  const fetchGenesList = useCallback(
+  const fetchUsersGroupsList = useCallback(
     (pageSize: number, page: number) => {
-      return MmpClient.getGroupsList(filter, pageSize, page);
+      return MmpClient.getGroupsList(filter, pageSize, page, projectId);
     },
-    [filter]
+    [filter, projectId]
   );
 
   return (
@@ -36,11 +41,13 @@ function UsersGroupsTable(props: IProps) {
           <LazyList<IGroup>
             token={filter}
             ChildElem={UsersGroupsRow}
-            fetchPage={fetchGenesList}
+            fetchPage={fetchUsersGroupsList}
             ChildWrapper={UsersGroupsRowWrapper}
             getElemId={getGroupId}
             onDelete={onDelete}
-            rowProps={{ isDeleted: props.isDeleted }}
+            rowProps={{ isDeleted: props.isDeleted, projectDeleted: props.projectDeleted }}
+            exclude={{ exclude: props.excludeGroups, field: 'name' }}
+            rowClick={props.handleRowClick}
           />
         </TableBody>
       </Table>

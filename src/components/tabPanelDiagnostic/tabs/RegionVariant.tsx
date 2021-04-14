@@ -134,8 +134,24 @@ const RegionVariant = (props: IProps) => {
           </div>
         </Grid>
       </Grid>
-      <GaiaPopup open={openDelregion} type="warningConfirm" message={messageDel} onAccept={continueDelRegion} onClose={closeDel} />
-      <GaiaPopup open={openDelVariant} type="warningConfirm" message={messageDel} onAccept={continueDelVariant} onClose={closeDel} />
+      <GaiaPopup
+        open={openDelregion}
+        type="warningConfirm"
+        message={messageDel}
+        onAccept={continueDelRegion}
+        onClose={closeDel}
+        textFirst={t('commons.buttons.leaveRoot')}
+        textSecond={t('commons.buttons.deleteDescendant')}
+      />
+      <GaiaPopup
+        open={openDelVariant}
+        type="warningConfirm"
+        message={messageDel}
+        onAccept={continueDelVariant}
+        onClose={closeDel}
+        textFirst={t('commons.buttons.leaveRoot')}
+        textSecond={t('commons.buttons.deleteDescendant')}
+      />
     </>
   );
 };

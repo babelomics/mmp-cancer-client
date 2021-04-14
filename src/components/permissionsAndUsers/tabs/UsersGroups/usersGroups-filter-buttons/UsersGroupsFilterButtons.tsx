@@ -12,7 +12,9 @@ interface IProps {
   filter: any;
   hideAddBtn?: boolean;
   setFilter: (newGroupsFilter: IFilterUsersGroups) => void;
-  setGenesOpenPopup?: () => void;
+  projectDeleted: boolean;
+
+  onAdd: () => void;
 }
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -68,7 +70,7 @@ const UsersGroupsFilterButtons = (props: IProps) => {
   return (
     <>
       <Box display="flex" flexDirection="column">
-        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" justifyContent="flex-end" style={{ width: '100%' }}>
+        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" alignItems="center" justifyContent="flex-end" style={{ width: '100%' }}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -76,14 +78,10 @@ const UsersGroupsFilterButtons = (props: IProps) => {
           >
             <Searchbar variant="outlined" margin="dense" value={searchText} onChange={handleSearchTextChange} />
           </form>
-          <Tooltip title={tooltipFilter}>
-            <IconButton onClick={handleExpandClick}>
-              <FilterList />
-            </IconButton>
-          </Tooltip>
-          {!props.hideAddBtn && (
+          <GaiaButton color="default" text={t('commons.buttons.filter')} icon={<FilterList />} onClick={handleExpandClick} style={{ marginLeft: 20 }} />
+          {!props.hideAddBtn && !props.projectDeleted && (
             <Tooltip title={addTooltip}>
-              <IconButton onClick={props.setGenesOpenPopup}>
+              <IconButton onClick={props.onAdd}>
                 <Add />
               </IconButton>
             </Tooltip>

@@ -21,7 +21,7 @@ function ProjectsTable(props: IProps) {
 
   const fetchProjectsPage = useCallback(
     (pageSize: number, page: number) => {
-      return MmpClient.getProjectsPage(filter, pageSize, page);
+      return MmpClient.getProjectsList(filter, pageSize, page);
     },
     [filter]
   );

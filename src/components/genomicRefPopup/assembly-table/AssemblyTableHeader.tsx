@@ -33,7 +33,7 @@ class ColumnHeader extends React.PureComponent<CHProps> {
       const selected = !!sortId && sortId === filter.sortBy;
       return (
         <TableCell>
-          <BootstrapButton color={selected ? 'primary' : 'default'} onClick={this.handleClick}>
+          <BootstrapButton color={'primary'} onClick={this.handleClick}>
             {label}
             {selected && SortDirection.ASC === filter.sortDirection && <ArrowDownwardIcon fontSize="small" />}
             {selected && SortDirection.DESC === filter.sortDirection && <ArrowUpwardIcon fontSize="small" />}

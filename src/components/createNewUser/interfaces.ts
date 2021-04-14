@@ -7,12 +7,12 @@ export default interface IState {
 }
 
 export interface IFormData {
-  accessType: number;
+  accessType: string;
   identifier: string;
   organization: string;
   firstName: string;
   lastName: string;
-  userType: number;
+  userType: string;
   email: string;
   canCreateProject: boolean;
 }

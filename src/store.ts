@@ -4,9 +4,6 @@ import throttle from 'lodash/throttle';
 import { createBrowserHistory } from 'history';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 
-import ILaunchState from './components/launch/interfaces';
-import launch from './components/launch/duck';
-
 import ILoginState from './components/login/interfaces';
 import login from './components/login/duck';
 
@@ -61,6 +58,9 @@ import IProject from './components/projectProfile/interfaces';
 import permissionsAndUsers from './components/permissionsAndUsers/duck';
 import IPermissionsAndUsers from './components/permissionsAndUsers/interfaces';
 
+import individualsDetails from './components/individualsDetails/duck';
+import IIndividualsDetails from './components/individualsDetails/interfaces';
+
 import { saveToStorage } from './utils/storage';
 
 /**
@@ -70,7 +70,6 @@ import { saveToStorage } from './utils/storage';
 export const history = createBrowserHistory({ basename: '/' });
 
 export interface IRootState {
-  launch: ILaunchState;
   login: ILoginState;
   passwordRequest: IPasswordRequestState;
   appConfiguration: IAppConfiguration;
@@ -89,7 +88,8 @@ export interface IRootState {
   genomicRefPopup: IGenomicRefPopup;
   tabPanelDiagnostic: ITabPanelDiagnostic;
   projectProfile: IProject;
-  permissionsData: IPermissionsAndUsers;
+  permissionsAndUsers: IPermissionsAndUsers;
+  individualsDetails: IIndividualsDetails;
 }
 
 declare global {
@@ -106,7 +106,6 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   combineReducers({
     router: connectRouter(history),
-    launch,
     passwordRequest,
     setPasswordRequest,
     login,
@@ -122,7 +121,8 @@ const store = createStore(
     genomicRefPopup,
     tabPanelDiagnostic,
     projectProfile,
-    permissionsAndUsers
+    permissionsAndUsers,
+    individualsDetails
   }),
   compose(applyMiddleware(...middlewares), composeEnhancers())
 );
@@ -131,9 +131,9 @@ const store = createStore(
 store.subscribe(
   throttle(() => {
     const user = store.getState().login.localUser;
-    const launch = store.getState().launch.data;
+    const configData = store.getState().login.configData;
     if (user) {
-      saveToStorage({ ...user, token: `${user.token.includes('Bearer') ? user.token : `Bearer ${user.token}`}` }, launch.configured);
+      saveToStorage({ ...user, token: `${user.token.includes('Bearer') ? user.token : `Bearer ${user.token}`}` }, configData.configured);
     }
   }, 1000)
 );

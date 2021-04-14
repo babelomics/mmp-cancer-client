@@ -12,6 +12,7 @@ interface IProps {
   badgeVerticalAlign?: 'top' | 'bottom';
   badgeHorizontalAlign?: 'right' | 'left';
   disabled?: boolean;
+  style?: React.CSSProperties | undefined;
   onClick?: (e: any) => void;
   onKeyPress?: (e: any) => void;
 }
@@ -27,11 +28,12 @@ const GaiaIconButton = ({
   badgeHorizontalAlign = 'right',
   badgeVerticalAlign = 'top',
   disabled,
+  style,
   onClick,
   onKeyPress
 }: IProps) => {
   return (
-    <IconButton color={color} disabled={disabled} onClick={onClick} size={size} onKeyPress={onKeyPress}>
+    <IconButton color={color} disabled={disabled} onClick={onClick} size={size} onKeyPress={onKeyPress} style={style}>
       {badge ? (
         <Badge
           anchorOrigin={{

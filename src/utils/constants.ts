@@ -13,3 +13,5 @@ export const API_PANEL_SETS = process.env.REACT_APP_API_PANEL_SETS;
 export const API_PANELS = process.env.REACT_APP_API_PANELS;
 export const API_PROJECTS = process.env.REACT_APP_API_PROJECTS;
 export const API_GROUPS = process.env.REACT_APP_API_GROUPS;
+export const API_PERMISSIONS = process.env.REACT_APP_API_PERMISSIONS;
+export const API_INDIVIDUALS = process.env.REACT_APP_API_INDIVIDUALS;

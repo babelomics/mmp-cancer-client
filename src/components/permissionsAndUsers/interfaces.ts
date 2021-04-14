@@ -1,41 +1,52 @@
 import SortDirection from '../commons/tableFilter/interfaces/SortDirection';
+import { IPermission } from './permissions';
 
 // Interfaces related to the component Example
 
 export default interface IState {
   loading: boolean;
-}
-
-interface IDynamic {
-  [key: string]: string | boolean | undefined;
+  excludeGroups: string[];
+  excludeUsers: string[];
+  groupData: IGroup | null;
+  userPermissionData: IUserPermission | null;
 }
 
 // =====  USERGROUPS
-export type IGroup = IDynamic & {
+export interface IGroup {
   groupId: string;
   name: string;
   description: string;
-  permission: IPermissions[];
-  users: string[];
-  permissionsNameList: string[];
-};
-// ======= PERMISSIONS
-
-export type IPermissions = IDynamic & {
-  name: string;
-  action: string;
-  entity_type: string;
-  entity_id: string;
-};
-
-export type IFilterUsersGroups = IDynamic & {
+  permissions: IPermission[];
+  users?: string[];
+  permissionsNameList?: string[];
+  guid: string;
+}
+export interface IFilterUsersGroups {
   permission?: string;
   searchText?: string;
   sortBy?: string;
   sortDirection?: SortDirection;
-};
-export type IPermissionUsersGroups = IDynamic & {
-  action: string;
-  entity_type: string;
-  entity_id: string;
-};
+}
+
+export interface IDeleteForm {
+  confirmation: string;
+}
+
+export interface IUserPermission {
+  userId: string;
+  userName?: string;
+  permissionsNameList?: string[];
+  groupsIdList?: string[];
+  groupGuidList?: string[];
+  permissions?: IPermission[];
+  groupPermissions?: IGroup[];
+}
+export interface IFilterUsersPermissions {
+  userId?: string;
+  userName?: string;
+  permission?: string;
+  group?: string;
+  search?: string;
+  sortBy?: string;
+  sortDirection?: SortDirection;
+}

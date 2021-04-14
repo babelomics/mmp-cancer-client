@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { ITranscript, ITranscriptFilter } from '../interfaces';
-import GaiaContainer from '../../../commons/GaiaContainer';
 import TranscriptFilterButtons from './transcript-filter-buttons/TranscriptFilterButtons';
 import TranscriptTable from './Transcript-table/TranscriptTable';
 
@@ -16,7 +14,6 @@ interface IProps {
 const defaultUserFilter = {} as ITranscriptFilter;
 
 const TranscriptList = (props: IProps) => {
-  const { t } = useTranslation();
   const [filter, setFilter] = useState<ITranscriptFilter>(defaultUserFilter);
 
   const handleDelete = (transcript: ITranscript) => {

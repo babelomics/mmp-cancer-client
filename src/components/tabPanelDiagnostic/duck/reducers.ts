@@ -27,7 +27,8 @@ export const initialState: IState = {
     hpoList: [],
     icd10List: [],
     transcriptList: [],
-    guid: ''
+    guid: '',
+    ensmblRelease: ''
   },
   panelSetId: '',
   assemblyId: '',
@@ -40,6 +41,39 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
   let descendants = [...state.diagnosticPanelGlobal.descendants];
   let regions = [...state.diagnosticPanelGlobal.regionList];
   let variants = [...state.diagnosticPanelGlobal.variantList];
+
+  const customComparator = (s1: string, s2: string): number => {
+    let pt1 = s1.split(/((?<=[a-z])(?=[0-9]))|((?<=[0-9])(?=[a-z]))/g);
+    let pt2 = s2.split(/((?<=[a-z])(?=[0-9]))|((?<=[0-9])(?=[a-z]))/g);
+    let i = 0;
+
+    if (_.isEqual(pt1, pt2)) {
+      return 0;
+    } else {
+      for (i = 0; i < Math.min(pt1.length, pt2.length); i++) {
+        if (!(pt1[i] === pt2[i])) {
+          if (pt1[i] > pt2[i]) {
+            return 1;
+          } else {
+            return -1;
+          }
+        } else {
+          const nu1 = parseInt(pt1[i]);
+          const nu2 = parseInt(pt2[i]);
+          if (nu1 > nu2) {
+            return 1;
+          } else {
+            return -1;
+          }
+        }
+      }
+    }
+    if (pt1.length > i) {
+      return 1;
+    } else {
+      return -1;
+    }
+  };
 
   switch (type) {
     case types.AC_INIT_FETCH:
@@ -109,22 +143,17 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
         }
       };
     case types.AC_DELETE_DESCENDANT:
-      if (payload.delete) {
-        descendants.forEach((desc: any, i: number) => {
-          if (desc.diagnosticPanelIdentifier === payload.identifier) {
-            descendants[i].toDelete = true;
-          }
-        });
-      } else {
-        descendants = descendants.filter((el: any) => {
-          return el.diagnosticPanelIdentifier !== payload.identifier;
-        });
-      }
+      var newList = descendants.map((desc: any) => {
+        if (desc.diagnosticPanelIdentifier === payload.identifier) {
+          return { ...desc, toDelete: payload.delete };
+        }
+        return desc;
+      });
       return {
         ...state,
         diagnosticPanelGlobal: {
           ...state.diagnosticPanelGlobal,
-          descendants: [...descendants]
+          descendants: [...newList]
         }
       };
     case types.AC_NEW_REGION:
@@ -150,10 +179,7 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
         }
       });
       regions.push(newRegion);
-      regions.sort((a, b) => (a.chromosome as any) - (b.chromosome as any) || (a.initPosition as any) - (b.initPosition as any) || (a.endPosition as any) - (b.endPosition as any));
-      // regions.sort((a, b) => {
-      //   return a.chromosome < b.chromosome ? -1 : 1;
-      // });
+      regions.sort((a, b) => customComparator(a.chromosome, b.chromosome));
 
       return {
         ...state,
@@ -175,6 +201,8 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
       };
     case types.AC_NEW_VARIANT:
       variants.push(payload);
+      variants.sort((a, b) => customComparator(a.chromosomeSequence, b.chromosomeSequence));
+
       return {
         ...state,
         diagnosticPanelGlobal: {

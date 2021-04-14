@@ -11,6 +11,7 @@ interface IProps {
   filter: ITranscriptPopupFilter;
   assembly: string;
   exclude: string[];
+  ensmblRelease: string;
   setFilter: (newFilter: ITranscriptPopupFilter) => void;
   addTranscript: (transcript: any) => void;
 }
@@ -20,11 +21,11 @@ function getTranscriptId(transcript: ITranscriptPopup) {
 }
 
 function TranscriptPopupTable(props: IProps) {
-  const { filter, assembly, addTranscript, exclude } = props;
+  const { filter, assembly, addTranscript, exclude, ensmblRelease } = props;
 
   const fetchTranscriptList = useCallback(
     (pageSize: number, page: number) => {
-      return MmpClient.getTranscriptModalList(filter, pageSize, page, assembly);
+      return MmpClient.getTranscriptModalList(filter, pageSize, page, assembly, ensmblRelease);
     },
     [filter]
   );
@@ -45,7 +46,7 @@ function TranscriptPopupTable(props: IProps) {
             fetchPage={fetchTranscriptList}
             ChildWrapper={TranscriptPanelRowWrapper}
             getElemId={getTranscriptId}
-            scrollModal={'transcriptModal'}
+            scrollAncestor={'transcriptModal'}
             exclude={{ exclude: exclude, field: 'transcriptId' }}
           />
         </TableBody>

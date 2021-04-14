@@ -14,7 +14,9 @@ interface ICell {
 }
 const useStyles = makeStyles((theme) => ({
   cursor: {
-    cursor: 'pointer'
+    cursor: 'pointer',
+    whiteSpace: 'normal',
+    wordBreak: 'break-word'
   },
   hideCell: {
     display: 'none'

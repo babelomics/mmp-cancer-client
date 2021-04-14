@@ -17,7 +17,7 @@ export interface IData {
   organization: string;
   dateCreated: string | Date;
   dateLastAccess: string | Date;
-  userType: number;
+  userType: string;
   canCreateProject: boolean;
 }
 

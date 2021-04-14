@@ -3,7 +3,9 @@
     "name": "MMP - Cancer",
     "access": "Access",
     "profile": "My profile",
-    "logout": "Logout"
+    "logout": "Logout",
+    "footerClinical": "Clinical Bioinformatics Area",
+    "footerFoundation": "Fundacion Progreso y salud, Sevilla, Spain"
   },
   "tabPanelDiagnostic": {
     "title": "Diagnostic Panel",
@@ -88,6 +90,8 @@
       "importError422_InvalidRef": "Error: some panels contain references to panels that do not exist.",
       "importError400_InvalidFileName": "Error: incorrect file name format.",
       "importError400_NotJson": "Error: incorrect format. (Required .json)",
+      "importError400_EmptyMandatoryFields": "Error: There are some empty mandatory fields!",
+      "importError422_InvalidDates": "Error: creation date cannot be later than the deletion date.",
       "importError422_InvalidIdOrName": "Error: empty identifier or name.",
       "importError409_IdentifierExists": "Error: Identifier is already taken!",
       "importError409_NameExists": "Error: Name is already taken!",
@@ -99,7 +103,6 @@
       "importError422_PanelsCoexist": "Error: There are some panels inside of the collection with the same name or id that coexists in the same period of time.",
       "importError422_Author": "The Author does not exit in the system!",
       "importErrorInvalidFile": "Error: invalid files cannot be imported"
-
     },
     "unsubscribe": {
       "confirmWord": "OVERWRITE"
@@ -163,11 +166,23 @@
   "login": {
     "title": "Sign in",
     "forgotPassword": "Forgot password?",
-    "signup": "Don't have an account? Sign up",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up",
     "messages": {
       "emptyUsername": "Invalid username",
       "emptyPassword": "Invalid password",
       "loginError": "Invalid User or Password"
+    }
+  },
+  "signUp": {
+    "title": "Request for access to the system",
+    "reason": "Reason for access request",
+    "alreadyAccount": "Do you already have access to the system?",
+    "messages": {
+      "success": "Registration request has been sent successfully",
+      "errorIdentifier": "Identifier is already taken!",
+      "errorEmail": "Email is already in use!",
+      "errorToken": "The recovery token has expired. You must request another"
     }
   },
   "forgotPassword": {
@@ -221,7 +236,8 @@
       "admin": "Administrator"
     },
     "updateUser": {
-      "success": "User has been updated successfully"
+      "success": "User has been updated successfully",
+      "ownSuccess": "User has been updated successfully. You will be redirected to login page."
     },
     "password": "Password",
     "repeatPassword": "Repeat password",
@@ -249,7 +265,8 @@
   },
   "usersManagement": {
     "title": "Users Management",
-    "titlePopupAdmin": "Admin Management"
+    "titlePopupAdmin": "Admin Management",
+    "newUserButton": "Add new user"
   },
   "projectsManagement": {
     "title": "Projects Management",
@@ -313,6 +330,7 @@
     "deleteConfirmWord": "DELETE",
     "deleteConfirmWordNotMatch": "Entered text doesn't match the required keyword",
     "deleteConfirmText": "Type DELETE {{action}}",
+    "selectOption": "Select an option",
     "table": {
       "emptyDataSourceMessage": "No records to display",
       "addTooltip": "Add",
@@ -381,13 +399,15 @@
       "required": "This field is mandatory",
       "invalidCost": "Invalid cost, must be a number with 2 decimals separated by a point.",
       "invalidEmail": "Invalid email address.",
-      "invalidIdentifier": "Invalid identifier format. Identifier must be between 3 - 32 characters and without blank spaces.",
+      "invalidIdentifier": "Identifier must be between 3 - 32 characters and without blank spaces.",
       "password": {
         "required": "Password is required",
         "dontMatch": "Password do not match"
       },
       "url": "Invalid URL. Try to modify it, please.",
-      "user": "Wrong credentials. Try to modify them, please"
+      "user": "Wrong credentials. Try to modify them, please",
+      "validationRegions": "The end position must be bigger or equal than the initial position",
+      "unauthorized": "Access denied. If you consider that there is an error, contact the project administrator or application administrator (depending on the case)."
     },
     "buttons": {
       "selection": "SELECTION",
@@ -405,8 +425,8 @@
       "ok": "ok",
       "yes": "yes",
       "no": "no",
-      "filter": "FILTER",
-      "reset": "RESET",
+      "filter": "Filter",
+      "reset": "Reset",
       "manualDrugUpdate": "Manual Drug Update",
       "available": "Available",
       "noAvailable": "Not Available",
@@ -414,7 +434,11 @@
       "deleteDiagnosticPanel": "Delete Diagnostic Panel Set",
       "leaveRoot": "Leave as root",
       "deleteDescendant": "Delete panel",
-      "selectAssemblyFilter": "Select Assembly Filter"
+      "selectAssemblyFilter": "Select Assembly Filter",
+      "selectUser": "Select User",
+      "export": "Export",
+      "delete": "Delete",
+      "new": "New"
     },
     "fields": {
       "filSelection": "File Name",
@@ -542,31 +566,164 @@
       "diagnosticPanels": "Diagnostic Panels",
       "vfcFiles": "VCF Files",
       "projectId": "Identifier",
-      "creationDateStart": "Created before",
-      "creationDateEnd": "Created after",
-      "modificationDateStart": "Last update before",
-      "modificationDateEnd": "Last update after",
-      "permission":"Permissions"
+      "creationDateStart": "Created after",
+      "creationDateEnd": "Created before",
+      "modificationDateStart": "Last update after",
+      "modificationDateEnd": "Last update before",
+      "permission": "Permissions",
+      "groups": "Groups",
+      "individualsId": "Identifier",
+      "dateOfBirth": "Date of birth",
+      "lifeStatus": "Life status",
+      "sex": "Sex",
+      "comment": "Comment",
+      "hpo": "HPO Phenotype",
+      "icd10": "ICD-10",
+      "karyotypicSex": "Karyotypic sex",
+      "phenotypeSex": "Phenotype sex",
+      "ethnicity": "Ethnicity",
+      "hpoPhenotype": "HPO",
+      "observed": "Observed",
+      "modifiers": "Modifiers",
+      "diagnosisDate": "Diagnosis Date",
+      "lifeStatusDetail": "Life status detail"
     }
   },
-   "permissionsAndUsers": {
+  "permissionsAndUsers": {
     "title": "Permissions and Users",
     "tooltip": {
       "leftArrow": "Previous Version",
       "rightArrow": "Next version",
-      "delete": "Delete Diagnostic Panel",
+      "delete": "Delete Permission",
       "save": "Save panel"
     },
     "messages": {
-      "successDelete": "The Diagnostic Panel has been deleted succesfully",
+      "createGroupSuccess": "The group has been created succesfully",
+      "createGroupError": "The group could not be created",
+      "createGroupConflict": "Already exists a group with same identifier or name",
+      "updateGroupSuccess": "The group has been updated succesfully",
+      "updateGroupError": "The group could not be updated",
       "error": "error during the delete process",
       "unknown": " Unknown error",
-      "chooseDeletion": "Are you sure you want to delete the panel? There are panels that will be left without ascenders. You can delete them along with their unique descendants or leave them as the root panel."
+      "chooseDeletion": "Are you sure you want to delete the group? You have three options to delete the group.",
+      "deleteOption1": "Option1: It will remove from the project all users that only belong to this group.",
+      "deleteOption2": "Option2: It will remove from the group, but will not modify its permissions.",
+      "deleteOption3": "Option3: It will remove from the user all the permissions that the group had that are not granted due to their membership in another group",
+      "createUserPermissionSuccess": "The user permission has been created succesfully",
+      "createUserPermissionError": "The user permission could not be created",
+      "createUserPermissionConflict": "Already exists a user permission with same identifier or name",
+      "updateUserPermissionSuccess": "The user permission has been updated succesfully",
+      "updateUserPermissionError": "The user permission could not be updated",
+      "createEmptyUserPermissionError": "You must select permissions to assign permissions to an user"
     },
     "tabs": {
       "usersGroups": "Users Group",
       "specifics": "Users with specific permissions",
       "associated": "Associated users and permissions"
+    },
+    "delete": {
+      "title": "Delete group",
+      "description": "Type DELETE to delete the selected group",
+      "deleteSuccess": "The group has been deleted successfully",
+      "deleteError": "The group could not be deleted",
+      "titleAssociated": "Delete user permission",
+      "descriptionAssociated": "Type DELETE to delete the selected user permission",
+      "deleteSuccessAssociated": "The user permission has been deleted successfully",
+      "deleteErrorAssociated": "The user permission could not be deleted"
+    },
+    "updateKeyword": "Update",
+    "createKeyword": "Create",
+    "deleteKeyword": "Delete",
+    "readKeyword": "Read",
+    "projectEntityKeyword": "Project",
+    "analysesEntityKeyword": "Analyses",
+    "samplesEntityKeyword": "Samples",
+    "individualsEntityKeyword": "Individuals",
+    "drugsEntityKeyword": "Drugs",
+    "panelsEntityKeyword": "Panels",
+    "individualEntityKeyword": "Individual",
+    "permissionsEntityKeyword": "Permissions",
+    "groupPopupTitle": "Group permissions",
+    "permissionsLabel": "Permissions:",
+    "groupsLabel": "Groups:",
+    "buttonOp1": "Option 1",
+    "buttonOp2": "Option 2",
+    "buttonOp3": "Option 3",
+    "associatedUsers": {
+      "popupTitle": "Permissions and users",
+      "selectUserPopupTitle": "Select User",
+      "warningPopup": {
+        "title": "Remove permissions?",
+        "message": "Do you want to keep permissions checked in the permissions tree?"
+      }
+    }
+  },
+  "individuals": {
+    "title": "Individuals Management",
+    "male": "MALE",
+    "unknown": "UNKNOWN",
+    "female": "FEMALE",
+    "other": "OTHER",
+    "alive": "ALIVE",
+    "deceased": "DECEASED",
+    "individualsDetailsTitle": "Individuals details",
+    "individualsDetails": "Details",
+    "basicInfo": "Basic Information",
+    "hpoPhenotype": "HPO Phenotype",
+    "diseases": "Diseases",
+    "samples": "Samples",
+    "familyRelationships": "Family Relationship",
+    "permissions": "Permissions",
+    "deleteDescription": "Type DELETE to delete the selected individual",
+    "deleteTitle": "Delete",
+    "hpoPhenotypeTab": "Human Phenotype Ontology",
+    "diseasesICD10": "Diseases ICD-10",
+    "stillbirth": "Stillbirth",
+    "neonatalDeath": "Neonatal death",
+    "deathInChildhood": "Death in childhood",
+    "deathInInfancy": "Death in infancy",
+    "deathInAdolescence": "Death in adolescence",
+    "deathInEarlyAdulthood": "Death in early adulthood",
+    "inavlidKaryotypicSex": "Invalid Karyotypic Sex. Must start with one or more X characters and end with zero or more Y characters",
+    "messages": {
+      "deleteSuccess": "Individual has been deleted successfully",
+      "deleteError": "Individual could not be deleted",
+      "updateSuccess": "Individual has been updated successfully",
+      "updateError": "Individual could not be updated",
+      "createSuccess": "Individual has been created successfully",
+      "createError": "Individual could not be created",
+      "errorEmptyIdentifier": "Error: empty project identifier or individual identifier",
+      "errorIdentifier": "Already exists an individual with same identifier"
+    },
+    "deleteHPOTitle": "Delete HPO",
+    "deletePopupDescription": "The selected record will be deleted. To confirm, type DELETE in the lower field.",
+    "deleteICD10Title": "Delete ICD10",
+    "hpoDetails": {
+      "title": "Human Phenotype Ontology",
+      "observed": "Observed",
+      "modifiers": "Modifiers",
+      "spatialPattern": "Spatial pattern",
+      "laterality": "Laterality",
+      "severity": "Severity",
+      "temporalPattern": "Temporal pattern",
+      "ageOfOnset": "Age of onset",
+      "paceOfProgression": "Pace of progression",
+      "comment": "Comment"
+    },
+    "icd10Details": {
+      "title": "Diseases ICD-10",
+      "dateOfDiagnosis": "Date of diagnosis"
+    },
+    "permissionsDetails": {
+      "title": "Permission on individual",
+      "createSuccess": "Individual's permissions have been created successfully",
+      "createError": "Individual's permissions could not be created",
+      "updateSuccess": "Individual's permissions have been updated successfully",
+      "updateError": "Individual's permissions could not be updated",
+      "deleteSuccess": "Individual's permissions have been deleted successfully",
+      "deleteError": "Individual's permissions could not be deleted",
+      "deleteTitle": "Delete permissions",
+      "removeAllText": "You are removing all user-specific permissions. Do you want to continue?"
     }
   }
 }

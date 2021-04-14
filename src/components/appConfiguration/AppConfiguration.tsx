@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import GaiaContainer from '../commons/GaiaContainer';
 import GaiaLoading from '../commons/GaiaLoading';
@@ -10,6 +10,7 @@ import { IConfiguration, IPandrugsConfig, IGenomicDictConfig } from './interface
 import { FormikErrors } from 'formik';
 import routes from '../router/routes';
 import { useHistory } from 'react-router-dom';
+import { Save } from '@material-ui/icons';
 
 interface IProps {
   loading: boolean;
@@ -47,13 +48,16 @@ export const AppConfiguration = (props: IProps) => {
     <GaiaContainer
       icon="settings_applications"
       title={t('appConfiguration.title')}
+      acceptButtonText={t('commons.buttons.save')}
+      acceptButtonIcon={<Save />}
       onBack={goHome}
       onAccept={!props.loading && !props.validationPundrugs && !props.validationGenomDict ? () => clickAccept() : undefined}
+      onCancel={!props.loading ? goHome : undefined}
     >
       {props.loading ? (
         <GaiaLoading />
       ) : (
-        <>
+        <div style={{ paddingRight: 100, paddingLeft: 100 }}>
           <ContactAdminConfig
             updateConfigData={props.updateConfigData}
             identifier={props.configData.contactIdentifier || ''}
@@ -77,7 +81,7 @@ export const AppConfiguration = (props: IProps) => {
             apiValidUrl={props.validateGenomicDictionaryUrl}
             genomicDictionaryURL={props.configData.genomicDictionaryURL}
           />
-        </>
+        </div>
       )}
     </GaiaContainer>
   );

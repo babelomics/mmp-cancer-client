@@ -1,9 +1,6 @@
-import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
 import { IconButton, makeStyles, TableCell, TableRow } from '@material-ui/core';
-import routes from '../../../../router/routes';
 import { ITranscript } from '../../interfaces';
-import { doDateFormat } from '../../../../../utils/utils';
 import { RemoveCircle } from '@material-ui/icons';
 
 interface IProps {

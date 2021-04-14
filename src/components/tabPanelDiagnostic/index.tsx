@@ -31,6 +31,8 @@ interface IProps extends RouteComponentProps {
   mode: 'new' | 'edit';
   panelSetData: IPanelSetData;
   author: string;
+  ensmblRelease: string;
+  abnormality: boolean;
 
   diagnosticPanelGeneral: IDiagnosticPanelGlobal;
   updatePanelGlobal: (identifier: string, dataPanelProfile: IDiagnosticPanelGlobal, t: any) => Promise<any>;
@@ -119,7 +121,8 @@ const mapStateToProps = (state: IRootState) => ({
   icd10List: state.tabPanelDiagnostic.diagnosticPanelGlobal.icd10List,
   mode: state.tabPanelDiagnostic.mode,
   panelSetData: state.panelSetProfile.panelSetData,
-  author: state.tabPanelDiagnostic.diagnosticPanelGlobal.author || `${state.login.user?.sub} - ${state.login.user?.firstName} ${state.login.user?.lastName}` || ''
+  author: state.tabPanelDiagnostic.diagnosticPanelGlobal.author || `${state.login.user?.sub} - ${state.login.user?.firstName} ${state.login.user?.lastName}` || '',
+  ensmblRelease: state.tabPanelDiagnostic.diagnosticPanelGlobal.ensmblRelease
 });
 
 const mapDispatchToProps = { ...operations };

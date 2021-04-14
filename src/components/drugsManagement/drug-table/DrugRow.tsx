@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Checkbox, makeStyles, TableCell, TableContainer, TableRow } from '@material-ui/core';
+import { Checkbox, makeStyles, TableCell, TableRow } from '@material-ui/core';
 import routes from '../../router/routes';
 import { Drug } from '../interfaces';
 import { doDateFormat } from '../../../utils/utils';

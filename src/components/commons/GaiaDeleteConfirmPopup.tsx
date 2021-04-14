@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import * as Yup from 'yup';
 import { GaiaModalFormik } from './GaiaModalFormik';
 import { useFormik } from 'formik';
@@ -12,26 +12,8 @@ interface IProps {
   title?: string;
   open?: boolean;
   onClose?: () => void;
-  onAccept?: () => void;
+  onAccept?: (data?: any) => void;
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2)
-  },
-  title: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500]
-  }
-}));
 
 export const GaiaDeleteConfirmPopup = ({ message, title, open = false, onClose, onAccept, actionText }: IProps) => {
   const { t } = useTranslation();
@@ -76,8 +58,10 @@ export const GaiaDeleteConfirmPopup = ({ message, title, open = false, onClose, 
         }
       }}
     >
-      <Typography variant="body1">{message ? message : t('commons.deleteConfirmText', { action: actionText })}</Typography>
-      <GaiaTextField required name="confirmation" label={t('commons.fields.confirmation')} formik={formik} fullWidth />
+      <Typography variant="body1" style={{ marginBottom: 10 }}>
+        {message ? message : t('commons.deleteConfirmText', { action: actionText })}
+      </Typography>
+      <GaiaTextField required name="confirmation" formik={formik} fullWidth />
     </GaiaModalFormik>
   );
 };

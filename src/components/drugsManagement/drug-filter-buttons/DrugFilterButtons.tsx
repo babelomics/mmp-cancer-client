@@ -79,7 +79,7 @@ const DrugFilterButtons = (props: IProps) => {
   return (
     <>
       <Box display="flex" flexDirection="column">
-        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" justifyContent="flex-end" style={{ width: '100%' }}>
+        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" alignItems="center" justifyContent="flex-end" style={{ width: '100%' }}>
           {!loading && showAvailability && (
             <>
               <GaiaButton style={{ marginRight: 10 }} text={t('commons.buttons.noAvailable')} variant="outlined" onClick={(available: boolean) => changeAvailability(false)} />
@@ -93,11 +93,7 @@ const DrugFilterButtons = (props: IProps) => {
           >
             <Searchbar variant="outlined" margin="dense" value={searchText} onChange={handleSearchTextChange} />
           </form>
-          <Tooltip title={tooltipFilter}>
-            <IconButton onClick={handleExpandClick}>
-              <FilterList />
-            </IconButton>
-          </Tooltip>
+          <GaiaButton color="default" text={t('commons.buttons.filter')} icon={<FilterList />} onClick={handleExpandClick} style={{ marginLeft: 20 }} />
           <Tooltip title={tooltipUpdate}>
             <IconButton onClick={manualUpdate}>
               <Archive />

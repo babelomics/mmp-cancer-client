@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import GaiaContainer from '../../GaiaContainer';
 import { Dialog } from '@material-ui/core';
-import { IGene, IPopupSearchGeneFilter } from './interfaces';
+import { IPopupSearchGeneFilter } from './interfaces';
 import PopupSearchGeneTable from './popup-panel-table/PopupSearchGeneTable';
 import PopupSearchGenesFilterButtons from './popup-panel-filter-button/PopupSearchGenesFilterButtons';
 import { useStyles } from '../popupStyle';
+import { Close } from '@material-ui/icons';
 
 const defaultPanelFilter = { isDeleted: false } as IPopupSearchGeneFilter;
 
@@ -15,15 +15,15 @@ interface IProps {
   assembly: string;
   title: string;
   exclude: string[];
+  ensmblRelease: string;
   onClose?: () => void;
   addGene: (gene: any) => void;
 }
 
-export const PopupSearchGenes = ({ open = false, onClose, openPopupParent, assembly, title, addGene, exclude }: IProps) => {
+export const PopupSearchGenes = ({ open = false, onClose, openPopupParent, assembly, title, addGene, exclude, ensmblRelease }: IProps) => {
   const classes = useStyles();
   const [openState, setOpen] = useState(open);
   const [filter, setFilter] = useState<IPopupSearchGeneFilter>(defaultPanelFilter);
-  const { t } = useTranslation();
 
   useEffect(() => {
     setOpen(open);
@@ -45,11 +45,15 @@ export const PopupSearchGenes = ({ open = false, onClose, openPopupParent, assem
     handleClose();
   };
 
+  const getActions = () => {
+    return [{ icon: <Close />, onClick: handleClose }];
+  };
+
   return (
     <Dialog open={openState} classes={{ paper: classes.dialogPaper }} PaperProps={{ id: 'geneModal' }}>
-      <GaiaContainer title={title} onBack={handleClose}>
+      <GaiaContainer title={title} actions={getActions()} hideBackButton>
         <PopupSearchGenesFilterButtons filter={filter} setFilter={setFilter} />
-        <PopupSearchGeneTable filter={filter} setFilter={setFilter} assembly={assembly} addGene={handleAdd} exclude={exclude} />
+        <PopupSearchGeneTable filter={filter} setFilter={setFilter} assembly={assembly} addGene={handleAdd} exclude={exclude} ensmblRelease={ensmblRelease} />
       </GaiaContainer>
     </Dialog>
   );

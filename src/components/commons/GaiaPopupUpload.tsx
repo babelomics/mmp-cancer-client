@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogActions, makeStyles, Typography, Grid, Button } from '@material-ui/core';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { Close } from '@material-ui/icons';
+import { Cancel, Close, Publish } from '@material-ui/icons';
 import GaiaIconButton from './GaiaIconButton';
 import GaiaButton from './GaiaButton';
 import { useTranslation } from 'react-i18next';
-import GaiaIcon from './GaiaIcon';
 import GaiaTextField from './GaiaTextField';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import GaiaFabButton from './GaiaFabButton';
 
 interface IProps {
   message: string;
@@ -53,7 +53,7 @@ const DialogTitle = (props: any) => {
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
       <Typography variant="h6">{children}</Typography>
-      {onClose ? <GaiaIconButton icon={<Close />} onClick={onClose} /> : null}
+      {onClose ? <GaiaFabButton color="default" icon={<Close />} onClick={onClose} /> : null}
     </MuiDialogTitle>
   );
 };
@@ -131,14 +131,14 @@ export const GaiaPopupUpload = ({ message, title, open = false, type = 'info', b
       <DialogTitle className={classes.title} onClose={handleClose}>
         {renderTitle()}
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent style={{ padding: '20px 24px' }}>
         <Grid container spacing={3}>
           <Grid item xs={12} container alignItems="center">
             <Typography variant="h6">{message}</Typography>
           </Grid>
         </Grid>
         {type === 'uploadFile' && (
-          <Grid container spacing={3}>
+          <Grid container spacing={3} alignItems="center">
             <Grid item xs={9}>
               <GaiaTextField required name="filSelection" formik={importFormik} label={t('commons.fields.filSelection')} fullWidth disabled />
             </Grid>
@@ -156,8 +156,8 @@ export const GaiaPopupUpload = ({ message, title, open = false, type = 'info', b
       <DialogActions>
         {type === 'uploadFile' && (
           <>
-            <GaiaButton text={t('commons.buttons.cancel')} onClick={handleClose} />
-            <GaiaButton text={t('commons.buttons.upload')} onClick={importFormik.handleSubmit} />
+            <GaiaButton icon={<Publish />} variant="outlined" text={t('commons.buttons.upload')} onClick={importFormik.handleSubmit} />
+            <GaiaButton icon={<Cancel />} color="default" text={t('commons.buttons.cancel')} onClick={handleClose} />
           </>
         )}
       </DialogActions>

@@ -6,6 +6,8 @@ import GaiaTextField from '../commons/GaiaTextField';
 import GaiaButton from '../commons/GaiaButton';
 import { IGenomicDictConfig } from './interfaces';
 import { FormikErrors, useFormik } from 'formik';
+import GaiaFabButton from '../commons/GaiaFabButton';
+import { Done, Edit } from '@material-ui/icons';
 
 interface IProps {
   genomicDictionaryURL: string | undefined;
@@ -34,15 +36,20 @@ export const GenomicDictionaryConfig = (props: IProps) => {
 
   return (
     <React.Fragment>
-      <Typography variant="subtitle2" style={{ marginBottom: 20, marginTop: 30 }}>
+      <Typography color="primary" variant="subtitle2" style={{ marginBottom: 20, marginTop: 30, fontWeight: 'bold' }}>
         {t('genomicDictionaryConfig.title')}
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <GaiaTextField fullWidth variant={props.validationState ? 'filled' : 'standard'} required name="url" label={t('commons.fields.url')} formik={formik} disabled={!props.validationState} />
+      <Grid container spacing={2} alignItems="center">
+        <Grid item xs={11}>
+          <Typography variant="body2">{t('commons.fields.url')}</Typography>
+          <GaiaTextField fullWidth required name="url" formik={formik} disabled={!props.validationState} />
         </Grid>
-        <Grid item xs={3} style={{ marginLeft: 70 }}>
-          {props.validationState ? <GaiaButton text={t('commons.buttons.validation')} onClick={formik.handleSubmit} /> : <GaiaButton text={t('commons.buttons.modify')} onClick={clickModify} />}
+        <Grid item xs={1} style={{ marginTop: 15 }}>
+          {props.validationState ? (
+            <GaiaFabButton color="default" icon={<Done />} size="small" onClick={formik.handleSubmit} />
+          ) : (
+            <GaiaFabButton color="default" icon={<Edit />} size="medium" onClick={clickModify} />
+          )}
         </Grid>
       </Grid>
     </React.Fragment>

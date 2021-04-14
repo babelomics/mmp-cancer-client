@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { TableBody, LinearProgress, TableContainer, TableCell, Table } from '@material-ui/core';
+import { TableBody, LinearProgress, TableContainer, Table } from '@material-ui/core';
 import { DrugFilter, Drug } from '../interfaces';
 import LazyList from '../../commons/tableFilter/LazyList';
 import DrugRow from './DrugRow';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { IConfiguration } from './interfaces';
@@ -19,21 +19,25 @@ export const PanDrugsConfig = (props: IProps) => {
   };
   return (
     <React.Fragment>
-      <Typography variant="subtitle2" style={{ marginBottom: 10, marginTop: 30 }}>
+      <Typography color="primary" variant="subtitle2" style={{ marginBottom: 10, marginTop: 30, fontWeight: 'bold' }}>
         {t('launch.administrationInfoTitle')}
       </Typography>
-      <div style={{ height: 200, marginBottom: 25 }}>
-        <ReactQuill
-          theme="snow"
-          value={props.textValue ?? ''}
-          onChange={(textValue: string, delta: any, source: string, editor: any) => {
-            props.updateConfigData({ setupInformation: textValue });
-          }}
-          //onChange={props.onChange}
-          modules={modules}
-          style={{ height: 150 }}
-        />
-      </div>
+      <Grid container>
+        <Grid item xs={11}>
+          <div style={{ height: 200, marginBottom: 25 }}>
+            <ReactQuill
+              theme="snow"
+              value={props.textValue ?? ''}
+              onChange={(textValue: string, delta: any, source: string, editor: any) => {
+                props.updateConfigData({ setupInformation: textValue });
+              }}
+              //onChange={props.onChange}
+              modules={modules}
+              style={{ height: 150 }}
+            />
+          </div>
+        </Grid>
+      </Grid>
     </React.Fragment>
   );
 };

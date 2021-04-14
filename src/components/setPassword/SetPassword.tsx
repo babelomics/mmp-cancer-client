@@ -11,8 +11,9 @@ import GaiaLoading from '../commons/GaiaLoading';
 
 interface IProps {
   loading: boolean;
-  signup: (identifier: string, password: string, t: any) => void;
+  signup: (token: string, identifier: string, password: string, t: any) => void;
   tokenData?: ITokenData;
+  token: string;
 }
 
 export const SetPassword = (props: IProps) => {
@@ -28,7 +29,7 @@ export const SetPassword = (props: IProps) => {
     validationSchema: generateValidationSchema(t),
     onSubmit: (values) => {
       if (props.tokenData) {
-        signup(props.tokenData.sub, values.password, t);
+        signup(props.token, props.tokenData.sub, values.password, t);
       }
     }
   });

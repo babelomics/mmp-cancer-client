@@ -17,6 +17,7 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import GaiaPopup from '../commons/GaiaPopup';
 import routes from '../router/routes';
 import { useHistory } from 'react-router-dom';
+import { Delete } from '@material-ui/icons';
 
 interface IProps {
   loading: boolean;
@@ -119,8 +120,38 @@ const PanelSetProfile = (props: IProps) => {
     history.push(`${routes.PATH_PANEL_SETS_MANAGEMENT}`);
   };
 
+  const getActions = () => {
+    const actions = [
+      {
+        icon: <GetAppIcon />,
+        onClick: openPopupExport,
+        variant: 'button',
+        text: t('commons.buttons.export')
+      }
+    ] as any[];
+
+    if (!props.panelSetData.deletionDate) {
+      actions.push({
+        icon: <Delete />,
+        onClick: clickDelete,
+        variant: 'button',
+        text: t('commons.buttons.delete')
+      });
+    }
+
+    return actions;
+  };
+
   return (
-    <GaiaContainer onBack={handleOnBack} icon="dynamic_feed" title={t('panelSetCreate.title')} onAccept={!props.loading && !props.panelSetData.deletionDate ? formik.handleSubmit : undefined}>
+    <GaiaContainer
+      onBack={handleOnBack}
+      onCancel={handleOnBack}
+      icon="dynamic_feed"
+      title={t('panelSetCreate.title')}
+      breadcrumbs={[t('panelSetsManagement.title'), t('panelSetCreate.title')]}
+      onAccept={!props.loading && !props.panelSetData.deletionDate ? formik.handleSubmit : undefined}
+      actions={getActions()}
+    >
       {props.loading ? (
         <GaiaLoading />
       ) : (
@@ -151,25 +182,6 @@ const PanelSetProfile = (props: IProps) => {
             onAccept={(data: any) => clickAcceptPopup(data)}
           />
 
-          <Grid style={{ paddingBottom: '20px', display: 'flex', justifyContent: 'flex-end' }}>
-            {!props.panelSetData.deletionDate && (
-              <Grid item xs={1}>
-                <Tooltip title={t('tabPanelDiagnostic.tooltip.delete') ?? ''} placement="top-start">
-                  <Fab color="primary" size="small" component="span" aria-label="add" variant="extended" onClick={() => clickDelete()}>
-                    <DeleteIcon />
-                  </Fab>
-                </Tooltip>
-              </Grid>
-            )}
-            <Grid item xs={1}>
-              <Tooltip title={t('panelProfileSet.tooltip.export') ?? 'Export Diagnostic Panel Set'} placement="top-start">
-                <Fab color="primary" size="small" component="span" aria-label="add" variant="extended" onClick={openPopupExport}>
-                  <GetAppIcon />
-                </Fab>
-              </Tooltip>
-            </Grid>
-          </Grid>
-
           <Grid container spacing={3}>
             <Grid item xs={2}>
               <GaiaTextField required name="diagnosticPanelSetIdentifier" label={t('commons.fields.identifier')} formik={formik} fullWidth disabled />
@@ -181,7 +193,7 @@ const PanelSetProfile = (props: IProps) => {
               <GaiaTextField required name="creationDate" label={t('commons.fields.dateCreated')} formik={formik} fullWidth disabled />
             </Grid>
             <Grid item xs={5}>
-              <GaiaTextField required name="description" label={t('commons.fields.description')} formik={formik} fullWidth disabled={props.panelSetData.deletionDate ? true : false} />
+              <GaiaTextField required name="description" label={t('commons.fields.description')} formik={formik} fullWidth disabled={props.panelSetData.deletionDate ? true : false} multiline />
             </Grid>
           </Grid>
           <Grid container spacing={3} alignItems="flex-end">

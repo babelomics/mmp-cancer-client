@@ -1,19 +1,18 @@
 import { AnyAction } from 'redux';
-import { getAccessTypeByStr } from '../../../utils/accessType';
 import IState from '../interfaces';
 import types from './types';
 
 export const initialState: IState = {
   loading: false,
   data: {
-    accessType: 0,
+    accessType: '',
     identifier: '',
     organization: '',
     firstName: '',
     lastName: '',
     email: '',
     accessRequestReason: '',
-    userType: 0,
+    userType: '',
     accessRefusalReason: '',
     attended: null
   }
@@ -41,7 +40,7 @@ const reducer = (state: IState = initialState, action: AnyAction) => {
         data: {
           ...payload,
           userType: 0,
-          accessType: getAccessTypeByStr(payload.accessType) || 0
+          accessType: payload.accessType
         }
       };
     default:

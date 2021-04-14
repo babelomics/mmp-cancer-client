@@ -21,7 +21,7 @@ function DelayedTextField(props: IProps) {
   }, [value]);
 
   useEffect(() => {
-    if (text != value) {
+    if (text !== value) {
       const timerId = setTimeout(() => {
         onChange(text);
       }, delay || DEFAULT_DELAY_MS);
@@ -46,6 +46,7 @@ function DelayedTextField(props: IProps) {
           e.preventDefault();
         }
       }}
+      style={{ color: '#696969' }}
     />
   );
 }

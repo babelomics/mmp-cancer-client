@@ -144,7 +144,14 @@ const GenomicRefPopup = ({
               <Grid container spacing={3}>
                 <Grid item xs={4}>
                   {activeEnsemblRelease && (
-                    <GaiaSelectField name="ensemblRelease" label={t('panelSetCreate.ensemblRelease')} items={listEnsemblRelease} fullWidth onChange={(e, value) => setEnsemblRelease(e, value)} />
+                    <GaiaSelectField
+                      name="ensemblRelease"
+                      label={t('panelSetCreate.ensemblRelease')}
+                      items={listEnsemblRelease}
+                      onChange={(e, value) => setEnsemblRelease(e, value)}
+                      value={genomicReference.ensemblRelease ?? ''}
+                      fullWidth
+                    />
                   )}
                 </Grid>
               </Grid>

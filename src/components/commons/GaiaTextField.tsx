@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { TextField } from '@material-ui/core';
+import { makeStyles, TextField, useTheme } from '@material-ui/core';
 
 interface IProps {
   name: string;
-  label: String;
+  label?: string;
   variant?: any | undefined;
   formik?: any;
   required?: boolean;
@@ -14,18 +14,51 @@ interface IProps {
   //debounce?: number;
   multiline?: boolean;
   rows?: number;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   InputLabelProps?: any;
   style?: any;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, multiline, className, fullWidth = true, onChange, InputLabelProps = {}, variant, style = {} }: IProps) => {
-  const [valueState, setValue] = useState(formik ? formik.values[name] : '');
+const useStyles = makeStyles((theme) => ({
+  disabledError: {
+    borderColor: 'red !important'
+  }
+}));
+
+const GaiaTextField = ({
+  required,
+  disabled,
+  type,
+  name,
+  label,
+  formik,
+  rows,
+  multiline,
+  className,
+  fullWidth = true,
+  onChange,
+  InputLabelProps = {},
+  variant = 'outlined',
+  style = {},
+  value
+}: IProps) => {
+  const [valueState, setValue] = useState(formik ? formik.values[name] : value ?? '');
+  const theme = useTheme();
+  const classes = useStyles();
   //const [timer, setTimer] = useState<any>(debounce);
 
   useEffect(() => {
-    setValue(formik.values[name]);
-  }, [formik.values[name]]);
+    if (formik) {
+      setValue(formik.values[name]);
+    }
+  }, [formik?.values[name]]);
+
+  useEffect(() => {
+    if (value) {
+      setValue(value);
+    }
+  }, [value]);
 
   const triggerChange = (e: React.ChangeEvent<any>) => {
     if (formik) {
@@ -46,10 +79,21 @@ const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, mu
     triggerChange(e);
   };
 
-  let blueStyle = { ...style };
-  if (variant === 'filled') {
-    blueStyle = { backgroundColor: '#dbecfb' };
-  }
+  const backgroundStyle = (): any => {
+    const hasErrors = formik && formik.submitCount > 0 && !!formik.errors[name];
+    if (!hasErrors) {
+      return { WebkitBoxShadow: `0 0 0 1000px ${theme.textfield.background} inset` };
+    }
+    return {};
+  };
+
+  const getStylesError = () => {
+    if (disabled && formik && formik.submitCount > 0 && !!formik.errors[name]) {
+      console.log('ENTRA');
+      return classes.disabledError;
+    }
+    return undefined;
+  };
 
   return (
     <TextField
@@ -57,7 +101,7 @@ const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, mu
       className={className}
       required={required}
       variant={variant}
-      inputProps={{ required: false }}
+      inputProps={{ required: false, style: { backgroundColor: 'transparent', ...backgroundStyle() } }}
       type={type}
       name={name}
       multiline={multiline}
@@ -69,7 +113,8 @@ const GaiaTextField = ({ required, disabled, type, name, label, formik, rows, mu
       helperText={formik ? formik.submitCount > 0 && formik.errors[name] : undefined}
       fullWidth={fullWidth}
       InputLabelProps={InputLabelProps}
-      style={blueStyle}
+      style={style}
+      InputProps={{ classes: { notchedOutline: getStylesError() } }}
     />
   );
 };

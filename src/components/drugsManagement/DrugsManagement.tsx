@@ -5,8 +5,6 @@ import DrugFilterButtons from './drug-filter-buttons/DrugFilterButtons';
 import DrugTable from './drug-table/DrugTable';
 import { DrugFilter } from './interfaces';
 import MmpClient from '../commons/tableFilter/MmpClient';
-import GaiaLoading from '../commons/GaiaLoading';
-import { LinearProgress } from '@material-ui/core';
 import routes from '../router/routes';
 import { useHistory } from 'react-router-dom';
 

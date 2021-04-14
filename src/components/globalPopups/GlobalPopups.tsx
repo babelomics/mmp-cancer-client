@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import GaiaPopup from '../commons/GaiaPopup';
 
@@ -11,6 +12,8 @@ interface IProps {
 }
 
 export const GlobalPopup = (props: IProps) => {
+  const { t } = useTranslation();
+
   const handleClose = () => {
     props.setPopupOpen(false);
   };

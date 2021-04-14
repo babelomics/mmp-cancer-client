@@ -6,6 +6,7 @@ let regexIdentifier = new RegExp(/^([a-zA-Z0-9_]{3,32})$/);
 
 export const generateValidationSchema = (t: TFunction) =>
   Yup.object().shape({
+    accessType: Yup.string().nullable().required(t('commons.error.required')),
     identifier: Yup.string().nullable().required(t('commons.error.required')).matches(regexIdentifier, t('commons.error.invalidIdentifier')),
     organization: Yup.string().nullable().required(t('commons.error.required')).max(150, t('commons.error.maxOrganization')),
     firstName: Yup.string().nullable().required(t('commons.error.required')).max(25, t('commons.error.maxFirstName')),

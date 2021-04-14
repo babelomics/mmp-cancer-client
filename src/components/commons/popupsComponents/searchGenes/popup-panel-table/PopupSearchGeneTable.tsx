@@ -11,6 +11,7 @@ interface IProps {
   filter: IPopupSearchGeneFilter;
   assembly: string;
   exclude: string[];
+  ensmblRelease: string;
   setFilter: (newFilter: IPopupSearchGeneFilter) => void;
   addGene: (gene: any) => void;
 }
@@ -20,11 +21,11 @@ function getGeneId(gene: IGene) {
 }
 
 function PopupSearchGeneTable(props: IProps) {
-  const { filter, assembly, addGene, exclude } = props;
+  const { filter, assembly, addGene, exclude, ensmblRelease } = props;
 
   const fetchGenePage = useCallback(
     (pageSize: number, page: number) => {
-      return MmpClient.getGenesSelectionList(filter, pageSize, page, assembly);
+      return MmpClient.getGenesSelectionList(filter, pageSize, page, assembly, ensmblRelease);
     },
     [filter]
   );
@@ -45,7 +46,7 @@ function PopupSearchGeneTable(props: IProps) {
             fetchPage={fetchGenePage}
             ChildWrapper={PopupSearchGeneRowWrapper}
             getElemId={getGeneId}
-            scrollModal={'geneModal'}
+            scrollAncestor={'geneModal'}
             exclude={{ exclude: exclude, field: 'geneId' }}
           />
         </TableBody>

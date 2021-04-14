@@ -2,8 +2,6 @@ const PATH_LOGIN = '/login';
 const PATH_HOME = '/home';
 const PATH_FORGOT_PASSWORD = '/forgot-password';
 const PATH_SET_PASSWORD = '/new-password';
-const PATH_SIGNUP = '/signup';
-const PATH_LAUNCH = '/launch';
 const PATH_USERS_MANAGEMENT = '/users-management';
 const PATH_DRUGS_MANAGEMENT = '/drugs-management';
 const PATH_REGISTRATION_MANAGEMENT = '/registration-management';
@@ -20,6 +18,8 @@ const PATH_TAB_PANEL_DIAGNOSTIC = '/tab-panel-diagnostic';
 const PATH_PROJECTS_MANAGEMENT = '/projects-management';
 const PATH_PROJECT_PROFILE = '/project';
 const PATH_PERMISSIONS_AND_USERS = '/permissions';
+const PATH_INDIVIDUALS_MANAGEMENT = '/individuals-management';
+const PATH_INDIVIDUALS_DETAILS = '/individual';
 
 
 export default {
@@ -27,8 +27,6 @@ export default {
   PATH_HOME,
   PATH_FORGOT_PASSWORD,
   PATH_SET_PASSWORD,
-  PATH_SIGNUP,
-  PATH_LAUNCH,
   PATH_USERS_MANAGEMENT,
   PATH_DRUGS_MANAGEMENT,
   PATH_REGISTRATION_MANAGEMENT,
@@ -44,5 +42,7 @@ export default {
   PATH_TAB_PANEL_DIAGNOSTIC,
   PATH_PROJECTS_MANAGEMENT,
   PATH_PROJECT_PROFILE,
-  PATH_PERMISSIONS_AND_USERS
+  PATH_PERMISSIONS_AND_USERS,
+  PATH_INDIVIDUALS_MANAGEMENT,
+  PATH_INDIVIDUALS_DETAILS
 };

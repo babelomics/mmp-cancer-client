@@ -14,7 +14,7 @@ interface IProps extends RouteComponentProps {
   userProfile: IUserProfile;
   t: any;
   fetchUserData: (identifier: string, t: any) => void;
-  updateUser: (identifier: string, data: any, t: any) => Promise<any>;
+  updateUser: (identifier: string, data: any, t: any, currentUser?: any) => Promise<any>;
   changePassword: (identifier: string, password: string, t: any) => void;
   unsubscribeUser: (identifier: string, t: any) => void;
   setUserSelectionPopupOpen: (open: boolean) => void;

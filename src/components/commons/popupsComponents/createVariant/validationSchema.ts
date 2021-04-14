@@ -1,7 +1,7 @@
 import { TFunction } from 'i18next';
 import * as Yup from 'yup';
 
-let regexPosition = new RegExp(/^([1-9]{0,})$/);
+let regexPosition = new RegExp(/^[1-9][0-9]*$/);
 let regexAltRef = new RegExp(/^[A, C, G, T]$/);
 
 export const checkValidationSchema = (t: TFunction) =>

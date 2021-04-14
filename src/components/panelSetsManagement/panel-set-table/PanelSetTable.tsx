@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Table, TableBody, TableCell, TableContainer } from '@material-ui/core';
+import { Table, TableBody, TableContainer } from '@material-ui/core';
 import { PanelSetFilter, PanelSet } from '../interfaces';
 import LazyList from '../../commons/tableFilter/LazyList';
 import PanelSetRow from './PanelSetRow';

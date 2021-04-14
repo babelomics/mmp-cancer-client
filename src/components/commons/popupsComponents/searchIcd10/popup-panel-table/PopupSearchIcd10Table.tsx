@@ -45,7 +45,7 @@ function PopupIcd10Table(props: IProps) {
             ChildWrapper={PopupIcd10RowWrapper}
             getElemId={getIcd10Id}
             setFilter={props.setFilter}
-            scrollModal={'icd10Modal'}
+            scrollAncestor={'icd10Modal'}
             exclude={{ exclude: exclude, field: 'id' }}
           />
         </TableBody>

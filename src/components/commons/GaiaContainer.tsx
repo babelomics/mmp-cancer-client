@@ -1,31 +1,35 @@
 import React from 'react';
-import { Divider, makeStyles, Paper, Typography } from '@material-ui/core';
-import { Close } from '@material-ui/icons';
+import { makeStyles, Paper, Typography } from '@material-ui/core';
+import { ArrowBack, ArrowForwardIos, Cancel, CheckCircle } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
 
-import GaiaIconButton from './GaiaIconButton';
 import GaiaButton from './GaiaButton';
 import GaiaIcon from './GaiaIcon';
 import { useHistory } from 'react-router-dom';
+import GaiaFabButton from './GaiaFabButton';
 
 interface IProps {
   isLaunchScreen?: boolean;
   icon?: string;
   title?: string;
-  backButtonText?: string;
   acceptButtonText?: string;
+  acceptButtonIcon?: React.ReactNode | (() => React.ReactNode);
   children?: any;
-  hideBackButton?: boolean;
-  backHistory?: boolean;
   actions?: IAction[];
+  style?: React.CSSProperties;
+  hideBackButton?: boolean;
+  breadcrumbs?: string[];
   onBack?: (e: any) => void;
   onAccept?: (e: any) => void;
-  backActions?: () => void;
-  style?: any;
+  onCancel?: (e: any) => void;
 }
 
 interface IAction {
   icon: React.ReactElement;
+  tooltip?: string;
+  disabled?: boolean;
+  variant?: 'fab' | 'button';
+  text?: string;
   onClick?: () => void;
 }
 
@@ -33,19 +37,26 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
     margin: 'auto',
-    width: '100%'
+    width: '100%',
+    height: '100%'
   },
   icon: {
-    marginRight: 10
+    marginRight: 10,
+    color: theme.palette.primary.light
   },
-  title: {
+  titleWrapper: {
     display: 'flex',
     alignItems: 'center',
     width: 'auto'
   },
+  title: {
+    fontSize: 15,
+    fontWeight: 'bold'
+  },
   rowSpace: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginBottom: 35
   },
   childrenWrapper: {
     display: 'flex',
@@ -54,54 +65,83 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap'
   },
   childrenContainer: {
-    paddingTop: 50,
     paddingBottom: 50,
     whiteSpace: 'nowrap'
+  },
+  breadcrumbIcon: {
+    marginRight: 5,
+    marginLeft: 5,
+    color: theme.palette.primary.light,
+    fontSize: 16,
+    marginTop: 3
   }
 }));
 
-const GaiaContainer = ({ icon, title, backButtonText, acceptButtonText, backHistory, onBack, onAccept, backActions, children, isLaunchScreen, hideBackButton, actions, style }: IProps) => {
+const GaiaContainer = ({ icon, title, acceptButtonText, acceptButtonIcon, onBack, onAccept, onCancel, children, actions, style, hideBackButton, breadcrumbs }: IProps) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const history = useHistory();
 
   const handleBack = (e: any) => {
-    if (backActions) {
-      backActions();
-    }
     if (onBack) {
       onBack(e);
-      if (backHistory) {
-        history.goBack();
-      }
     } else {
       history.goBack();
     }
   };
 
+  const renderBreadcrumbs = () => {
+    return (
+      <div className="d-flex" style={{ flexWrap: 'wrap' }}>
+        {breadcrumbs?.map((b, i) => {
+          if (i < breadcrumbs.length - 1) {
+            return (
+              <React.Fragment>
+                <Typography className={classes.title} variant="body2">
+                  {b}
+                </Typography>
+                <ArrowForwardIos className={classes.breadcrumbIcon} />
+              </React.Fragment>
+            );
+          }
+          return (
+            <Typography className={classes.title} variant="body2">
+              {b}
+            </Typography>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <Paper className={classes.root} style={style}>
-      {!isLaunchScreen && (
-        <React.Fragment>
-          <div className={classes.rowSpace}>
-            <div className={classes.title}>
-              <GaiaIcon className={classes.icon} color="inherit" icon={icon} size={30} />
-              <Typography variant="h5">{title}</Typography>
-            </div>
-            <div>
-              {actions?.map((a) => (
-                <GaiaIconButton icon={a.icon} onClick={a.onClick} color="primary" />
-              ))}
-              <GaiaIconButton icon={<Close />} onClick={handleBack} />
-            </div>
-          </div>
-          <Divider />
-          <div className={classes.rowSpace} style={{ marginTop: '25px' }}>
-            {!isLaunchScreen && !hideBackButton && <GaiaButton text={backButtonText || t('commons.buttons.goBack')} onClick={handleBack} />}
-            {onAccept && <GaiaButton text={acceptButtonText || t('commons.buttons.accept')} onClick={onAccept} />}
-          </div>
-        </React.Fragment>
-      )}
+      <div className={classes.rowSpace}>
+        <div className={classes.titleWrapper}>
+          {!hideBackButton && <GaiaFabButton color="default" icon={<ArrowBack />} iconSize={20} onClick={handleBack} tooltip={t('commons.buttons.goBack')} style={{ marginRight: 30 }} />}
+          <GaiaIcon className={classes.icon} color="inherit" icon={icon} size={27} />
+          {breadcrumbs ? (
+            renderBreadcrumbs()
+          ) : (
+            <Typography className={classes.title} variant="body2">
+              {title}
+            </Typography>
+          )}
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          {actions?.map((a) =>
+            !a.variant || a.variant === 'fab' ? (
+              <GaiaFabButton color="default" icon={a.icon} iconSize={20} onClick={a.onClick} tooltip={a.tooltip ?? ''} disabled={a.disabled} style={{ marginLeft: 20 }} />
+            ) : (
+              <GaiaButton color="default" icon={a.icon} text={a.text ?? ''} onClick={a.onClick} disabled={a.disabled} style={{ marginLeft: 20 }} />
+            )
+          )}
+          {onAccept && (
+            <GaiaButton icon={acceptButtonIcon || <CheckCircle />} iconSize={18} text={acceptButtonText || t('commons.buttons.accept')} onClick={onAccept} style={{ fontSize: 14, marginLeft: 20 }} />
+          )}
+          {onCancel && <GaiaButton icon={<Cancel />} iconSize={18} color="secondary" text={t('commons.buttons.cancel')} onClick={onCancel} style={{ fontSize: 14, marginLeft: 20 }} />}
+        </div>
+      </div>
       <div className={classes.childrenWrapper}>
         <div className={classes.childrenContainer}>{children}</div>
       </div>

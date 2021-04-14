@@ -20,7 +20,6 @@ const GenesList = (props: IProps) => {
     props.deleteGene(gene.geneId);
   };
 
-  console.log(props.isDeleted);
   return (
     <React.Fragment>
       <GeneFilterButtons filter={filter} setFilter={setFilter} setGenesOpenPopup={props.setGenesOpenPopup} hideAddBtn={props.isDeleted ?? false} />

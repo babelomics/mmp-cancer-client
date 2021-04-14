@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import GaiaContainer from '../../GaiaContainer';
-import { Dialog, Grid, TextField } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { useStyles } from '../popupStyle';
 import { useFormik } from 'formik';
 import { checkValidationSchema } from './validationSchema';
 import GaiaTextField from '../../GaiaTextField';
+import GaiaModalFormik from '../../GaiaModalFormik';
 
 interface IProps {
   open?: boolean;
@@ -71,25 +71,38 @@ export const PopupUsersSelection = ({ open = false, onClose, openPopupParent, se
     }
   });
 
-  console.log(checkFormik);
-
   return (
-    <Dialog open={openState} classes={{ paper: classes.dialogPaper }}>
-      <GaiaContainer title={titlePopup} onBack={handleClose} onAccept={checkFormik.handleSubmit} style={{ overflow: 'hidden', padding: '30px' }}>
-        <div style={{ marginBottom: '10px' }}>
+    <GaiaModalFormik open={openState} title={titlePopup} formik={checkFormik} onClose={handleClose} maxWidth="sm" hideCloseButton fullWidth>
+      <Grid container>
+        <Grid xs={12}>
           {t('tabPanelDiagnostic.fields.chromosomeSequence')} : {t('tabPanelDiagnostic.fields.initPosition')} : {t('tabPanelDiagnostic.fields.reference')} :{' '}
           {t('tabPanelDiagnostic.fields.alternative')}
-        </div>
-        <div>
-          <GaiaTextField required name="chromosome" style={{ marginRight: '10px', width: '220px' }} label={''} formik={checkFormik} fullWidth /> :
-          <GaiaTextField name="initPosition" style={{ marginLeft: '10px', width: '150px', marginRight: '10px' }} label={''} formik={checkFormik} fullWidth />
+        </Grid>
+      </Grid>
+      <Grid container style={{ marginTop: 10 }}>
+        <Grid item xs={4}>
+          <GaiaTextField required name="chromosome" formik={checkFormik} fullWidth />
+        </Grid>
+        <Grid container item xs={1} justify="center" style={{ width: 25, maxWidth: 25, marginTop: 15 }}>
           :
-          <GaiaTextField required name="reference" style={{ marginLeft: '10px', width: '35px', marginRight: '10px' }} label={''} formik={checkFormik} fullWidth />
+        </Grid>
+        <Grid item xs={3}>
+          <GaiaTextField name="initPosition" style={{ whiteSpace: 'initial' }} formik={checkFormik} fullWidth />
+        </Grid>
+        <Grid container item xs={1} justify="center" style={{ width: 25, maxWidth: 25, marginTop: 15 }}>
           :
-          <GaiaTextField required name="alternative" style={{ marginLeft: '10px', width: '35px', marginRight: '10px' }} label={''} formik={checkFormik} fullWidth />
-        </div>
-      </GaiaContainer>
-    </Dialog>
+        </Grid>
+        <Grid item xs={1}>
+          <GaiaTextField required name="reference" style={{ whiteSpace: 'initial' }} formik={checkFormik} fullWidth />
+        </Grid>
+        <Grid container item xs={1} justify="center" style={{ width: 25, maxWidth: 25, marginTop: 15 }}>
+          :
+        </Grid>
+        <Grid item xs={1}>
+          <GaiaTextField required name="alternative" style={{ whiteSpace: 'initial' }} formik={checkFormik} fullWidth />
+        </Grid>
+      </Grid>
+    </GaiaModalFormik>
   );
 };
 

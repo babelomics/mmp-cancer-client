@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { IconButton, makeStyles, TableCell, TableRow } from '@material-ui/core';
 import { IGroup } from '../../../interfaces';
 import { RemoveCircle } from '@material-ui/icons';
@@ -6,6 +6,8 @@ import { RemoveCircle } from '@material-ui/icons';
 interface IProps {
   item: IGroup;
   isDeleted: boolean;
+  excludeGroups: string[];
+  projectDeleted: boolean;
   rowClick?: (groups: IGroup) => void;
   onDelete?: (groups: IGroup) => void;
 }
@@ -16,7 +18,9 @@ interface ICell {
 
 const useStyles = makeStyles((theme) => ({
   cursor: {
-    cursor: 'pointer'
+    cursor: 'pointer',
+    whiteSpace: 'normal',
+    wordBreak: 'break-word'
   },
   hideCell: {
     display: 'none'
@@ -24,15 +28,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function UsersGroupsRow(props: IProps) {
-  const { item: groups } = props;
+  const { item: group, rowClick } = props;
   const classes = useStyles();
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     if (props.onDelete) {
-      props.onDelete(groups);
+      props.onDelete(group);
     }
   };
+
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => {
+      if (rowClick) {
+        rowClick(group);
+      }
+    },
+    [rowClick, group]
+  );
+
   const CeteredCell = (props: ICell) => {
     return (
       <TableCell className={`${classes.cursor} ${props.hide ? classes.hideCell : ''}`} style={{ textAlign: 'center' }}>
@@ -42,13 +56,16 @@ function UsersGroupsRow(props: IProps) {
   };
 
   return (
-    <TableRow>
-      <CeteredCell>{groups.groupId}</CeteredCell>
-      <CeteredCell>{groups.name}</CeteredCell>
-      <CeteredCell>{groups.description}</CeteredCell>
-      <CeteredCell>{groups.permissionsNameList.join(', ')}</CeteredCell>
-
-      {!groups.isChildren && !props.isDeleted && (
+    <TableRow onClick={(e) => (!props.projectDeleted ? handleClick(e) : undefined)}>
+      <CeteredCell>{group.groupId}</CeteredCell>
+      <CeteredCell>{group.name}</CeteredCell>
+      <CeteredCell>{group.description}</CeteredCell>
+      <TableCell className={classes.cursor} style={{ textAlign: 'center' }}>
+        {group.permissionsNameList?.map((p, i) => (
+          <div key={`p-${i}`}>{p}</div>
+        ))}
+      </TableCell>
+      {!props.projectDeleted && (
         <CeteredCell>
           <IconButton edge="end" onClick={handleDelete}>
             <RemoveCircle />

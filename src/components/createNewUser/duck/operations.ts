@@ -13,17 +13,17 @@ const createUser = (data: any, setFormikErrors: (errors: FormikErrors<IFormData>
   dispatch(actions.initCreate());
   api
     .createUser(data)
-    .then((res) => {
+    .then(() => {
       dispatch(globalPopupOperations.showMessagePopup(t('createNewUser.messages.success'), 'success', () => dispatch(push(routes.PATH_USERS_MANAGEMENT))));
       dispatch(actions.endCreate());
     })
-    .catch((err) => {
+    .catch((err: any) => {
       dispatch(actions.endCreate());
 
-      if (err.message.toLowerCase().includes('email')) {
+      if (err.message?.toLowerCase().includes('email')) {
         dispatch(globalPopupOperations.showMessagePopup(t('registryRequest.messages.errorEmail'), 'error'));
         setFormikErrors({ email: t('registryRequest.messages.errorEmail') });
-      } else if (err.message.toLowerCase().includes('identifier')) {
+      } else if (err.message?.toLowerCase().includes('identifier')) {
         dispatch(globalPopupOperations.showMessagePopup(t('registryRequest.messages.errorIdentifier'), 'error'));
         setFormikErrors({ identifier: t('registryRequest.messages.errorIdentifier') });
       } else {

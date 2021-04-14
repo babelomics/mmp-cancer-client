@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, IconButton, Tooltip } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+import { AddCircle } from '@material-ui/icons';
 
 import { IHPOFilter } from '../../interfaces';
 
@@ -20,11 +20,11 @@ const HPOFilterButtons = (props: IProps) => {
   return (
     <>
       <Box display="flex" flexDirection="column">
-        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" justifyContent="flex-end" style={{ width: '100%' }}>
+        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" alignItems="center" justifyContent="flex-end" style={{ width: '100%' }}>
           {!props.hideAddBtn && (
             <Tooltip title={addTooltip}>
               <IconButton onClick={props.setHPOOpenPopup}>
-                <Add />
+                <AddCircle />
               </IconButton>
             </Tooltip>
           )}

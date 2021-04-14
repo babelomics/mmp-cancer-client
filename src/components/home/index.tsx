@@ -5,6 +5,7 @@ import { IRootState } from '../../store';
 import { operations } from './duck';
 import Home from './Home';
 import { ITokenData } from '../login/interfaces';
+import routes from '../router/routes';
 
 interface IProps extends RouteComponentProps {
   user: ITokenData | null;
@@ -12,6 +13,12 @@ interface IProps extends RouteComponentProps {
 }
 
 class Wrapper extends React.Component<IProps, {}> {
+  componentDidMount() {
+    if (this.props.user?.userType === 'User') {
+      this.props.history.push(routes.PATH_PROJECTS_MANAGEMENT);
+    }
+  }
+
   render() {
     return <Home {...this.props} />;
   }
@@ -19,7 +26,7 @@ class Wrapper extends React.Component<IProps, {}> {
 
 const mapStateToProps = (state: IRootState) => ({
   user: state.login.user,
-  configured: state.launch.data.configured
+  configured: state.login.configData.configured
 });
 
 const mapDispatchToProps = { ...operations };

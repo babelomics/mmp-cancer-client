@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { Box, Chip, Grid, IconButton, makeStyles, Popover, Tooltip } from '@material-ui/core';
-import { FilterList, Add } from '@material-ui/icons';
+import { Box, Chip, Grid, makeStyles, Popover } from '@material-ui/core';
+import { FilterList } from '@material-ui/icons';
 import GaiaButton from '../../commons/GaiaButton';
 
 import { IProjectsFilter } from '../interfaces';
@@ -11,11 +11,12 @@ import FilterDateField from '../../commons/tableFilter/FilterDateField';
 import FilterTextField from '../../commons/tableFilter/FilterTextField';
 import { ITableAssemblyData } from '../../genomicRefPopup/interfaces';
 import ModalTableAssembly from '../../genomicRefPopup/ModalTableAssembly';
-import routes from '../../router/routes';
+import ILogin from '../../login/interfaces';
 
 interface IProps {
   filter: any;
   setFilter: (newProjectsFilter: IProjectsFilter) => void;
+  login: ILogin;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -69,9 +70,6 @@ const ProjectsFilterButtons = (props: IProps) => {
     setFilter(obj);
   };
 
-  const tooltipFilter = t('commons.table.filters.filterTooltip');
-  const addTooltip = t('commons.table.addTooltip');
-
   const clicAssemblyButton = () => {
     setOpenAssemblyPopup(true);
   };
@@ -81,13 +79,10 @@ const ProjectsFilterButtons = (props: IProps) => {
     setOpenAssemblyPopup(false);
   };
 
-  const handleProject = useCallback(() => {
-    history.push(routes.PATH_PROJECT_PROFILE);
-  }, [history]);
   return (
     <>
       <Box display="flex" flexDirection="column">
-        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" justifyContent="flex-end" style={{ width: '100%' }}>
+        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" alignItems="center" justifyContent="flex-end" style={{ width: '100%' }}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -95,16 +90,7 @@ const ProjectsFilterButtons = (props: IProps) => {
           >
             <Searchbar variant="outlined" margin="dense" value={search} onChange={handleSearchTextChange} />
           </form>
-          <Tooltip title={tooltipFilter}>
-            <IconButton onClick={handleExpandClick}>
-              <FilterList />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={addTooltip} onClick={handleProject}>
-            <IconButton>
-              <Add />
-            </IconButton>
-          </Tooltip>
+          <GaiaButton color="default" text={t('commons.buttons.filter')} icon={<FilterList />} onClick={handleExpandClick} style={{ marginLeft: 20 }} />
         </Box>
         <Popover
           id="simple-popover"
@@ -143,16 +129,16 @@ const ProjectsFilterButtons = (props: IProps) => {
               <FilterTextField label={t('commons.fields.ensemblRelease')} value={filter.ensemblRelease} onChange={handleFilter} field="ensemblRelease" />
             </Grid>
             <Grid item xs={6}>
-              <FilterDateField value={filter.creationDateStart} onChange={handleFilter} label={t('commons.fields.createdBefore')} field="creationDateStart" />
+              <FilterDateField value={filter.creationDateStart} onChange={handleFilter} label={t('commons.fields.createdAfter')} field="creationDateStart" />
             </Grid>
             <Grid item xs={6}>
-              <FilterDateField value={filter.creationDateEnd} onChange={handleFilter} label={t('commons.fields.createdAfter')} field="creationDateEnd" />
+              <FilterDateField value={filter.creationDateEnd} onChange={handleFilter} label={t('commons.fields.createdBefore')} field="creationDateEnd" />
             </Grid>
             <Grid item xs={6}>
-              <FilterDateField value={filter.modificationDateStart} onChange={handleFilter} label={t('commons.fields.lastUpdateBefore')} field="modificationDateStart" />
+              <FilterDateField value={filter.modificationDateStart} onChange={handleFilter} label={t('commons.fields.lastUpdateAfter')} field="modificationDateStart" />
             </Grid>
             <Grid item xs={6}>
-              <FilterDateField value={filter.modificationDateEnd} onChange={handleFilter} label={t('commons.fields.lastUpdateAfter')} field="modificationDateEnd" />
+              <FilterDateField value={filter.modificationDateEnd} onChange={handleFilter} label={t('commons.fields.lastUpdateBefore')} field="modificationDateEnd" />
             </Grid>
             <Grid item xs={12}>
               <GaiaButton text={t('commons.buttons.reset')} fullWidth onClick={resetFilters} />

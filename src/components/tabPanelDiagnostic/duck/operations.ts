@@ -4,7 +4,7 @@ import api from './api';
 import { operations as globalPopupOperations } from '../../globalPopups/duck';
 import routes from '../../router/routes';
 import { push } from 'connected-react-router';
-import { IDiagnosticPanel, IDiagnosticPanelGlobal } from '../interfaces';
+import { IDiagnosticPanelGlobal } from '../interfaces';
 import { AxiosResponse } from 'axios';
 import { doDateFormat } from '../../../utils/utils';
 

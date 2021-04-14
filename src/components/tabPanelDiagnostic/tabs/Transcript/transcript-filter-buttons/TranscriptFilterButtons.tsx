@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Chip, IconButton, makeStyles, Tooltip } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+import { Box, Chip, IconButton, Tooltip } from '@material-ui/core';
+import { AddCircle } from '@material-ui/icons';
 
 import { ITranscriptFilter } from '../../interfaces';
 import Searchbar from '../../../../commons/tableFilter/Searchbar';
@@ -35,7 +35,7 @@ const TranscriptFilterButtons = (props: IProps) => {
   return (
     <>
       <Box display="flex" flexDirection="column">
-        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" justifyContent="flex-end" style={{ width: '100%' }}>
+        <Box display="flex" flexDirection="row" padding={2} alignSelf="end" alignItems="center" justifyContent="flex-end" style={{ width: '100%' }}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -47,7 +47,7 @@ const TranscriptFilterButtons = (props: IProps) => {
           {!props.hideAddBtn && (
             <Tooltip title={addTooltip}>
               <IconButton onClick={props.setTranscriptOpenPopup}>
-                <Add />
+                <AddCircle />
               </IconButton>
             </Tooltip>
           )}

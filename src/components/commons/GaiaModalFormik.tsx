@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogActions, makeStyles, Typography } from '@material-ui/core';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { Close } from '@material-ui/icons';
-import GaiaIconButton from './GaiaIconButton';
+import { Cancel, CheckCircle, Close, DoneRounded } from '@material-ui/icons';
 import GaiaButton from './GaiaButton';
 import { useTranslation } from 'react-i18next';
+import GaiaFabButton from './GaiaFabButton';
 
 interface IProps {
   title: string;
+  id?: string;
   open?: boolean;
   children?: any;
   formik: any;
+  maxWidth?: false | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  fullWidth?: boolean;
+  hideCloseButton?: boolean;
   onSubmit?: () => void;
   onClose?: () => void;
 }
@@ -35,16 +39,16 @@ const useStyles = makeStyles((theme) => ({
 
 const DialogTitle = (props: any) => {
   const classes = useStyles();
-  const { children, onClose, ...other } = props;
+  const { children, onClose, hideCloseButton, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
       <Typography variant="h6">{children}</Typography>
-      {onClose ? <GaiaIconButton icon={<Close />} onClick={onClose} /> : null}
+      {!hideCloseButton ? <GaiaFabButton color="default" icon={<Close />} onClick={onClose} /> : null}
     </MuiDialogTitle>
   );
 };
 
-export const GaiaModalFormik = ({ title, open = false, children, formik, onSubmit, onClose }: IProps) => {
+export const GaiaModalFormik = ({ title, id, open = false, children, formik, maxWidth, fullWidth, onSubmit, onClose, hideCloseButton }: IProps) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [openState, setOpen] = useState(open);
@@ -72,14 +76,16 @@ export const GaiaModalFormik = ({ title, open = false, children, formik, onSubmi
   };
 
   return (
-    <Dialog onClose={handleClose} open={openState}>
-      <DialogTitle className={classes.title} onClose={handleClose}>
+    <Dialog onClose={handleClose} open={openState} maxWidth={maxWidth} fullWidth={fullWidth}>
+      <DialogTitle className={classes.title} onClose={handleClose} hideCloseButton={hideCloseButton}>
         {title}
       </DialogTitle>
-      <DialogContent dividers>{children}</DialogContent>
-      <DialogActions>
-        <GaiaButton text={t('commons.buttons.cancel')} onClick={handleClose} />
-        <GaiaButton text={t('commons.buttons.accept')} onClick={handleSubmit} />
+      <DialogContent id={id} style={{ padding: '20px 24px' }}>
+        {children}
+      </DialogContent>
+      <DialogActions className={classes.root}>
+        <GaiaButton icon={<CheckCircle />} variant="outlined" text={t('commons.buttons.accept')} onClick={handleSubmit} />
+        <GaiaButton color="default" icon={<Cancel />} variant="outlined" text={t('commons.buttons.cancel')} onClick={handleClose} />
       </DialogActions>
     </Dialog>
   );

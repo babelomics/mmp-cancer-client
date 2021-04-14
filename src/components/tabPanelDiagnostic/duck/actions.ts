@@ -1,4 +1,4 @@
-import { IDiagnosticPanel, IDiagnosticPanelGlobal, IDiagnosticPanelGlobalUpdate } from '../interfaces';
+import { IDiagnosticPanelGlobal, IDiagnosticPanelGlobalUpdate } from '../interfaces';
 import { IGene, IHPO, ITranscript, IIcd10 } from '../tabs/interfaces';
 import types from './types';
 
