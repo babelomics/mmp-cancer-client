@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import Card from "./UI/Card";
+import Loading from "./UI/Loading";
 
 function DrugsList() {
   const [drugs, setDrugs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   let { id } = useParams();
 
   const fetchPost = async () => {
+    setIsLoading(true);
     const response = await fetch(
       "http://localhost:8080/drugSets/" + id + "/drugs"
     );
     const data = await response.json();
     setDrugs(data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -18,13 +23,19 @@ function DrugsList() {
   }, []);
 
   return (
-    <div className="Drugs">
-        {drugs.map((drug) => (
-          <>
-            
-              <div><h3>{drug.standardName}</h3></div>
-              <div>Common Name: {drug.commonName}</div>
-              <div>                
+    <React.Fragment>
+      {isLoading ? (
+        <Loading></Loading>
+      ) : (
+        <div className="Drugs">
+          {drugs.map((drug) => (
+            <>
+              <Card className="drug">
+                <div>
+                  <h3>{drug.standardName}</h3>
+                </div>
+                <div>Common Name: {drug.commonName}</div>
+                <div>
                   Drug Sources:
                   <ul className="list-group">
                     {drug.drugSources.map((drugSource) => (
@@ -38,11 +49,13 @@ function DrugsList() {
                       </>
                     ))}
                   </ul>
-              </div>
-            <br></br>
-          </>
-        ))}
-    </div>
+                </div>
+              </Card>
+            </>
+          ))}
+        </div>
+      )}
+    </React.Fragment>
   );
 }
 
