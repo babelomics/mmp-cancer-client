@@ -36,13 +36,13 @@ function DrugsList() {
                 </div>
                 <div>Common Name: {drug.commonName}</div>
                 <div>
-                  Drug Sources:
+                  Drug Names:
                   <ul className="list-group">
-                    {drug.drugSources.map((drugSource) => (
+                    {drug.drugNames.map((drugName) => (
                       <>
                         <li>
-                          <div>Short Name: {drugSource.shortName}</div>
-                          <div>Name: {drugSource.name}</div>
+                          <div>Name: {drugName.name}</div>
+                          <div>Source: {drugName.drugSource.shortName}</div>
                         </li>
 
                         <br></br>
