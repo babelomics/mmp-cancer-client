@@ -35,16 +35,15 @@ function DrugSetsList() {
           <>
           <br></br>
           <Card className="drugset">
-              <div>{drugSet.name}</div>
-              <div>
-                Created at: {moment(drugSet.createdAt).format("MMMM Do YYYY")}
-              </div>
-              <button onClick={() => getDetails(drugSet.id)}>
-                {" "}
-                Show Detail{" "}
-              </button>
-            </Card>
-            
+            <div>{drugSet.name}</div>
+            <div>
+              Created at: {moment(drugSet.createdAt).format("MMMM Do YYYY")}
+            </div>
+            <button onClick={() => getDetails(drugSet.id)}>
+              {" "}
+              Show Detail{" "}
+            </button>
+          </Card>
           </>
         ))}
     </div>

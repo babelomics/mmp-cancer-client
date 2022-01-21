@@ -3,6 +3,7 @@ import moment from "moment";
 import { useParams, useNavigate } from "react-router-dom";
 import Card from "./UI/Card";
 import Loading from "./UI/Loading";
+import DrugsList from "./DrugsList";
 
 function DrugSetDetail() {
   let { id } = useParams();
@@ -31,6 +32,7 @@ function DrugSetDetail() {
       {isLoading ? (
         <Loading></Loading>
       ) : (
+        <>
         <Card className="drugsetDetail">
           <div>
             <div>{drugSet.name}</div>
@@ -42,9 +44,10 @@ function DrugSetDetail() {
             <div>
               Drugs: {drugSet.drugs && Object.keys(drugSet.drugs).length}
             </div>
-            <button onClick={() => getDrugs(drugSet.id)}> Show Drugs </button>
           </div>
         </Card>
+        <DrugsList />
+        </>
       )}
     </React.Fragment>
   );

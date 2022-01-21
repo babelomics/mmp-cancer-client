@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { DataTable } from 'primereact/datatable';
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
-import { FilterMatchMode, FilterService } from 'primereact/api';
+import { Button } from 'primereact/button';
+import { FilterMatchMode } from 'primereact/api';
 import Card from "./UI/Card";
 import Loading from "./UI/Loading";
 
@@ -12,15 +13,12 @@ function DrugsList() {
   const [isLoading, setIsLoading] = useState(false);
   const [first, setFirst] = useState(0);
   const [filters, setFilters] = useState({
-    'drugsfilter': { value: null, matchMode: FilterMatchMode.CONTAINS },
     'global': { value: null, matchMode: FilterMatchMode.CONTAINS }
   });
   const [globalFilterValue, setGlobalFilterValue] = useState('');
+  const [expandedRows, setExpandedRows] = useState(null);
+  const isMounted = useRef(false);
   let { id } = useParams();
-  FilterService.register('drugsfilter', (a, b) => {
-    console.log(a, b); // TEST
-    return false;
-  });
 
   const fetchPost = async () => {
     setIsLoading(true);
@@ -33,6 +31,7 @@ function DrugsList() {
   };
 
   useEffect(() => {
+    isMounted.current = true;
     fetchPost();
   }, []);
 
@@ -44,8 +43,19 @@ function DrugsList() {
     setGlobalFilterValue(value);
   }
 
+  const expandAll = () => {
+    let _expandedRows = {};
+    drugs.forEach(d => _expandedRows[`${d.id}`] = true);
+    setExpandedRows(_expandedRows);
+  }
+
+  const collapseAll = () => {
+    setExpandedRows(null);
+  }
+
   const renderHeader = () => {
     return (
+      <>
       <div className="p-d-flex p-jc-between p-ai-center">
         <h5 className="p-m-0">Drug List</h5>
         <span className="p-input-icon-left">
@@ -53,6 +63,11 @@ function DrugsList() {
           <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
         </span>
       </div>
+      <div className="table-header-container">
+        <Button icon="pi pi-plus" label="Expand All" onClick={expandAll} className="mr-2" />
+        <Button icon="pi pi-minus" label="Collapse All" onClick={collapseAll} />
+      </div>
+      </>
     )
   }
 
@@ -65,8 +80,11 @@ function DrugsList() {
       ) : (
         <DataTable value={drugs} paginator header={header} rows={10} dataKey="id" first={first} onPage={(e) => setFirst(e.first)}
         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-          <Column header="" body={drugBodyTemplate} style={{width:'100%'}}></Column>
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" filters={filters}
+        expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={drugBodyTemplate}>
+          <Column expander style={{ width: '3em' }} />
+          <Column header="Standard Name" field="standardName"></Column>
+          <Column header="Common Name" field="commonName"></Column>
         </DataTable>
       )}
     </React.Fragment>
