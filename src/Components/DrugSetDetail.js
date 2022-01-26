@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Card from "./UI/Card";
 import Loading from "./UI/Loading";
 import DrugsList from "./DrugsList";
+import { Button } from "primereact/button";
+import { Dialog } from 'primereact/dialog';
+import UpdateList from "./UpdateList";
 
 function DrugSetDetail() {
   let { id } = useParams();
   const [drugSet, setDrugSet] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // const navigate = useNavigate();
+  const [displayModal, setDisplayModal] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -22,9 +26,29 @@ function DrugSetDetail() {
     fetchPost();
   }, [id]);
 
-  // function getDrugs(drugSetId) {
-  //   navigate("/drugsets/" + drugSetId + "/drugs");
-  // }
+  const dialogFuncMap = {
+    'displayModal': setDisplayModal
+  }
+
+  const onClick = (name) => {
+    dialogFuncMap[`${name}`](true);
+  }
+
+  const onHide = (name) => {
+      dialogFuncMap[`${name}`](false);
+  }
+
+  function home() {
+    navigate("/");
+  }
+
+  const renderFooter = () => {
+    return (
+      <div>
+        <Button label="OK" icon="pi pi-check" onClick={() => onHide('displayModal')} autoFocus></Button>
+      </div>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -33,6 +57,7 @@ function DrugSetDetail() {
       ) : (
         <>
         <Card className="drugsetDetail">
+          <Button icon="pi pi-home" iconPos="left" onClick={home}></Button>
           <div>
             <div>{drugSet.name}</div>
             <div>Description: {drugSet.description}</div>
@@ -43,8 +68,14 @@ function DrugSetDetail() {
             <div>
               Drugs: {drugSet.drugs && Object.keys(drugSet.drugs).length}
             </div>
+            <div>
+              <Button label="Show All Updates" icon="pi pi-external-link" onClick={() => onClick('displayModal')}></Button>
+            </div>
           </div>
         </Card>
+        <Dialog header="Update List" visible={displayModal} modal={true} style={{width: '40%'}} footer={renderFooter} onHide={() => onHide('displayModal')}>
+          <UpdateList />
+        </Dialog>
         <DrugsList />
         </>
       )}
