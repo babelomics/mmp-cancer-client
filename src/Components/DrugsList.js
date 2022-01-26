@@ -20,20 +20,19 @@ function DrugsList() {
   const isMounted = useRef(false);
   let { id } = useParams();
 
-  const fetchPost = async () => {
-    setIsLoading(true);
-    const response = await fetch(
-      "http://localhost:8080/drugSets/" + id + "/drugs"
-    );
-    const data = await response.json();
-    setDrugs(data);
-    setIsLoading(false);
-  };
-
   useEffect(() => {
+    const fetchPost = async () => {
+      setIsLoading(true);
+      const response = await fetch(
+        "http://localhost:8080/drugSets/" + id + "/drugs"
+      );
+      const data = await response.json();
+      setDrugs(data);
+      setIsLoading(false);
+    };
     isMounted.current = true;
     fetchPost();
-  }, []);
+  }, [id]);
 
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
@@ -94,7 +93,7 @@ function DrugsList() {
 const drugBodyTemplate = (rowData) => {
   return (
     <Card className="drug">
-      <div>
+      <div key={rowData.id}>
         <h3>{rowData.standardName}</h3>
       </div>
       <div>Common Name: {rowData.commonName}</div>
@@ -102,7 +101,7 @@ const drugBodyTemplate = (rowData) => {
         <ul className="list-group">
           {rowData.drugNames.map((drugName) => (
             <>
-              <li>
+              <li key={drugName.id}>
                 <div>Name: {drugName.name}</div>
                 <div>Source: {drugName.drugSource.shortName}</div>
               </li>
