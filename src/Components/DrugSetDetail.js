@@ -57,18 +57,18 @@ function DrugSetDetail() {
       ) : (
         <>
         <Card className="drugsetDetail">
-          <Button icon="pi pi-home" iconPos="left" onClick={home}></Button>
-          <div>
-            <div>{drugSet.name}</div>
-            <div>Description: {drugSet.description}</div>
-            <div>
-              Created on: {moment(drugSet.createdAt).format("MMMM Do YYYY")}
+          <div className="grid">
+            <div className="col-5"><Button icon="pi pi-home" iconPos="left" onClick={home}></Button></div>
+            <div className="col-7"><h3>{drugSet.name}</h3></div>
+            <div className="col-3"><strong>Description:</strong> {drugSet.description}</div>
+            <div className="col-2">
+              <strong>Created on:</strong> {moment(drugSet.createdAt).format("MMMM Do YYYY")}
             </div>
-            <div>Last updated: {moment(drugSet.updatedAt).format("MMMM Do YYYY")}</div>
-            <div>
-              Drugs: {drugSet.drugs && Object.keys(drugSet.drugs).length}
+            <div className="col-2"><strong>Last updated:</strong> {moment(drugSet.updatedAt).format("MMMM Do YYYY")}</div>
+            <div className="col-2">
+              <strong>Drugs:</strong> {drugSet.drugs && Object.keys(drugSet.drugs).length}
             </div>
-            <div>
+            <div className="col-2">
               <Button label="Show All Updates" icon="pi pi-external-link" onClick={() => onClick('displayModal')}></Button>
             </div>
           </div>

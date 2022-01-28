@@ -7,6 +7,7 @@ import { FilterMatchMode } from 'primereact/api';
 import { DataTable } from 'primereact/datatable';
 import { Column } from "primereact/column";
 import { ContextMenu } from 'primereact/contextmenu';
+import PandrugsClient from "../PandrugsClient/PandrugsClient";
 
 function DrugSetsList() {
   const [drugSets, setDrugSets] = useState([]);
@@ -29,8 +30,9 @@ function DrugSetsList() {
 
   const updateSet = async (drugSet) => {
     setIsLoading(true);
-    await fetch("http://localhost:8080/drugSets/pandrugs/updates", { method: 'POST', mode: 'no-cors' });
-    drugSet.updatedAt = new Date();
+    const response = await fetch("http://localhost:8080/drugSets/pandrugs/updates", { method: 'POST' });
+    const data = await response.json();
+    drugSet.updatedAt = data.updatedAt;
     setIsLoading(false);
   }
 
@@ -87,9 +89,9 @@ function DrugSetsList() {
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" filters={filters} onRowDoubleClick={e => getDetails(e.data)}
         selectionMode="single" selection={selectedDrugSet} onSelectionChange={e => setSelectedDrugSet(e.value)}
         contextMenuSelection={selectedDrugSet} onContextMenuSelectionChange={e => setSelectedDrugSet(e.value)} onContextMenu={e => cm.current.show(e.originalEvent)}>
-          <Column header="Name" field="name"></Column>
-          <Column header="Creation Date" body={formatCreationDateTemplate}></Column>
-          <Column header="Last Update" body={formatUpdatedDateTemplate}></Column>
+          <Column header="Name" field="name" sortable></Column>
+          <Column header="Creation Date" body={formatCreationDateTemplate} sortable></Column>
+          <Column header="Last Update" body={formatUpdatedDateTemplate} sortable></Column>
         </DataTable>
         </>
       )}

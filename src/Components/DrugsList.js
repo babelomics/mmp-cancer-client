@@ -82,8 +82,8 @@ function DrugsList() {
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" filters={filters}
         expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={drugBodyTemplate}>
           <Column expander style={{ width: '3em' }} />
-          <Column header="Standard Name" field="standardName"></Column>
-          <Column header="Common Name" field="commonName"></Column>
+          <Column header="Standard Name" field="standardName" sortable></Column>
+          <Column header="Common Name" field="commonName" sortable></Column>
         </DataTable>
       )}
     </React.Fragment>
