@@ -5,8 +5,8 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Button } from 'primereact/button';
 import { FilterMatchMode } from 'primereact/api';
-import Card from "./UI/Card";
-import Loading from "./UI/Loading";
+import Card from "../../UI/Card";
+import Loading from "../../UI/Loading";
 
 function DrugsList() {
   const [drugs, setDrugs] = useState([]);

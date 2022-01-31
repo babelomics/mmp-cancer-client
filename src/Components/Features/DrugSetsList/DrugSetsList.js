@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import Loading from "./UI/Loading";
+import Loading from "../../UI/Loading";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from 'primereact/api';
 import { DataTable } from 'primereact/datatable';
 import { Column } from "primereact/column";
 import { ContextMenu } from 'primereact/contextmenu';
-import PandrugsClient from "../PandrugsClient/PandrugsClient";
 
 function DrugSetsList() {
   const [drugSets, setDrugSets] = useState([]);

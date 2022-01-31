@@ -1,4 +1,4 @@
-import DrugSetsList from "../Components/DrugSetsList";
+import DrugSetsList from "../Components/Features/DrugSetsList/DrugSetsList";
 
 function Home() {
 

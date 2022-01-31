@@ -1,9 +1,9 @@
 import React from "react";
 import Home from "./Views/Home";
-import DrugsList from "./Components/DrugsList";
+import DrugsList from "./Components/Features/DrugsList/DrugsList";
 import { Routes, Route } from "react-router-dom";
 import NoMatch from "./Views/NoMatch";
-import DrugSetDetail from "./Components/DrugSetDetail";
+import DrugSetDetail from "./Components/Features/DrugSetDetail/DrugSetDetail";
 
 export const AppRoutes = () => {
   return (
