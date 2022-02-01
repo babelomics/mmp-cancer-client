@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { useParams, useNavigate } from "react-router-dom";
+import {useDispatch, useSelector} from 'react-redux'
+import updateList from '../../../app/drugs'
+import { RootState } from "../../../app/store";
 import Card from "../../UI/Card";
 import Loading from "../../UI/Loading";
 import DrugsList from "../drugList/DrugList";
@@ -16,6 +19,18 @@ function DrugSetDetail() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const dispatch = useDispatch()
+  let drugList = useSelector((state: RootState) => {
+    return state.drugListSlice;
+  });
+
+  const addDrugList = (drugs: Drug[] | undefined) => {
+    return {
+      type: 'ADD_DRUGS',
+      payload: drugs
+    };
+  };
+
   useEffect(() => {
     const abortController = new AbortController();
     const fetchPost = async () => {
@@ -23,10 +38,14 @@ function DrugSetDetail() {
       let data: Drugset;
       data = await MmpCancerClient.getDrugsetById(id, undefined, abortController.signal);
       setDrugSet(data);
+      dispatch(updateList(drugList,addDrugList(drugSet?.drugs)))
+      console.log(drugList)
       setIsLoading(false);
     };
     fetchPost();
   }, [id]);
+
+
   function home() {
     navigate("/");
   }

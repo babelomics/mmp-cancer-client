@@ -8,10 +8,14 @@ import "primeicons/primeicons.css";                                //icons
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter as Router} from 'react-router-dom';
 import {AppRoutes} from './AppRoutes';
+import { Provider } from 'react-redux'
+import store from './app/store'
 
 ReactDOM.render(
    <Router>
-    <AppRoutes />
+     <Provider store={store}>
+      <AppRoutes />
+    </Provider>
   </Router>,
   document.getElementById('root')
 );

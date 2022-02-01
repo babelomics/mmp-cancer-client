@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Props } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { DataTable } from 'primereact/datatable';
 import { Column } from "primereact/column";
