@@ -5,16 +5,15 @@ import Card from "../../UI/Card";
 import Loading from "../../UI/Loading";
 import DrugsList from "../drugList/DrugList";
 import { Button } from "primereact/button";
-import { Dialog } from 'primereact/dialog';
 import UpdateList from "../updateList/UpdateList";
 import Drugset from "../../../models/Drugset";
 import MmpCancerClient from "../../../clients/mmpCancerClient";
+import Drug from "../../../models/Drug";
 
 function DrugSetDetail() {
   let { id } = useParams();
-  const [drugSet, setDrugSet] = useState<Drugset | undefined>();
+  const [drugSet, setDrugSet] = useState<Drugset>();
   const [isLoading, setIsLoading] = useState(false);
-  const [displayModal, setDisplayModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,29 +27,8 @@ function DrugSetDetail() {
     };
     fetchPost();
   }, [id]);
-
-  const dialogFuncMap = {
-    displayModal: setDisplayModal
-  }
-
-  const onClick = (name: string) => {
-    dialogFuncMap[`${name}`](true);
-  }
-
-  const onHide = (name: string) => {
-      dialogFuncMap[`${name}`](false);
-  }
-
   function home() {
     navigate("/");
-  }
-
-  const renderFooter = () => {
-    return (
-      <div>
-        <Button label="OK" icon="pi pi-check" onClick={() => onHide('displayModal')} autoFocus></Button>
-      </div>
-    );
   }
 
   return (
@@ -62,24 +40,19 @@ function DrugSetDetail() {
         <Card className="drugsetDetail">
           <div className="grid">
             <div className="col-5"><Button icon="pi pi-home" iconPos="left" onClick={home}></Button></div>
-            <div className="col-7"><h3>{drugSet.name}</h3></div>
-            <div className="col-3"><strong>Description:</strong> {drugSet.description}</div>
+            <div className="col-7"><h3>{drugSet?.name}</h3></div>
+            <div className="col-3"><strong>Description:</strong> {drugSet?.description}</div>
             <div className="col-2">
-              <strong>Created on:</strong> {moment(drugSet.created_at).format("MMMM Do YYYY")}
+              <strong>Created on:</strong> {moment(drugSet?.created_at).format("MMMM Do YYYY")}
             </div>
-            <div className="col-2"><strong>Last updated:</strong> {moment(drugSet.updated_at).format("MMMM Do YYYY")}</div>
+            <div className="col-2"><strong>Last updated:</strong> {moment(drugSet?.updated_at).format("MMMM Do YYYY")}</div>
             <div className="col-2">
-              <strong>Drugs:</strong> {drugSet.drugs && Object.keys(drugSet.drugs).length}
-            </div>
-            <div className="col-2">
-              <Button label="Show All Updates" icon="pi pi-external-link" onClick={() => onClick('displayModal')}></Button>
+              <strong>Drugs:</strong> {drugSet?.drugs && Object.keys(drugSet?.drugs).length}
             </div>
           </div>
         </Card>
-        <Dialog header="Update List" visible={displayModal} modal={true} style={{width: '40%'}} footer={renderFooter} onHide={() => onHide('displayModal')}>
           <UpdateList />
-        </Dialog>
-        <DrugsList />
+        <DrugsList drugs= {drugSet?.drugs}/>
         </>
       )}
     </React.Fragment>

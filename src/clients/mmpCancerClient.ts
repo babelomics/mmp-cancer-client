@@ -1,6 +1,6 @@
 import { MMP_CANCER_API_URI } from '../utils/constants';
 import Drugset from '../models/Drugset';
-
+import DrugUpdate from '../models/DrugUpdate';
 
 class MmpCancerClient {
 
@@ -13,6 +13,23 @@ class MmpCancerClient {
         const queryParams = !!searchText ? { searchText: searchText } : undefined;        
         return this.get<Drugset>(`${MMP_CANCER_API_URI}drugSets/${id}`, queryParams, abortSignal);
     }
+
+    public static async getDrugsetUpdate<DrugUpdate>(id: string | undefined, searchText: string | undefined, abortSignal: AbortSignal): Promise<DrugUpdate> {
+        const queryParams = !!searchText ? { searchText: searchText } : undefined;        
+        return this.get<DrugUpdate>(`${MMP_CANCER_API_URI}drugSets/${id}/updates`, queryParams, abortSignal);
+    }
+
+    public static async getDrugsByDrugset<Drug>(id: string | undefined, searchText: string | undefined, abortSignal: AbortSignal): Promise<Drug> {
+        const queryParams = !!searchText ? { searchText: searchText } : undefined;        
+        return this.get<Drug>(`${MMP_CANCER_API_URI}drugSets/${id}/drugs`, queryParams, abortSignal);
+    }
+
+    public static async updatePandrugSet<DrugSet>(searchText: string | undefined, abortSignal: AbortSignal): Promise<DrugSet> {
+        const requestBody = ""
+        const queryParams = !!searchText ? { searchText: searchText } : undefined;        
+        return this.post<DrugSet>(`${MMP_CANCER_API_URI}drugSets/pandrugs/updates`, queryParams, requestBody, abortSignal);
+    }
+
 
     private static readonly translateDate = (dateStr: string) => {
         const year = dateStr.substring(0, 4);

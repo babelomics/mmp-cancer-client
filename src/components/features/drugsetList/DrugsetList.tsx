@@ -9,6 +9,7 @@ import { Column } from "primereact/column";
 import { ContextMenu } from 'primereact/contextmenu';
 import MmpCancerClient from "../../../clients/mmpCancerClient";
 import Drugset from "../../../models/Drugset";
+import { Button } from "primereact/button";
 
 function DrugsetList() {
   const [drugSets, setDrugSets] = useState<Drugset[]>([]);
@@ -20,20 +21,17 @@ function DrugsetList() {
   });
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const cm = useRef(null);
-  const menuModel = [
-    {label: 'Update DrugSet', icon: 'pi pi-fw pi-refresh', command: () => updateSet(selectedDrugSet!)}
-  ]
   const navigate = useNavigate();
 
   function getDetails(drugSet: Drugset) {
     navigate("drugsets/" + drugSet.id);
   }
 
-  const updateSet = async (drugSet: Drugset) => {
+  const updateSet = async () => {
     setIsLoading(true);
-    const response = await fetch("http://localhost:8080/drugSets/pandrugs/updates", { method: 'POST' });
-    const data = await response.json();
-    drugSet.updated_at = data.updatedAt;
+    const abortController = new AbortController();
+    let data: Drugset;
+    data = await MmpCancerClient.updatePandrugSet(undefined, abortController.signal);
     setIsLoading(false);
   }
 
@@ -79,22 +77,23 @@ function DrugsetList() {
 
   const header = renderHeader();
 
+
   return (
     <React.Fragment>
       {isLoading ? (
         <Loading></Loading>
       ) : (
         <>
-        <ContextMenu model={menuModel} ref={cm} onHide={() => setSelectedDrugSet(null!)}></ContextMenu>
         <DataTable value={drugSets} paginator header={header} rows={10} dataKey="id" first={first} onPage={(e) => setFirst(e.first)}
         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" filters={filters} onRowDoubleClick={e => getDetails(e.data)}
         selectionMode="single" selection={selectedDrugSet} onSelectionChange={e => setSelectedDrugSet(e.value)}
-        contextMenuSelection={selectedDrugSet} onContextMenuSelectionChange={e => setSelectedDrugSet(e.value)}  onContextMenu={e => cm.current.show(e.originalEvent)}>
+        contextMenuSelection={selectedDrugSet} onContextMenuSelectionChange={e => setSelectedDrugSet(e.value)}>
           <Column header="Name" field="name" sortable></Column>
           <Column header="Creation Date" body={formatCreationDateTemplate} sortable></Column>
           <Column header="Last Update" body={formatUpdatedDateTemplate} sortable></Column>
         </DataTable>
+        <div className="col-5"><Button icon="pi pi-undo" iconPos="left" onClick={updateSet}></Button></div>
         </>
       )}
     </React.Fragment>
