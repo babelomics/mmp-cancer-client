@@ -1,11 +1,12 @@
 interface Drug {
     id: string;
-    standardName: string;
-    commonName: string;
-    startUpdate: string;
-    endUpdate?: string;
-    previousVersion?: string;
-    nextVersion?: string;
+    standard_name: string;
+    common_name: string;
+    start_update: string;
+    end_update?: string;
+    previous_version?: string;
+    next_version?: string;
+    drugset_id: string;
 }
 
 

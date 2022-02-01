@@ -3,7 +3,7 @@ import moment from "moment";
 import { useParams, useNavigate } from "react-router-dom";
 import Card from "../../UI/Card";
 import Loading from "../../UI/Loading";
-import DrugsList from "../drugsList/DrugsList";
+import DrugsList from "../drugList/DrugList";
 import { Button } from "primereact/button";
 import { Dialog } from 'primereact/dialog';
 import UpdateList from "../updateList/UpdateList";
@@ -30,7 +30,7 @@ function DrugSetDetail() {
   }, [id]);
 
   const dialogFuncMap = {
-    'displayModal': setDisplayModal
+    displayModal: setDisplayModal
   }
 
   const onClick = (name: string) => {

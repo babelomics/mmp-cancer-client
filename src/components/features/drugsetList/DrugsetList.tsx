@@ -90,7 +90,7 @@ function DrugsetList() {
         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" filters={filters} onRowDoubleClick={e => getDetails(e.data)}
         selectionMode="single" selection={selectedDrugSet} onSelectionChange={e => setSelectedDrugSet(e.value)}
-        contextMenuSelection={selectedDrugSet} onContextMenuSelectionChange={e => setSelectedDrugSet(e.value)}>
+        contextMenuSelection={selectedDrugSet} onContextMenuSelectionChange={e => setSelectedDrugSet(e.value)}  onContextMenu={e => cm.current.show(e.originalEvent)}>
           <Column header="Name" field="name" sortable></Column>
           <Column header="Creation Date" body={formatCreationDateTemplate} sortable></Column>
           <Column header="Last Update" body={formatUpdatedDateTemplate} sortable></Column>
