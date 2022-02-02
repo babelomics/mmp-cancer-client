@@ -5,15 +5,12 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from 'primereact/api';
 import MmpCancerClient from "../../../clients/mmpCancerClient";
+import { getDrugs } from "../../../app/drugListSlice";
+import store from '../../../app/store'
 import Drug from "../../../models/Drug";
 import DrugName from "../../../models/DrugName";
 
-
-interface DrugListProps {
-  drugs: Array<Drug> | undefined,
-}
-
-function DrugsList(props: DrugListProps) {
+function DrugsList() {
 
   const [first, setFirst] = useState(0);
   const [filters, setFilters] = useState({
@@ -47,7 +44,7 @@ function DrugsList(props: DrugListProps) {
 
   return (
     <React.Fragment>
-      <DataTable value={props.drugs} paginator header={header} rows={10} dataKey="id" first={first} onPage={(e) => setFirst(e.first)}
+      <DataTable value={getDrugs(store.getState())} paginator header={header} rows={10} dataKey="id" first={first} onPage={(e) => setFirst(e.first)}
         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" filters={filters}>
           <Column header="Standard Name" field="standardName" sortable></Column>

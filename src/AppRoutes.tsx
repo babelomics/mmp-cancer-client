@@ -12,7 +12,7 @@ export const AppRoutes = () => {
         <Route path="/" element={<Home/>} />
         <Route path="drugsets"></Route>
         <Route path="drugsets/:id" element={<DrugSetDetail/>}></Route>
-        <Route path="drugsets/:id/drugs" element={<DrugsList drugs={undefined}/>}></Route>
+        <Route path="drugsets/:id/drugs" element={<DrugsList/>}></Route>
         <Route element={<NoMatch/>}/>
       </Routes>
     </div>

@@ -1,13 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
-import drugListSlice from './drugs'
+import drugListReducer from './drugListSlice'
 
 const reducer = combineReducers({
-    drugListSlice,
+    drugListReducer,
   })
 
 const store = configureStore({
   reducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: false,
+      immutableCheck: false,
+      serializableCheck: false,
+    }),
 })
 
 export type RootState = ReturnType<typeof reducer>
