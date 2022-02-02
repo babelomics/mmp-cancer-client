@@ -11,8 +11,8 @@ import { ContextMenu } from 'primereact/contextmenu';
 import MmpCancerClient from "../../../clients/mmpCancerClient";
 import Drugset from "../../../models/Drugset";
 import { Button } from "primereact/button";
-import DrugsetsTablePagination from "../../../utils/materialUI/tablePaginator";
-import { getDrugsets } from "../../../app/drugSetListSlice";
+import DrugsetsTablePagination from "../../../utils/materialUI/drugSetTablePaginator";
+import { getDrugsets } from "../../../app/drugsetsSlice";
 
 function DrugsetList() {
   const [drugSets, setDrugSets] = useState<Drugset[]>([]);

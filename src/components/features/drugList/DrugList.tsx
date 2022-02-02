@@ -5,7 +5,7 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from 'primereact/api';
 import MmpCancerClient from "../../../clients/mmpCancerClient";
-import { getDrugs } from "../../../app/drugListSlice";
+import { getDrugs } from "../../../app/drugsSlice";
 import store from '../../../app/store'
 import Drug from "../../../models/Drug";
 import DrugName from "../../../models/DrugName";
