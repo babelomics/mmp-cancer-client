@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 import drugListReducer from './drugListSlice'
+import drugSetListReducer from './drugSetListSlice'
 
 const reducer = combineReducers({
     drugListReducer,
+    drugSetListReducer,
   })
 
 const store = configureStore({

@@ -6,10 +6,13 @@ import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from 'primereact/api';
 import { DataTable } from 'primereact/datatable';
 import { Column } from "primereact/column";
+import store from '../../../app/store'
 import { ContextMenu } from 'primereact/contextmenu';
 import MmpCancerClient from "../../../clients/mmpCancerClient";
 import Drugset from "../../../models/Drugset";
 import { Button } from "primereact/button";
+import DrugsetsTablePagination from "../../../utils/materialUI/tablePaginator";
+import { getDrugsets } from "../../../app/drugSetListSlice";
 
 function DrugsetList() {
   const [drugSets, setDrugSets] = useState<Drugset[]>([]);
@@ -27,13 +30,7 @@ function DrugsetList() {
     navigate("drugsets/" + drugSet.id);
   }
 
-  const updateSet = async () => {
-    setIsLoading(true);
-    const abortController = new AbortController();
-    let data: Drugset;
-    data = await MmpCancerClient.updatePandrugSet(undefined, abortController.signal);
-    setIsLoading(false);
-  }
+
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -42,6 +39,8 @@ function DrugsetList() {
       let data: Array<Drugset>;
       data = await MmpCancerClient.getDrugsets(undefined, abortController.signal);
       setDrugSets(data);
+      store.dispatch({type: 'drugSetList/updateSetList', payload: data})
+      console.log(getDrugsets(store.getState()))
       setIsLoading(false);
     };
     fetchPost();    
@@ -77,23 +76,15 @@ function DrugsetList() {
 
   const header = renderHeader();
 
-
   return (
     <React.Fragment>
       {isLoading ? (
         <Loading></Loading>
       ) : (
         <>
-        <DataTable value={drugSets} paginator header={header} rows={10} dataKey="id" first={first} onPage={(e) => setFirst(e.first)}
-        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" filters={filters} onRowDoubleClick={e => getDetails(e.data)}
-        selectionMode="single" selection={selectedDrugSet} onSelectionChange={e => setSelectedDrugSet(e.value)}
-        contextMenuSelection={selectedDrugSet} onContextMenuSelectionChange={e => setSelectedDrugSet(e.value)}>
-          <Column header="Name" field="name" sortable></Column>
-          <Column header="Creation Date" body={formatCreationDateTemplate} sortable></Column>
-          <Column header="Last Update" body={formatUpdatedDateTemplate} sortable></Column>
-        </DataTable>
-        <div className="col-5"><Button icon="pi pi-undo" iconPos="left" onClick={updateSet}></Button></div>
+
+        <DrugsetsTablePagination></DrugsetsTablePagination>
+                
         </>
       )}
     </React.Fragment>
