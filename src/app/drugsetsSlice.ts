@@ -2,9 +2,7 @@ import DrugSet from '../models/Drugset'
 import type { RootState } from './store'
 
 const initialState = {
-  drugSetList: [
-    { list: [] as DrugSet[] },
-  ],
+  drugSetList: [] as DrugSet[],
 }
 
 export default function drugSetListReducer(state = initialState, action: any) {
@@ -12,13 +10,7 @@ export default function drugSetListReducer(state = initialState, action: any) {
 
     case 'drugSetList/updateSetList': {
       return{
-        ...state,
-        drugSetList: [  
-            ...state.drugSetList,
-            {
-              list: action.payload
-            }
-        ]
+        drugSetList: action.payload
       }
 
     }
@@ -30,4 +22,3 @@ export default function drugSetListReducer(state = initialState, action: any) {
 
 }
 
-export const getDrugsets = (state: RootState) => state.drugSetListReducer.drugSetList.at(state.drugSetListReducer.drugSetList.length - 1)?.list

@@ -2,14 +2,7 @@ import Drug from '../models/Drug'
 import type { RootState } from './store'
 
 const initialState = {
-  drugList: [
-    { list: [] as Drug[] },
-  ],
-  isLoading: [
-    {
-      loading: false
-    },
-  ],
+  drugList: [] as Drug[] ,
 }
 
 export default function drugListReducer(state = initialState, action: any) {
@@ -17,26 +10,9 @@ export default function drugListReducer(state = initialState, action: any) {
 
     case 'drugList/updateList': {
       return{
-        ...state,
-        drugList: [  
-            ...state.drugList,
-            {
-              list: action.payload
-            }
-        ]
-      }
-
-    }
-
-    case 'drugList/isLoading': {
-      return{
-        ...state,
-        isLoading: [  
-            ...state.isLoading,
-            {
-              loading: action.payload
-            }
-        ]
+        
+        drugList: action.payload
+      
       }
 
     }
@@ -48,6 +24,4 @@ export default function drugListReducer(state = initialState, action: any) {
 
 }
 
-export const getDrugs = (state: RootState) => state.drugListReducer.drugList.at(state.drugListReducer.drugList.length - 1)?.list
-export const getLoading = (state: RootState) => state.drugListReducer.isLoading.at(state.drugListReducer.isLoading.length - 1)?.loading
 

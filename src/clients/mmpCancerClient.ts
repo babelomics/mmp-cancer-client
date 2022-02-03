@@ -57,7 +57,6 @@ class MmpCancerClient {
                 return `${encodeURIComponent(paramName)}=${encodeURIComponent(value)}`;
             }).join("&");
         const queryUrl = `${serviceUrl}${!!queryStr ? "?" : ""}${queryStr}`;
-        console.log(params);
         const response = await fetch(queryUrl, params);
 
         if (!!response.ok) {

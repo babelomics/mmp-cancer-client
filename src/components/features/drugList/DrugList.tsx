@@ -1,57 +1,188 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
-import { DataTable } from 'primereact/datatable';
-import { Column } from "primereact/column";
-import { InputText } from "primereact/inputtext";
-import { FilterMatchMode } from 'primereact/api';
-import MmpCancerClient from "../../../clients/mmpCancerClient";
-import { getDrugs } from "../../../app/drugsSlice";
-import store from '../../../app/store'
+import * as React from "react";
+import { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import { useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableFooter from "@mui/material/TableFooter";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import UpdateIcon from "@mui/icons-material/Update";
+import TableHead from "@mui/material/TableHead";
+import { styled } from "@mui/material/styles";
+import moment from "moment";
+import LoadingButton from "@mui/lab/LoadingButton";
+import Drugset from "../../../models/Drugset";
 import Drug from "../../../models/Drug";
-import DrugName from "../../../models/DrugName";
+import MmpCancerClient from "../../../clients/mmpCancerClient";
+import Loading from "../../UI/Loading";
+import { Button } from "@mui/material";
+import store from "../../../app/store";
+import { useSelector } from "react-redux";
 
-function DrugsList() {
+function DrugsTablePagination(props: any) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
 
-  const [first, setFirst] = useState(0);
-  const [filters, setFilters] = useState({
-    'global': { value: null, matchMode: FilterMatchMode.CONTAINS }
-  });
-  const [globalFilterValue, setGlobalFilterValue] = useState('');
+  const handleFirstPageButtonClick = (event: any) => {
+    onPageChange(event, 0);
+  };
 
-  const onGlobalFilterChange = (e: any) => {
-    const value = e.target.value;
-    let _filters = { ...filters };
-    _filters['global'].value = value;
-    setFilters(_filters);
-    setGlobalFilterValue(value);
-  }
+  const handleBackButtonClick = (event: any) => {
+    onPageChange(event, page - 1);
+  };
 
-  const renderHeader = () => {
-    return (
-      <>
-      <div className="p-d-flex p-jc-between p-ai-center">
-        <h5 className="p-m-0">Drug List</h5>
-        <span className="p-input-icon-left">
-          <i className="pi pi-search" />
-          <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
-        </span>
-      </div>
-      </>
-    )
-  }
+  const handleNextButtonClick = (event: any) => {
+    onPageChange(event, page + 1);
+  };
 
-  const header = renderHeader();
+  const handleLastPageButtonClick = (event: any) => {
+    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
 
   return (
-    <React.Fragment>
-      <DataTable value={getDrugs(store.getState())} paginator header={header} rows={10} dataKey="id" first={first} onPage={(e) => setFirst(e.first)}
-        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" filters={filters}>
-          <Column header="Standard Name" field="standardName" sortable></Column>
-          <Column header="Common Name" field="commonName" sortable></Column>
-        </DataTable>
-    </React.Fragment>
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
   );
 }
 
-export default DrugsList;
+DrugsTablePagination.propTypes = {
+  count: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+};
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+export default function DrugList() {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const handleChangeRowsPerPage = (event: any) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleDrag = (event: React.DragEvent<HTMLAnchorElement>) => {
+    alert("dragged");
+  };
+
+  const rows: Drug[] = useSelector((state: any) => state.drugListReducer.drugList || undefined);
+
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+  const handleChangePage = (event: any, newPage: any) => {
+    setPage(newPage);
+  };
+
+  return (
+    <React.Fragment>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell align="left">Nombre Estándar</StyledTableCell>
+              <StyledTableCell align="left">Nombre Común</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {(rowsPerPage > 0
+              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : rows
+            ).map((row: Drug) => (
+              <TableRow key={row.id}>
+                <TableCell component="th" scope="row">
+                  {row.standardName}
+                </TableCell>
+                <TableCell align="left">
+                  {row.commonName}
+                </TableCell>
+              </TableRow>
+            ))}
+
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 53 * emptyRows }}>
+                <TableCell colSpan={2} />
+              </TableRow>
+            )}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                colSpan={2}
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  inputProps: {
+                    "aria-label": "rows per page",
+                  },
+                  native: true,
+                }}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                ActionsComponent={DrugsTablePagination}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
+    </React.Fragment>
+  );
+}

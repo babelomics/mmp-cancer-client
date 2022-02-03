@@ -11,8 +11,7 @@ import { ContextMenu } from 'primereact/contextmenu';
 import MmpCancerClient from "../../../clients/mmpCancerClient";
 import Drugset from "../../../models/Drugset";
 import { Button } from "primereact/button";
-import DrugsetsTablePagination from "../../../utils/materialUI/drugSetTablePaginator";
-import { getDrugsets } from "../../../app/drugsetsSlice";
+import DrugSetTable from "../../../utils/materialUI/drugSetTable";
 
 function DrugsetList() {
   const [drugSets, setDrugSets] = useState<Drugset[]>([]);
@@ -40,7 +39,6 @@ function DrugsetList() {
       data = await MmpCancerClient.getDrugsets(undefined, abortController.signal);
       setDrugSets(data);
       store.dispatch({type: 'drugSetList/updateSetList', payload: data})
-      console.log(getDrugsets(store.getState()))
       setIsLoading(false);
     };
     fetchPost();    
@@ -83,7 +81,7 @@ function DrugsetList() {
       ) : (
         <>
 
-        <DrugsetsTablePagination></DrugsetsTablePagination>
+        <DrugSetTable></DrugSetTable>
                 
         </>
       )}
