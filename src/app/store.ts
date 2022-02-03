@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux';
-import drugListReducer from './drugsSlice'
-import drugSetListReducer from './drugsetsSlice'
+import drugList from './drugsSlice'
+import drugSetList from './drugsetsSlice'
 
 
 const reducer = combineReducers({
-    drugListReducer,
-    drugSetListReducer,
+    drugList,
+    drugSetList,
   })
 
 const store = configureStore({

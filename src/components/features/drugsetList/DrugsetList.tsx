@@ -12,6 +12,7 @@ import MmpCancerClient from "../../../clients/mmpCancerClient";
 import Drugset from "../../../models/Drugset";
 import { Button } from "primereact/button";
 import DrugSetTable from "../../../utils/materialUI/drugSetTable";
+import Card from "../../UI/Card";
 
 function DrugsetList() {
   const [drugSets, setDrugSets] = useState<Drugset[]>([]);
@@ -81,7 +82,9 @@ function DrugsetList() {
       ) : (
         <>
         <br></br>
-        <DrugSetTable></DrugSetTable>
+        <Card className="drugsetList">
+          <DrugSetTable></DrugSetTable>
+        </Card>
                 
         </>
       )}

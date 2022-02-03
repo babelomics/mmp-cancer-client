@@ -83,7 +83,9 @@ function DrugSetDetail() {
         </Card>
         <UpdateList open={open} onClose={handleClose}/>
           <br></br>
-        <DrugList></DrugList>
+        <Card className="drugs">
+          <DrugList></DrugList>
+        </Card>
         </>
       )}
     </React.Fragment>

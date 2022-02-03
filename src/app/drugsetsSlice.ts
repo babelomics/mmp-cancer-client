@@ -5,7 +5,7 @@ const initialState = {
   drugSetList: [] as DrugSet[],
 }
 
-export default function drugSetListReducer(state = initialState, action: any) {
+export default function drugSetList(state = initialState, action: any) {
   switch (action.type) {
 
     case 'drugSetList/updateSetList': {

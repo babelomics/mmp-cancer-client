@@ -130,7 +130,7 @@ export default function DrugSetTable() {
   };
 
 
-  const rows: Drugset[] = useSelector((state: any) => state.drugSetListReducer.drugSetList || undefined);
+  const rows: Drugset[] = useSelector((state: any) => state.drugSetList.drugSetList || undefined);
   
 
   const formatUpdatedDateTemplate = (rowData: Drugset) => {

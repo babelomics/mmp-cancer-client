@@ -132,7 +132,7 @@ export default function DrugList() {
     alert("dragged");
   };
 
-  const rows: Drug[] = useSelector((state: any) => state.drugListReducer.drugList || undefined);
+  const rows: Drug[] = useSelector((state: any) => state.drugList.drugList || undefined);
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
