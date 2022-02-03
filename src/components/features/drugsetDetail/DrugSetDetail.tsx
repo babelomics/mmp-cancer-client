@@ -12,7 +12,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import { IconButton } from "@mui/material";
 import DrugList from "../drugList/DrugList";
 import LoadingButton from '@mui/lab/LoadingButton';
-import DrugUpdateDialog from "../../../utils/materialUI/drugUpdateDialog";
 import ListAltIcon from '@mui/icons-material/ListAlt';
 
 function DrugSetDetail() {
@@ -25,7 +24,7 @@ function DrugSetDetail() {
     setOpen(true);
   };
 
-  const handleClose = (value: string) => {
+  const handleClose = () => {
     setOpen(false);
   };
 
@@ -79,14 +78,10 @@ function DrugSetDetail() {
               >
                 Actualizaciones
               </LoadingButton>
-              <DrugUpdateDialog
-                selectedValue={"selectedValue"}
-                open={open}
-                onClose={handleClose}
-              />
             </div>
           </div>
         </Card>
+        <UpdateList open={open} onClose={handleClose}/>
           <br></br>
         <DrugList></DrugList>
         </>
