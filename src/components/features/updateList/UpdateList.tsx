@@ -27,7 +27,7 @@ function UpdateList() {
   return (
     <React.Fragment>
       <DataTable value={updates} dataKey="id" sortField="created_at" sortOrder={-1}>
-        <Column header="Updated at" body={formatCreationDateTemplate}></Column>
+        <Column header="" body={formatCreationDateTemplate}></Column>
       </DataTable>
     </React.Fragment>
   );

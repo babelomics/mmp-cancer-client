@@ -11,12 +11,24 @@ import Drug from "../../../models/Drug";
 import HomeIcon from '@mui/icons-material/Home';
 import { IconButton } from "@mui/material";
 import DrugList from "../drugList/DrugList";
+import LoadingButton from '@mui/lab/LoadingButton';
+import DrugUpdateDialog from "../../../utils/materialUI/drugUpdateDialog";
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 function DrugSetDetail() {
   let { id } = useParams();
   const [drugSet, setDrugSet] = useState<Drugset>();
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = React.useState(false);
   
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value: string) => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     const abortController = new AbortController();
     const fetchPost = async () => {
@@ -41,6 +53,7 @@ function DrugSetDetail() {
         <Loading></Loading>
       ) : (
         <>
+        <br></br>
         <Card className="drugsetDetail">
           <div className="grid">
             <div className="col-5">
@@ -57,9 +70,24 @@ function DrugSetDetail() {
             <div className="col-2">
               <strong>Fármacos:</strong> {drugSet?.drugs && Object.keys(drugSet?.drugs).length}
             </div>
+            <div className="col-2">
+              <LoadingButton
+                  color="primary"
+                  onClick={handleClickOpen}
+                  startIcon={<ListAltIcon />}
+                  variant="contained"
+              >
+                Actualizaciones
+              </LoadingButton>
+              <DrugUpdateDialog
+                selectedValue={"selectedValue"}
+                open={open}
+                onClose={handleClose}
+              />
+            </div>
           </div>
         </Card>
-          <UpdateList />
+          <br></br>
         <DrugList></DrugList>
         </>
       )}

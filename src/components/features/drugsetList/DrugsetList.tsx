@@ -80,7 +80,7 @@ function DrugsetList() {
         <Loading></Loading>
       ) : (
         <>
-
+        <br></br>
         <DrugSetTable></DrugSetTable>
                 
         </>
