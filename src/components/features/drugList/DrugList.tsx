@@ -28,6 +28,7 @@ import Loading from "../../UI/Loading";
 import { Button } from "@mui/material";
 import store from "../../../app/store";
 import { useSelector } from "react-redux";
+import Row from "../../../utils/materialUI/collapsibleDrugList";
 
 function DrugsTablePagination(props: any) {
   const theme = useTheme();
@@ -100,11 +101,21 @@ DrugsTablePagination.propTypes = {
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: theme.palette.primary.dark,
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
   },
 }));
 
@@ -136,28 +147,21 @@ export default function DrugList() {
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <TableHead>
             <TableRow>
+              <StyledTableCell align="left" style={{ width: 50 }} ></StyledTableCell>
               <StyledTableCell align="left">Nombre Estándar</StyledTableCell>
               <StyledTableCell align="left">Nombre Común</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {(rowsPerPage > 0
+          {(rowsPerPage > 0
               ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
-            ).map((row: Drug) => (
-              <TableRow key={row.id}>
-                <TableCell component="th" scope="row">
-                  {row.standardName}
-                </TableCell>
-                <TableCell align="left">
-                  {row.commonName}
-                </TableCell>
-              </TableRow>
-            ))}
-
+            ).map((row) => (
+            <Row key={row.id} row={row} />
+          ))}
             {emptyRows > 0 && (
               <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={2} />
+                <TableCell colSpan={3} />
               </TableRow>
             )}
           </TableBody>
