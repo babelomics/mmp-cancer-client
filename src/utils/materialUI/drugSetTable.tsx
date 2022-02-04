@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -23,10 +23,13 @@ import { useSelector } from "react-redux";
 import store from '../../app/store';
 import moment from 'moment';
 import LoadingButton from '@mui/lab/LoadingButton';
-import Drugset from '../../models/Drugset';
+import Drugset from '../../models/drugSet';
 import MmpCancerClient from '../../clients/mmpCancerClient';
-import Loading from '../../components/UI/Loading';
+import Loading from '../../components/UI/loading';
 import { Button } from '@mui/material';
+import { Input, InputAdornment } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 
 function DrugsetsTablePagination(props: any) {
   const theme = useTheme();
@@ -106,13 +109,12 @@ export default function DrugSetTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
 
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-
   
   const updateSet = async () => {
     setIsLoading(true);
@@ -124,17 +126,14 @@ export default function DrugSetTable() {
     setIsLoading(false);
   }
 
-
   const handleDrag = (event: React.DragEvent<HTMLAnchorElement>) => {
     alert("dragged");
   };
 
-
-  const rows: Drugset[] = useSelector((state: any) => state.drugSetList.drugSetList || undefined);
-  
+  const originalRows: Drugset[] = useSelector((state: any) => state.drugSetList.drugSetList || undefined);
+  const [rows, setRows] = React.useState<Drugset[]>(originalRows);
 
   const formatUpdatedDateTemplate = (rowData: Drugset) => {
-
     if(typeof rowData.updated_at !== 'undefined'){
         return moment(rowData.updated_at).format("MMMM Do YYYY")
     }
@@ -147,84 +146,109 @@ export default function DrugSetTable() {
     setPage(newPage);
   };
 
-  
+  const clearSearch = () => {
+    setSearchTerm("");
+    searchDrugsets("");
+  }
+
+  const searchDrugsets = (value: string) => {
+    setSearchTerm(value);
+    const filteredRows = originalRows.filter((row) => {
+      return row.name.toLowerCase().includes(value.toLowerCase());
+    });
+    setRows(filteredRows);
+  }
+
   return (
-        <React.Fragment>
-            {isLoading ? (
-              <Loading></Loading>
-            ) : (
-                  <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                    <TableHead>
-                        <TableRow>
-                          <StyledTableCell >Nombre</StyledTableCell>
-                          <StyledTableCell align="center">Descripción</StyledTableCell>
-                          <StyledTableCell align="center">Creado</StyledTableCell>
-                          <StyledTableCell align="center">Última Actualización</StyledTableCell>
-                          <StyledTableCell align="center"></StyledTableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {(rowsPerPage > 0
-                          ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                          : rows
-                        ).map((row: Drugset) => (
-                          <TableRow key={row.id}>
-                            <TableCell component="th" scope="row">
-                              <Button variant="text" href={"/drugsets/" + row.id} onDrag={handleDrag}>{row.name}</Button>
-                            </TableCell>
-                            <TableCell style={{ width: 260}} align="center">
-                              {row.description}
-                            </TableCell>
-                            <TableCell style={{ width: 260 }} align="center">
-                              {moment(row.created_at).format("MMMM Do YYYY")}
-                            </TableCell>
-                            <TableCell style={{ width: 260 }} align="center">
-                              {formatUpdatedDateTemplate(row)}
-                            </TableCell>
-                            <TableCell  style={{ width: 150 }} align="center">
-                              <LoadingButton
-                                      color="primary"
-                                      onClick={updateSet}
-                                      startIcon={<UpdateIcon />}
-                                      variant="contained"
-                                  >
-                                      Update
-                              </LoadingButton>
-                          </TableCell>
-                          </TableRow>
-                        ))}
+    <React.Fragment>
+    {isLoading ? (
+      <Loading></Loading>
+    ) : (
+      <TableContainer component={Paper}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end', padding: 1 }}>
+          <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}></SearchIcon>
+          <Input
+            placeholder="Buscar"
+            type="text"
+            value={searchTerm}
+            onChange={(newValue) => searchDrugsets(newValue.target.value)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton onClick={clearSearch}><ClearIcon /></IconButton>
+              </InputAdornment>
+            }
+          />
+        </Box>
+        <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+        <TableHead>
+            <TableRow>
+              <StyledTableCell >Nombre</StyledTableCell>
+              <StyledTableCell align="center">Descripción</StyledTableCell>
+              <StyledTableCell align="center">Creado</StyledTableCell>
+              <StyledTableCell align="center">Última Actualización</StyledTableCell>
+              <StyledTableCell align="center"></StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {(rowsPerPage > 0
+              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : rows
+            ).map((row: Drugset) => (
+              <TableRow key={row.id}>
+                <TableCell component="th" scope="row">
+                  <Button variant="text" href={"/drugsets/" + row.id} onDrag={handleDrag}>{row.name}</Button>
+                </TableCell>
+                <TableCell style={{ width: 260}} align="center">
+                  {row.description}
+                </TableCell>
+                <TableCell style={{ width: 260 }} align="center">
+                  {moment(row.created_at).format("MMMM Do YYYY")}
+                </TableCell>
+                <TableCell style={{ width: 260 }} align="center">
+                  {formatUpdatedDateTemplate(row)}
+                </TableCell>
+                <TableCell  style={{ width: 150 }} align="center">
+                  <LoadingButton
+                          color="primary"
+                          onClick={updateSet}
+                          startIcon={<UpdateIcon />}
+                          variant="contained"
+                      >
+                          Update
+                  </LoadingButton>
+              </TableCell>
+              </TableRow>
+            ))}
 
-                        {emptyRows > 0 && (
-                          <TableRow style={{ height: 53 * emptyRows }}>
-                            <TableCell colSpan={6} />
-                          </TableRow>
-                        )}
-                      </TableBody>
-                      <TableFooter>
-                        <TableRow>
-                          <TablePagination
-                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                            colSpan={4}
-                            count={rows.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            SelectProps={{
-                              inputProps: {
-                                'aria-label': 'rows per page',
-                              },
-                              native: true,
-                            }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={DrugsetsTablePagination}
-                          />
-                        </TableRow>
-                      </TableFooter>
-                    </Table>
-                  </TableContainer>
-                  )}
-
-        </React.Fragment>
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 53 * emptyRows }}>
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                colSpan={4}
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  inputProps: {
+                    'aria-label': 'rows per page',
+                  },
+                  native: true,
+                }}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                ActionsComponent={DrugsetsTablePagination}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
+      )}
+    </React.Fragment>
   );
 }

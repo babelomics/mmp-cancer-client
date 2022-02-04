@@ -1,6 +1,4 @@
 import { MMP_CANCER_API_URI } from '../utils/constants';
-import Drugset from '../models/Drugset';
-import DrugUpdate from '../models/DrugUpdate';
 
 class MmpCancerClient {
 

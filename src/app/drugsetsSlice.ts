@@ -1,5 +1,4 @@
-import DrugSet from '../models/Drugset'
-import type { RootState } from './store'
+import DrugSet from '../models/drugSet'
 
 const initialState = {
   drugSetList: [] as DrugSet[],

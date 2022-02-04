@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -16,19 +15,14 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import UpdateIcon from "@mui/icons-material/Update";
 import TableHead from "@mui/material/TableHead";
 import { styled } from "@mui/material/styles";
-import moment from "moment";
-import LoadingButton from "@mui/lab/LoadingButton";
-import Drugset from "../../../models/Drugset";
-import Drug from "../../../models/Drug";
-import MmpCancerClient from "../../../clients/mmpCancerClient";
-import Loading from "../../UI/Loading";
-import { Button } from "@mui/material";
-import store from "../../../app/store";
+import Drug from "../../../models/drug";
 import { useSelector } from "react-redux";
 import Row from "../../../utils/materialUI/collapsibleDrugList";
+import { Input, InputAdornment } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 
 function DrugsTablePagination(props: any) {
   const theme = useTheme();
@@ -109,30 +103,18 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
-
 export default function DrugList() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [searchTerm, setSearchTerm] = React.useState("");
 
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleDrag = (event: React.DragEvent<HTMLAnchorElement>) => {
-    alert("dragged");
-  };
-
-  const rows: Drug[] = useSelector((state: any) => state.drugList.drugList || undefined);
+  const originalRows: Drug[] = useSelector((state: any) => state.drugList.drugList || undefined);
+  const [rows, setRows] = React.useState<Drug[]>(originalRows);
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -141,9 +123,36 @@ export default function DrugList() {
     setPage(newPage);
   };
 
+  const clearSearch = () => {
+    setSearchTerm("");
+    searchDrugs("");
+  }
+
+  const searchDrugs = (value: string) => {
+    setSearchTerm(value);
+    const filteredRows = originalRows.filter((row) => {
+      return row.commonName.toLowerCase().includes(value.toLowerCase()) || row.standardName.toLowerCase().includes(value.toLowerCase());
+    });
+    setRows(filteredRows);
+  }
+
   return (
     <React.Fragment>
       <TableContainer component={Paper}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end', padding: 1 }}>
+          <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}></SearchIcon>
+          <Input
+            placeholder="Buscar"
+            type="text"
+            value={searchTerm}
+            onChange={(newValue) => searchDrugs(newValue.target.value)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton><ClearIcon onClick={clearSearch} /></IconButton>
+              </InputAdornment>
+            }
+          />
+        </Box>
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <TableHead>
             <TableRow>

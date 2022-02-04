@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import store from '../../../app/store'
-import Card from "../../UI/Card";
-import Loading from "../../UI/Loading";
-import UpdateList from "../updateList/UpdateList";
-import Drugset from "../../../models/Drugset";
+import Card from "../../UI/card";
+import Loading from "../../UI/loading";
+import UpdateList from "../updateList/updateList";
+import Drugset from "../../../models/drugSet";
 import MmpCancerClient from "../../../clients/mmpCancerClient";
-import Drug from "../../../models/Drug";
 import HomeIcon from '@mui/icons-material/Home';
-import { IconButton } from "@mui/material";
-import DrugList from "../drugList/DrugList";
+import { Grid, IconButton } from "@mui/material";
+import DrugList from "../drugList/drugList";
 import LoadingButton from '@mui/lab/LoadingButton';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 
@@ -54,22 +53,22 @@ function DrugSetDetail() {
         <>
         <br></br>
         <Card className="drugsetDetail">
-          <div className="grid">
-            <div className="col-5">
+          <Grid container spacing={2}>
+            <Grid item xs={5}>
               <IconButton color="primary" aria-label="Home" size="large" href={"/"} onDrag={handleDrag}>
                 <HomeIcon />
               </IconButton>
-            </div>
-            <div className="col-7"><h3>{drugSet?.name}</h3></div>
-            <div className="col-3"><strong>Descripción:</strong> {drugSet?.description}</div>
-            <div className="col-2">
+            </Grid>
+            <Grid item xs={7}><h3>{drugSet?.name}</h3></Grid>
+            <Grid item xs={3}><strong>Descripción:</strong> {drugSet?.description}</Grid>
+            <Grid item xs={2}>
               <strong>Creado:</strong> {moment(drugSet?.created_at).format("MMMM Do YYYY")}
-            </div>
-            <div className="col-2"><strong>Última Actualización</strong> {moment(drugSet?.updated_at).format("MMMM Do YYYY")}</div>
-            <div className="col-2">
+            </Grid>
+            <Grid item xs={3}><strong>Última Actualización</strong> {moment(drugSet?.updated_at).format("MMMM Do YYYY")}</Grid>
+            <Grid item xs={2}>
               <strong>Fármacos:</strong> {drugSet?.drugs && Object.keys(drugSet?.drugs).length}
-            </div>
-            <div className="col-2">
+            </Grid>
+            <Grid item xs={2}>
               <LoadingButton
                   color="primary"
                   onClick={handleClickOpen}
@@ -78,8 +77,8 @@ function DrugSetDetail() {
               >
                 Actualizaciones
               </LoadingButton>
-            </div>
-          </div>
+            </Grid>
+          </Grid>
         </Card>
         <UpdateList open={open} onClose={handleClose}/>
           <br></br>

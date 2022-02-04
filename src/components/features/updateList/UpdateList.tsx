@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
-import DrugUpdate from "../../../models/DrugUpdate";
+import DrugUpdate from "../../../models/drugUpdate";
 import MmpCancerClient from "../../../clients/mmpCancerClient";
 import { Box, Dialog, DialogTitle, IconButton, Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableFooter, TableHead, TablePagination, TableRow } from "@mui/material";
 import { useTheme } from "@mui/material/styles";

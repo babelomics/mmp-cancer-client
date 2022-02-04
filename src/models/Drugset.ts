@@ -1,4 +1,4 @@
-import Drug from "./Drug";
+import Drug from "./drug";
 
 interface Drugset {
     id: string;

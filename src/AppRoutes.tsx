@@ -1,9 +1,9 @@
 import React from "react";
-import Home from "./views/Home";
-import DrugsList from "./components/features/drugList/DrugList";
+import Home from "./views/home";
+import DrugsList from "./components/features/drugList/drugList";
 import { Routes, Route } from "react-router-dom";
-import NoMatch from "./views/NoMatch";
-import DrugSetDetail from "./components/features/drugsetDetail/DrugSetDetail";
+import NoMatch from "./views/noMatch";
+import DrugSetDetail from "./components/features/drugsetDetail/drugSetDetail";
 
 export const AppRoutes = () => {
   return (

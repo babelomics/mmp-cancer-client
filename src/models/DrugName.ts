@@ -1,4 +1,4 @@
-import DrugSource from "./DrugSource";
+import DrugSource from "./drugSource";
 
 interface DrugName {
     id: string;
