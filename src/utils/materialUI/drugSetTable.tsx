@@ -134,8 +134,8 @@ export default function DrugSetTable() {
   const [rows, setRows] = React.useState<Drugset[]>(originalRows);
 
   const formatUpdatedDateTemplate = (rowData: Drugset) => {
-    if(typeof rowData.updated_at !== 'undefined'){
-        return moment(rowData.updated_at).format("MMMM Do YYYY")
+    if(typeof rowData.updatedAt !== 'undefined'){
+        return moment(rowData.updatedAt).format("MMMM Do YYYY")
     }
     return "-";
   }
@@ -202,7 +202,7 @@ export default function DrugSetTable() {
                   {row.description}
                 </TableCell>
                 <TableCell style={{ width: 260 }} align="center">
-                  {moment(row.created_at).format("MMMM Do YYYY")}
+                  {moment(row.createdAt).format("MMMM Do YYYY")}
                 </TableCell>
                 <TableCell style={{ width: 260 }} align="center">
                   {formatUpdatedDateTemplate(row)}

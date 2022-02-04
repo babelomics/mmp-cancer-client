@@ -99,6 +99,7 @@ function UpdateList(props: any) {
       let data: Array<DrugUpdate>;
       data = await MmpCancerClient.getDrugsetUpdate(id, undefined, abortController.signal);
       setUpdates(data);
+      console.log(updates)
     };
     fetchUpdates();
   }, [id]);
@@ -141,7 +142,7 @@ function UpdateList(props: any) {
               ).map((row: DrugUpdate) => (
                 <TableRow key={row.id}>
                   <TableCell component="th" scope="row">
-                    { moment(row.created_at).format("MMMM Do YYYY [at] HH:mm:ss") }
+                    { moment(row.createdAt).format("MMMM Do YYYY [at] HH:mm:ss") }
                   </TableCell>
                 </TableRow>
               ))}

@@ -62,9 +62,9 @@ function DrugSetDetail() {
             <Grid item xs={7}><h3>{drugSet?.name}</h3></Grid>
             <Grid item xs={3}><strong>Descripción:</strong> {drugSet?.description}</Grid>
             <Grid item xs={2}>
-              <strong>Creado:</strong> {moment(drugSet?.created_at).format("MMMM Do YYYY")}
+              <strong>Creado:</strong> {moment(drugSet?.createdAt).format("MMMM Do YYYY")}
             </Grid>
-            <Grid item xs={3}><strong>Última Actualización</strong> {moment(drugSet?.updated_at).format("MMMM Do YYYY")}</Grid>
+            <Grid item xs={3}><strong>Última Actualización</strong> {moment(drugSet?.updatedAt).format("MMMM Do YYYY")}</Grid>
             <Grid item xs={2}>
               <strong>Fármacos:</strong> {drugSet?.drugs && Object.keys(drugSet?.drugs).length}
             </Grid>
