@@ -20,9 +20,108 @@ import { styled } from "@mui/material/styles";
 import Drug from "../../../models/drug";
 import { useSelector } from "react-redux";
 import Row from "../../../utils/materialUI/collapsibleDrugList";
-import { Input, InputAdornment } from "@mui/material";
+import { Input, InputAdornment, TableSortLabel } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import { visuallyHidden } from '@mui/utils';
+
+function descendingComparator(a: Drug, b: Drug, orderBy: any) {
+  let elementA = (orderBy === 'standardName') ? a.standardName : a.commonName;
+  let elementB = (orderBy === 'standardName') ? b.standardName : b.commonName;
+  if (elementB < elementA) {
+    return -1;
+  }
+  if (elementB > elementA) {
+    return 1;
+  }
+  return 0;
+}
+
+type Order = 'asc' | 'desc';
+
+function getComparator(
+  order: Order,
+  orderBy: string,
+): (
+  a: Drug,
+  b: Drug,
+) => number {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+// This method is created for cross-browser compatibility, if you don't
+// need to support IE11, you can use Array.prototype.sort() directly
+function stableSort(array: Drug[], comparator: (a: Drug, b: Drug) => number) {
+  const stabilizedThis = array.map((el, index) => [el, index] as [Drug, number]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) {
+      return order;
+    }
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
+}
+
+interface EnhancedTableProps {
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Drug) => void;
+  order: Order;
+  orderBy: string;
+  rowCount: number;
+}
+
+function EnhancedTableHead(props: EnhancedTableProps) {
+  const { order, orderBy, onRequestSort } = props;
+  const createSortHandler = (property: keyof Drug) => (event: React.MouseEvent<unknown>) => {
+    onRequestSort(event, property);
+  };
+
+  return (
+    <TableHead>
+      <TableRow>
+        <StyledTableCell align="left" style={{ width: 50 }}></StyledTableCell>
+        <StyledTableCell
+          align="left"
+          key="standardName"
+          sortDirection={orderBy === 'standardName' ? order : false}
+        >
+          <TableSortLabel
+            active={orderBy === 'standardName'}
+            direction={orderBy === 'standardName' ? order : 'asc'}
+            onClick={createSortHandler('standardName')}
+          >
+            Nombre Estándar
+            {orderBy === 'standardName' ? (
+              <Box component="span" sx={visuallyHidden}>
+                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+              </Box>
+            ) : null}
+          </TableSortLabel>
+        </StyledTableCell>
+        <StyledTableCell
+          align="left"
+          key="commonName"
+          sortDirection={orderBy === 'commonName' ? order : false}
+        >
+          <TableSortLabel
+            active={orderBy === 'commonName'}
+            direction={orderBy === 'commonName' ? order : 'asc'}
+            onClick={createSortHandler('commonName')}
+          >
+            Nombre Común
+            {orderBy === 'commonName' ? (
+              <Box component="span" sx={visuallyHidden}>
+                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+              </Box>
+            ) : null}
+          </TableSortLabel>
+        </StyledTableCell>
+      </TableRow>
+    </TableHead>
+  );
+}
 
 function DrugsTablePagination(props: any) {
   const theme = useTheme();
@@ -104,9 +203,20 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 export default function DrugList() {
+  const [order, setOrder] = React.useState<Order>('asc');
+  const [orderBy, setOrderBy] = React.useState('standardName');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [searchTerm, setSearchTerm] = React.useState("");
+
+  const handleRequestSort = (
+    event: React.MouseEvent<unknown>,
+    property: keyof Drug,
+  ) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
 
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -154,17 +264,16 @@ export default function DrugList() {
           />
         </Box>
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align="left" style={{ width: 50 }} ></StyledTableCell>
-              <StyledTableCell align="left">Nombre Estándar</StyledTableCell>
-              <StyledTableCell align="left">Nombre Común</StyledTableCell>
-            </TableRow>
-          </TableHead>
+          <EnhancedTableHead
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+              rowCount={rows.length}
+          />
           <TableBody>
           {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
+              ? stableSort(rows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : stableSort(rows, getComparator(order, orderBy))
             ).map((row) => (
             <Row key={row.id} row={row} />
           ))}
