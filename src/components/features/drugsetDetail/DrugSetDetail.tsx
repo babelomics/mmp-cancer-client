@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import moment from "moment";
+import { es } from 'date-fns/locale';
+import { format } from 'date-fns';
 import { useParams } from "react-router-dom";
 import store from '../../../app/store'
 import Card from "../../UI/card";
@@ -45,6 +46,18 @@ function DrugSetDetail() {
     alert("dragged");
   };
 
+  const formatCreateDate = (value: Drugset | undefined) => {
+    return (value ? format(new Date(value.createdAt), "dd MMMM yyyy", { locale: es}) : "");
+  }
+
+  const formatUpdateDate = (value: Drugset | undefined) => {
+    if (value) {
+      return (value.updatedAt ? format(new Date(value.updatedAt), "dd MMMM yyyy", { locale: es}) : "");
+    } else {
+      return "";
+    }
+  }
+
   return (
     <React.Fragment>
       {isLoading ? (
@@ -61,10 +74,8 @@ function DrugSetDetail() {
             </Grid>
             <Grid item xs={7}><h3>{drugSet?.name}</h3></Grid>
             <Grid item xs={3}><strong>Descripción:</strong> {drugSet?.description}</Grid>
-            <Grid item xs={2}>
-              <strong>Creado:</strong> {moment(drugSet?.createdAt).format("MMMM Do YYYY")}
-            </Grid>
-            <Grid item xs={3}><strong>Última Actualización</strong> {moment(drugSet?.updatedAt).format("MMMM Do YYYY")}</Grid>
+            <Grid item xs={2}><strong>Creado:</strong> { formatCreateDate(drugSet) }</Grid>
+            <Grid item xs={3}><strong>Última Actualización:</strong> { formatUpdateDate(drugSet) }</Grid>
             <Grid item xs={2}>
               <strong>Fármacos:</strong> {drugSet?.drugs && Object.keys(drugSet?.drugs).length}
             </Grid>

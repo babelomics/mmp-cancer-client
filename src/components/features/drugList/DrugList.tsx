@@ -20,10 +20,17 @@ import { styled } from "@mui/material/styles";
 import Drug from "../../../models/drug";
 import { useSelector } from "react-redux";
 import Row from "../../../utils/materialUI/collapsibleDrugList";
-import { Input, InputAdornment, TableSortLabel } from "@mui/material";
+import { Grid, Input, InputAdornment, TableSortLabel } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import { visuallyHidden } from '@mui/utils';
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import esLocale from 'date-fns/locale/es';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
+import MmpCancerClient from "../../../clients/mmpCancerClient";
+import { useParams } from "react-router-dom";
 
 function descendingComparator(a: Drug, b: Drug, orderBy: any) {
   let elementA = (orderBy === 'standardName') ? a.standardName : a.commonName;
@@ -39,16 +46,8 @@ function descendingComparator(a: Drug, b: Drug, orderBy: any) {
 
 type Order = 'asc' | 'desc';
 
-function getComparator(
-  order: Order,
-  orderBy: string,
-): (
-  a: Drug,
-  b: Drug,
-) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
+function getComparator(order: Order, orderBy: string,): (a: Drug, b: Drug,) => number {
+  return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 // This method is created for cross-browser compatibility, if you don't
@@ -203,11 +202,13 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 export default function DrugList() {
+  let { id } = useParams();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState('standardName');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [dateFrom, setDateFrom] = React.useState<Date | null>(null);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -246,23 +247,52 @@ export default function DrugList() {
     setRows(filteredRows);
   }
 
+  const fromDate = async (value: Date | null) => {
+    setDateFrom(value);
+    console.log(value);
+    if (value) {
+      const abortController = new AbortController();
+      let data: Array<Drug>;
+      data = await MmpCancerClient.getDrugsByDrugset(id, undefined, value, abortController.signal);
+      setRows(data);
+    }
+  }
+
   return (
     <React.Fragment>
       <TableContainer component={Paper}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end', padding: 1 }}>
-          <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}></SearchIcon>
-          <Input
-            placeholder="Buscar"
-            type="text"
-            value={searchTerm}
-            onChange={(newValue) => searchDrugs(newValue.target.value)}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton><ClearIcon onClick={clearSearch} /></IconButton>
-              </InputAdornment>
-            }
-          />
-        </Box>
+        <Grid container spacing={2}>
+          <Grid item xs={10}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-end', padding: 1 }}>
+              <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}></SearchIcon>
+              <Input
+                placeholder="Buscar"
+                type="text"
+                value={searchTerm}
+                onChange={(newValue) => searchDrugs(newValue.target.value)}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton><ClearIcon onClick={clearSearch} /></IconButton>
+                  </InputAdornment>
+                }
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={2}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-end', padding: 1}}>
+              <LocalizationProvider dateAdapter={AdapterDateFns} locale={esLocale}>
+                <DatePicker
+                  label="Fecha desde..."
+                  value={dateFrom}
+                  onChange={(newValue) => {
+                    fromDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </Box>
+          </Grid>
+        </Grid>
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <EnhancedTableHead
               order={order}

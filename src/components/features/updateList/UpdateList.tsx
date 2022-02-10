@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import moment from "moment";
+import { es } from 'date-fns/locale';
+import { format } from 'date-fns';
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import DrugUpdate from "../../../models/drugUpdate";
@@ -142,7 +143,7 @@ function UpdateList(props: any) {
               ).map((row: DrugUpdate) => (
                 <TableRow key={row.id}>
                   <TableCell component="th" scope="row">
-                    { moment(row.createdAt).format("MMMM Do YYYY [at] HH:mm:ss") }
+                    { format(new Date(row.createdAt), "dd MMMM yyyy 'a las' HH:mm:ss", {locale: es}) }
                   </TableCell>
                 </TableRow>
               ))}

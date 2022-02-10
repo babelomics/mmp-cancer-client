@@ -1,5 +1,5 @@
 import React from "react";
-import DrugsetList from "../components/features/drugSetList/drugSetList";
+import DrugsetList from "../components/features/drugsetList/drugsetList";
 
 const Home = (props:any) => {
 

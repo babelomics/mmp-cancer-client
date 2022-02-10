@@ -21,7 +21,8 @@ import TableHead from '@mui/material/TableHead';
 import { styled } from '@mui/material/styles';
 import { useSelector } from "react-redux";
 import store from '../../app/store';
-import moment from 'moment';
+import { es } from 'date-fns/locale';
+import { format } from 'date-fns';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Drugset from '../../models/drugSet';
 import MmpCancerClient from '../../clients/mmpCancerClient';
@@ -135,7 +136,7 @@ export default function DrugSetTable() {
 
   const formatUpdatedDateTemplate = (rowData: Drugset) => {
     if(typeof rowData.updatedAt !== 'undefined'){
-        return moment(rowData.updatedAt).format("MMMM Do YYYY")
+        return format(new Date(rowData.updatedAt), "dd MMMM yyyy", { locale: es })
     }
     return "-";
   }
@@ -202,7 +203,7 @@ export default function DrugSetTable() {
                   {row.description}
                 </TableCell>
                 <TableCell style={{ width: 260 }} align="center">
-                  {moment(row.createdAt).format("MMMM Do YYYY")}
+                  { format(new Date(row.createdAt), "dd MMMM yyyy", {locale: es})}
                 </TableCell>
                 <TableCell style={{ width: 260 }} align="center">
                   {formatUpdatedDateTemplate(row)}
