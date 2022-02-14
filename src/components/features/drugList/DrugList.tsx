@@ -50,8 +50,6 @@ function getComparator(order: Order, orderBy: string,): (a: Drug, b: Drug,) => n
   return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
 function stableSort(array: Drug[], comparator: (a: Drug, b: Drug) => number) {
   const stabilizedThis = array.map((el, index) => [el, index] as [Drug, number]);
   stabilizedThis.sort((a, b) => {
