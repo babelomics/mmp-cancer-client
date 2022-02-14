@@ -24,7 +24,7 @@ import store from '../../app/store';
 import { es } from 'date-fns/locale';
 import { format } from 'date-fns';
 import LoadingButton from '@mui/lab/LoadingButton';
-import Drugset from '../../models/drugSet';
+import Drugset from '../../models/drugset';
 import MmpCancerClient from '../../clients/mmpCancerClient';
 import Loading from '../../components/UI/loading';
 import { Button } from '@mui/material';
@@ -152,12 +152,21 @@ export default function DrugSetTable() {
     searchDrugsets("");
   }
 
-  const searchDrugsets = (value: string) => {
-    setSearchTerm(value);
-    const filteredRows = originalRows.filter((row) => {
-      return row.name.toLowerCase().includes(value.toLowerCase());
-    });
-    setRows(filteredRows);
+  const handleKeyDown = (keyEvent: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (keyEvent.key === 'Enter') {
+      searchDrugsets(searchTerm);
+    }
+  }
+
+  const searchDrugsets = async (value: string) => {
+    if (value) {
+      const abortController = new AbortController();
+      let data: Array<Drugset>;
+      data = await MmpCancerClient.getDrugsets(value, abortController.signal);
+      setRows(data);
+    } else {
+      setRows(originalRows);
+    }
   }
 
   return (
@@ -167,12 +176,13 @@ export default function DrugSetTable() {
     ) : (
       <TableContainer component={Paper}>
         <Box sx={{ display: 'flex', alignItems: 'flex-end', padding: 1 }}>
-          <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}></SearchIcon>
+          <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} onClick={() => searchDrugsets(searchTerm)}></SearchIcon>
           <Input
             placeholder="Buscar"
             type="text"
             value={searchTerm}
-            onChange={(newValue) => searchDrugsets(newValue.target.value)}
+            onChange={(newValue) => setSearchTerm(newValue.target.value)}
+            onKeyDown={(event) => handleKeyDown(event)}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton onClick={clearSearch}><ClearIcon /></IconButton>

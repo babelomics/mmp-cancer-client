@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Loading from "../../UI/loading";
 import store from '../../../app/store'
 import MmpCancerClient from "../../../clients/mmpCancerClient";
-import Drugset from "../../../models/drugSet";
+import Drugset from "../../../models/drugset";
 import DrugSetTable from "../../../utils/materialUI/drugSetTable";
 import Card from "../../UI/card";
 

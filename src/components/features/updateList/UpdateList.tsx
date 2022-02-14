@@ -100,7 +100,6 @@ function UpdateList(props: any) {
       let data: Array<DrugUpdate>;
       data = await MmpCancerClient.getDrugsetUpdate(id, undefined, abortController.signal);
       setUpdates(data);
-      console.log(updates)
     };
     fetchUpdates();
   }, [id]);

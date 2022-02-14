@@ -6,7 +6,7 @@ import store from '../../../app/store'
 import Card from "../../UI/card";
 import Loading from "../../UI/loading";
 import UpdateList from "../updateList/updateList";
-import Drugset from "../../../models/drugSet";
+import Drugset from "../../../models/drugset";
 import MmpCancerClient from "../../../clients/mmpCancerClient";
 import HomeIcon from '@mui/icons-material/Home';
 import { Grid, IconButton } from "@mui/material";

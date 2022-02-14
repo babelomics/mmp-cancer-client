@@ -236,26 +236,31 @@ export default function DrugList() {
 
   const clearSearch = () => {
     setSearchTerm("");
-    searchDrugs("");
+    searchDrugs("", dateFrom);
   }
 
-  const searchDrugs = (value: string) => {
-    setSearchTerm(value);
-    const filteredRows = originalRows.filter((row) => {
-      return row.commonName.toLowerCase().includes(value.toLowerCase()) || row.standardName.toLowerCase().includes(value.toLowerCase());
-    });
-    setRows(filteredRows);
+  const handleKeyDown = (keyEvent: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (keyEvent.key === 'Enter') {
+      searchDrugs(searchTerm, dateFrom);
+    }
   }
 
-  const fromDate = async (value: Date | null) => {
-    setDateFrom(value);
-    console.log(value);
-    if (value) {
+  const searchDrugs = async (searchText: string | null, fromDate: Date | null) => {
+    if (searchText || fromDate) {
+      let text = searchText ? searchText : undefined;
+      let date = fromDate ? fromDate : undefined;
       const abortController = new AbortController();
       let data: Array<Drug>;
-      data = await MmpCancerClient.getDrugsByDrugset(id, undefined, value, abortController.signal);
+      data = await MmpCancerClient.getDrugsByDrugset(id, text, date, abortController.signal);
       setRows(data);
+    } else {
+      setRows(originalRows);
     }
+  }
+
+  const fromDate = (value: Date | null) => {
+    setDateFrom(value);
+    searchDrugs(searchTerm, value);
   }
 
   return (
@@ -264,12 +269,13 @@ export default function DrugList() {
         <Grid container spacing={2}>
           <Grid item xs={10}>
             <Box sx={{ display: 'flex', alignItems: 'flex-end', padding: 1 }}>
-              <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}></SearchIcon>
+            <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} onClick={() => searchDrugs(searchTerm, dateFrom)}></SearchIcon>
               <Input
                 placeholder="Buscar"
                 type="text"
                 value={searchTerm}
-                onChange={(newValue) => searchDrugs(newValue.target.value)}
+                onChange={(newValue) => setSearchTerm(newValue.target.value)}
+                onKeyDown={(event) => handleKeyDown(event)}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton><ClearIcon onClick={clearSearch} /></IconButton>

@@ -1,7 +1,7 @@
-import DrugSet from '../models/drugSet'
+import Drugset from "../models/drugset"
 
 const initialState = {
-  drugSetList: [] as DrugSet[],
+  drugSetList: [] as Drugset[],
 }
 
 export default function drugSetList(state = initialState, action: any) {
