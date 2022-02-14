@@ -3,7 +3,7 @@ import Home from "./views/home";
 import DrugsList from "./components/features/drugList/drugList";
 import { Routes, Route } from "react-router-dom";
 import NoMatch from "./views/noMatch";
-import DrugSetDetail from "./components/features/drugsetDetail/drugSetDetail";
+import DrugSetDetail from "./components/features/drugsetDetail/drugsetDetail";
 
 export const AppRoutes = () => {
   return (
