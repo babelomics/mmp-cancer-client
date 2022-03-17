@@ -31,6 +31,8 @@ import { Button } from '@mui/material';
 import { Input, InputAdornment } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+import JobsList from '../../components/features/jobList/jobList';
 
 function DrugsetsTablePagination(props: any) {
   const theme = useTheme();
@@ -111,7 +113,8 @@ export default function DrugSetTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
-
+  const [open, setOpen] = React.useState(false);
+  
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -169,6 +172,15 @@ export default function DrugSetTable() {
     }
   }
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
   return (
     <React.Fragment>
     {isLoading ? (
@@ -189,7 +201,16 @@ export default function DrugSetTable() {
               </InputAdornment>
             }
           />
+          <LoadingButton
+              color="primary"
+              onClick={handleClickOpen}
+              startIcon={<FactCheckIcon />}
+              variant="contained"
+          >
+              Estado Actualizaciones
+          </LoadingButton>
         </Box>
+        <JobsList open={open} onClose={handleClose}/>
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableHead>
             <TableRow>
@@ -225,7 +246,7 @@ export default function DrugSetTable() {
                           startIcon={<UpdateIcon />}
                           variant="contained"
                       >
-                          Update
+                          Actualizar
                   </LoadingButton>
               </TableCell>
               </TableRow>

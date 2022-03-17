@@ -21,6 +21,11 @@ class MmpCancerClient {
     return this.get<Drug>(`${MMP_CANCER_API_URI}drugSets/${id}/drugs`, queryParams, abortSignal);
   }
 
+  public static async getJobs<JobSynchronization>(id: string | undefined, searchText: string | undefined, abortSignal: AbortSignal): Promise<JobSynchronization> {
+    const queryParams = !!searchText ? { searchText: searchText } : undefined;
+    return this.get<JobSynchronization>(`${MMP_CANCER_API_URI}jobs`, queryParams, abortSignal);
+  }
+
   public static async updatePandrugSet<DrugSet>(searchText: string | undefined, abortSignal: AbortSignal): Promise<DrugSet> {
     const requestBody = ""
     const queryParams = !!searchText ? { searchText: searchText } : undefined;
