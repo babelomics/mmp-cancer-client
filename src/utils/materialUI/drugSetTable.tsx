@@ -187,20 +187,26 @@ export default function DrugSetTable() {
       <Loading></Loading>
     ) : (
       <TableContainer component={Paper}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end', padding: 1 }}>
-          <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} onClick={() => searchDrugsets(searchTerm)}></SearchIcon>
-          <Input
-            placeholder="Buscar"
-            type="text"
-            value={searchTerm}
-            onChange={(newValue) => setSearchTerm(newValue.target.value)}
-            onKeyDown={(event) => handleKeyDown(event)}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton onClick={clearSearch}><ClearIcon /></IconButton>
-              </InputAdornment>
-            }
-          />
+        <Box sx={{ display: 'flex', alignItems: 'flex-end', padding: 1, justifyContent: 'space-between' }}>
+          <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                    }}>
+            <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} onClick={() => searchDrugsets(searchTerm)}></SearchIcon>
+            <Input
+              placeholder="Buscar"
+              type="text"
+              value={searchTerm}
+              onChange={(newValue) => setSearchTerm(newValue.target.value)}
+              onKeyDown={(event) => handleKeyDown(event)}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={clearSearch}><ClearIcon /></IconButton>
+                </InputAdornment>
+              }
+            />
+          </div>
           <LoadingButton
               color="primary"
               onClick={handleClickOpen}
