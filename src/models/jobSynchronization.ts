@@ -1,6 +1,7 @@
 interface JobSynchronization {
     id: string;
-    drugSetId?: string;
+    drugsetName?: string;
+    createdAt: string;
     status: string;
 }
 

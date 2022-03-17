@@ -33,6 +33,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import JobsList from '../../components/features/jobList/jobList';
+import Grid from '@mui/material/Grid';
 
 function DrugsetsTablePagination(props: any) {
   const theme = useTheme();
@@ -187,35 +188,37 @@ export default function DrugSetTable() {
       <Loading></Loading>
     ) : (
       <TableContainer component={Paper}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end', padding: 1, justifyContent: 'space-between' }}>
-          <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        flexWrap: 'wrap',
-                    }}>
-            <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} onClick={() => searchDrugsets(searchTerm)}></SearchIcon>
-            <Input
-              placeholder="Buscar"
-              type="text"
-              value={searchTerm}
-              onChange={(newValue) => setSearchTerm(newValue.target.value)}
-              onKeyDown={(event) => handleKeyDown(event)}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton onClick={clearSearch}><ClearIcon /></IconButton>
-                </InputAdornment>
-              }
-            />
-          </div>
-          <LoadingButton
-              color="primary"
-              onClick={handleClickOpen}
-              startIcon={<FactCheckIcon />}
-              variant="contained"
-          >
-              Estado Actualizaciones
-          </LoadingButton>
-        </Box>
+        <Grid container spacing={2}>
+          <Grid item xs={9.5}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-end', padding: 1 }}>
+              <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} onClick={() => searchDrugsets(searchTerm)}></SearchIcon>
+              <Input
+                placeholder="Buscar"
+                type="text"
+                value={searchTerm}
+                onChange={(newValue) => setSearchTerm(newValue.target.value)}
+                onKeyDown={(event) => handleKeyDown(event)}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={clearSearch}><ClearIcon /></IconButton>
+                  </InputAdornment>
+                }
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={2.5}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-end', padding: 1 }}>
+              <LoadingButton
+                  color="primary"
+                  onClick={handleClickOpen}
+                  startIcon={<FactCheckIcon />}
+                  variant="contained"
+              >
+                  Cola Actualizaciones
+              </LoadingButton>
+            </Box>
+          </Grid>
+        </Grid>
         <JobsList open={open} onClose={handleClose}/>
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableHead>

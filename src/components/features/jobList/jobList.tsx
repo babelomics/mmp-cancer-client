@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { es } from 'date-fns/locale';
+import { format } from 'date-fns';
 import { useParams } from "react-router-dom";
 import MmpCancerClient from "../../../clients/mmpCancerClient";
 import { Box, Dialog, DialogTitle, IconButton, Paper, Table, TableBody, TableCell, tableCellClasses, dialogTitleClasses, TableContainer, TableFooter, TableHead, TablePagination, TableRow } from "@mui/material";
@@ -11,7 +13,7 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 import { styled } from "@mui/material/styles";
 import JobSynchronization from "../../../models/jobSynchronization";
 import CheckIcon from '@mui/icons-material/Check';
-import AvTimerIcon from '@mui/icons-material/AvTimer';
+import PanToolIcon from '@mui/icons-material/PanTool';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import './jobList.css'
 function JobsListTablePagination(props: any) {
@@ -117,7 +119,7 @@ function JobsListTablePagination(props: any) {
 
     const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
         [`&.${dialogTitleClasses.root}`]: {
-          backgroundColor: theme.palette.primary.dark,
+          backgroundColor: theme.palette.primary.light,
           color: theme.palette.common.white,
         },
       }));
@@ -137,7 +139,7 @@ function JobsListTablePagination(props: any) {
         if (status === "Complete") { 
             return <CheckIcon sx={{ color: 'green', mr: 1, my: 0.5}}></CheckIcon>
         } else if (status === "Waiting") { 
-            return <AvTimerIcon sx={{ color: 'Orange', mr: 1, my: 0.5}}></AvTimerIcon>
+            return <PanToolIcon sx={{ color: 'Orange', mr: 1, my: 0.5}}></PanToolIcon>
         } else if (status === "Running") { 
             return <DirectionsRunIcon sx={{ color: 'Blue', mr: 1, my: 0.5}}></DirectionsRunIcon>
         }
@@ -150,12 +152,25 @@ function JobsListTablePagination(props: any) {
           <StyledDialogTitle> <label className={"h3 custom-flex-justify-center"}>Estado de las actualizaciones</label></StyledDialogTitle>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell align="center">DrugSet</StyledTableCell>
+                <StyledTableCell align="center">Fecha</StyledTableCell>
+                <StyledTableCell align="center">Estado</StyledTableCell>
+              </TableRow>
+            </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
                   ? jobs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   : jobs
                 ).map((row: JobSynchronization) => (
                   <TableRow key={row.id}>
+                    <TableCell component="th" scope="row">
+                    { row.drugsetName }                    
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                    { format(new Date(row.createdAt), "dd MMMM yyyy 'a las' HH:mm:ss", {locale: es}) }                    
+                    </TableCell>
                     <TableCell component="th" scope="row">
                     <div style={{
                         display: 'flex',
