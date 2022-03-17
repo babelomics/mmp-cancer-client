@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import MmpCancerClient from "../../../clients/mmpCancerClient";
-import { Box, Dialog, DialogTitle, IconButton, Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableFooter, TableHead, TablePagination, TableRow } from "@mui/material";
+import { Box, Dialog, DialogTitle, IconButton, Paper, Table, TableBody, TableCell, tableCellClasses, dialogTitleClasses, TableContainer, TableFooter, TableHead, TablePagination, TableRow } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
@@ -114,6 +114,13 @@ function JobsListTablePagination(props: any) {
         fontSize: 14,
       },
     }));
+
+    const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
+        [`&.${dialogTitleClasses.root}`]: {
+          backgroundColor: theme.palette.primary.dark,
+          color: theme.palette.common.white,
+        },
+      }));
   
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - jobs.length) : 0;
   
@@ -140,14 +147,9 @@ function JobsListTablePagination(props: any) {
     return (
       <React.Fragment>
         <Dialog onClose={handleClose} open={open}>
-          <DialogTitle  sx={{ color: 'primary.main' }}>Estado de las actualizaciones</DialogTitle>
+          <StyledDialogTitle  sx={{ color: 'primary.main' }}>Estado de las actualizaciones</StyledDialogTitle>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell align="left">Estado</StyledTableCell>
-                </TableRow>
-              </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
                   ? jobs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
