@@ -157,8 +157,14 @@ function JobsListTablePagination(props: any) {
                 ).map((row: JobSynchronization) => (
                   <TableRow key={row.id}>
                     <TableCell component="th" scope="row">
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                    }}>
                       {handleStatusIcon(row.status)}
-                      { row.status }
+                      <span>{ row.status }</span>
+                    </div>
                     </TableCell>
                   </TableRow>
                 ))}
