@@ -13,7 +13,7 @@ import JobSynchronization from "../../../models/jobSynchronization";
 import CheckIcon from '@mui/icons-material/Check';
 import AvTimerIcon from '@mui/icons-material/AvTimer';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
-
+import './jobList.css'
 function JobsListTablePagination(props: any) {
     const theme = useTheme();
     const { count, page, rowsPerPage, onPageChange } = props;
@@ -147,7 +147,7 @@ function JobsListTablePagination(props: any) {
     return (
       <React.Fragment>
         <Dialog onClose={handleClose} open={open}>
-          <StyledDialogTitle  sx={{ color: 'primary.main' }}>Estado de las actualizaciones</StyledDialogTitle>
+          <StyledDialogTitle> <label className={"h3 custom-flex-justify-center"}>Estado de las actualizaciones</label></StyledDialogTitle>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
               <TableBody>
